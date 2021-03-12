@@ -1,2 +1,6 @@
 general:
     prefix: "&8[&eSkulls&8]"
+
+skull:
+    search_ask: "&aPlease enter a keyword to search"
+    no_results: "&cCould not find any results for the keyword: &6%keyword%"

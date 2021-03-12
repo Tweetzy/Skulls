@@ -7,11 +7,14 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -64,6 +67,10 @@ public class SkullManager {
         return getCategories().stream().filter(cat -> cat.getBaseCategory() == baseCategory && cat.isCustom() == isCustom).findFirst().orElse(null);
     }
 
+    public List<Skull> search(String keyword, boolean includeTags) {
+        return getSkulls().stream().filter(skull -> match(keyword, skull.getName()) || Arrays.stream(skull.getTags()).anyMatch(tag -> match(keyword, tag)) && includeTags).collect(Collectors.toList());
+    }
+
     public void toggleFavouriteSkull(UUID skullID, boolean isFavourite) {
         if (!Skulls.getInstance().getData().contains("favourite skulls") && isFavourite) {
             Skulls.getInstance().getData().set("favourite skulls", Collections.singletonList(skullID.toString()));
@@ -88,5 +95,11 @@ public class SkullManager {
     public void clearTemporaryStorage() {
         skulls.clear();
         categories.clear();
+    }
+
+    private boolean match(String pattern, String sentence) {
+        Pattern patt = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = patt.matcher(sentence);
+        return matcher.find();
     }
 }

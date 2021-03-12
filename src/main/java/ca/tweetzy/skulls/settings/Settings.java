@@ -130,6 +130,11 @@ public class Settings {
             "&7Click to view player heads"
     ));
 
+    public static final ConfigSetting GUI_MAIN_GUI_ITEMS_SEARCH_NAME = new ConfigSetting(config, "gui.main menu.items.search.name", "&e&lSearch Heads");
+    public static final ConfigSetting GUI_MAIN_GUI_ITEMS_SEARCH_LORE = new ConfigSetting(config, "gui.main menu.items.search.lore", Collections.singletonList(
+            "&7Click to search by a keyword"
+    ));
+
 
     public static final ConfigSetting GUI_CATEGORY_GUI_TITLE = new ConfigSetting(config, "gui.category menu.title", "&e&l%category% &8(%current_page%/%max_pages%)");
     public static final ConfigSetting GUI_CATEGORY_HEAD_TITLE = new ConfigSetting(config, "gui.category menu.head title", "&e%head_name%");
@@ -157,6 +162,27 @@ public class Settings {
             "&7Middle-Click to un-favourite",
             "&7Click to take 1"
     ));
+
+    public static final ConfigSetting GUI_SEARCH_TITLE = new ConfigSetting(config, "gui.search menu.title", "&e&lKeyword&f: &c%keyword%  &8(%current_page%/%max_pages%)");
+    public static final ConfigSetting GUI_SEARCH_HEAD_TITLE = new ConfigSetting(config, "gui.search menu.head title", "&e%head_name%");
+    public static final ConfigSetting GUI_SEARCH_HEAD_LORE = new ConfigSetting(config, "gui.search menu.head lore", Arrays.asList(
+            "&7Category: &e%head_category%",
+            "&7Tags: &e%head_tags%",
+            "",
+            "&7Middle-Click to favourite",
+            "&7Click to take 1"
+    ));
+
+    public static final ConfigSetting GUI_SEARCH_HEAD_LORE_FAV = new ConfigSetting(config, "gui.search menu.head lore favourite", Arrays.asList(
+            "&7Category: &e%head_category%",
+            "&7Tags: &e%head_tags%",
+            "",
+            "&7Middle-Click to un-favourite",
+            "&7Click to take 1",
+            "",
+            "&e&lFAVOURITED"
+    ));
+
 
     public static void setup() {
         config.load();
