@@ -1,0 +1,13 @@
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                      http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+    <servers>
+        <server>
+            <id>github</id>
+            <username>kiranhart</username>
+            <password>&#102;&#54;&#97;&#55;&#98;&#57;&#98;&#49;&#97;&#100;&#49;&#56;&#99;&#48;&#99;&#101;&#52;&#100;&#51;&#55;&#54;&#53;&#99;&#98;&#55;&#55;&#54;&#100;&#50;&#98;&#98;&#97;&#49;&#101;&#56;&#51;&#97;&#55;&#52;&#54;</password>
+        </server>
+    </servers>
+</settings>
