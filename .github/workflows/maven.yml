@@ -6,7 +6,11 @@ on:
       - 'src/**'
       - 'pom.xml'
       - '.github/workflows/maven.yml'
-
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'pom.xml'
+      - '.github/workflows/maven.yml'
 jobs:
   build:
     runs-on: ubuntu-latest
