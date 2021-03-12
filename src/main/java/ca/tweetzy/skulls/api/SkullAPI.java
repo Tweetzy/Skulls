@@ -44,6 +44,7 @@ public class SkullAPI {
      * Create a custom textured skull
      *
      * @param texture is the texture URL (http://textures.minecraft.net/texture/???) or the base64 encoded value
+     * @param base64 is the entered texture a base64 string?
      * @return the created head
      */
     public ItemStack getCustomTextureHead(String texture, boolean base64) {
@@ -56,7 +57,7 @@ public class SkullAPI {
             byte[] encoded = Base64.getEncoder().encode(String.format("{\"textures\": {\"SKIN\": {\"url\": \"%s\"}}}", texture).getBytes());
             profile.getProperties().put("textures", new Property("textures", new String(encoded)));
         }
-        Field profileField = null;
+        Field profileField;
         try {
             profileField = meta.getClass().getDeclaredField("profile");
             profileField.setAccessible(true);
