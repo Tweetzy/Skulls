@@ -7,13 +7,13 @@ import ca.tweetzy.skulls.settings.Settings;
 import ca.tweetzy.skulls.skull.SkullCategory;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import org.apache.commons.lang.Validate;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.lang.reflect.Field;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -69,6 +69,46 @@ public class SkullAPI {
         return head;
     }
 
+    /**
+     * Used to create a custom head w/placeholder optional replacements
+     *
+     * @param texture is the base64 string or the URL to the texture
+     * @param name is the new name of the item
+     * @param lore the lore you want to give to the item
+     * @param replacements is any replacements you want done, can be null.
+     * @return the head w/replacements
+     */
+    public ItemStack getTexturedHead(String texture, String name, List<String> lore, HashMap<String, Object> replacements) {
+        ItemStack stack = getCustomTextureHead(texture, true);
+        ItemMeta meta = stack.getItemMeta();
+        meta.setDisplayName(TextUtils.formatText(name));
+
+        if (replacements != null) {
+            for (String key : replacements.keySet()) {
+                if (name.contains(key)) name = name.replace(key, String.valueOf(replacements.get(key)));
+            }
+
+            for (int i = 0; i < lore.size(); i++) {
+                for (String key : replacements.keySet()) {
+                    if (lore.get(i).contains(key)) lore.set(i, lore.get(i).replace(key, String.valueOf(replacements.get(key))));
+                }
+            }
+        }
+
+        meta.setDisplayName(TextUtils.formatText(name));
+        meta.setLore(lore.stream().map(TextUtils::formatText).collect(Collectors.toList()));
+        stack.setItemMeta(meta);
+        return stack;
+    }
+
+    /**
+     * Used to create the base category icons, this is really just meant
+     * to be used by Skulls, but if you have a use case, go for it.
+     *
+     * @param baseCategory Is the primary category type your getting
+     * @param useCustomHead Should the item be a custom skull or a default mc item.
+     * @return the category item.
+     */
     public ItemStack getBaseCategoryIcon(SkullCategory.BaseCategory baseCategory, boolean useCustomHead) {
         ItemStack stack = XMaterial.PLAYER_HEAD.parseItem();
         ItemMeta meta = null;

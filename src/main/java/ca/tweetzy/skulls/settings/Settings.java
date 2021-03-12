@@ -3,6 +3,7 @@ package ca.tweetzy.skulls.settings;
 import ca.tweetzy.core.configuration.Config;
 import ca.tweetzy.core.configuration.ConfigSetting;
 import ca.tweetzy.skulls.Skulls;
+import ca.tweetzy.skulls.downloader.MinecraftHeadsLinks;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -119,14 +120,42 @@ public class Settings {
             "&7Total Heads: &e%head_count%"
     ));
 
+    public static final ConfigSetting GUI_MAIN_GUI_ITEMS_FAVOURITES_NAME = new ConfigSetting(config, "gui.main menu.items.favourites.name", "&e&lFavourite Heads");
+    public static final ConfigSetting GUI_MAIN_GUI_ITEMS_FAVOURITES_LORE = new ConfigSetting(config, "gui.main menu.items.favourites.lore", Collections.singletonList(
+            "&7Click to view favorite heads"
+    ));
+
+    public static final ConfigSetting GUI_MAIN_GUI_ITEMS_PLAYERS_NAME = new ConfigSetting(config, "gui.main menu.items.player heads.name", "&e&lPlayer Heads");
+    public static final ConfigSetting GUI_MAIN_GUI_ITEMS_PLAYERS_LORE = new ConfigSetting(config, "gui.main menu.items.player heads.lore", Collections.singletonList(
+            "&7Click to view player heads"
+    ));
+
+
     public static final ConfigSetting GUI_CATEGORY_GUI_TITLE = new ConfigSetting(config, "gui.category menu.title", "&e&l%category% &8(%current_page%/%max_pages%)");
     public static final ConfigSetting GUI_CATEGORY_HEAD_TITLE = new ConfigSetting(config, "gui.category menu.head title", "&e%head_name%");
     public static final ConfigSetting GUI_CATEGORY_HEAD_LORE = new ConfigSetting(config, "gui.category menu.head lore", Arrays.asList(
-            "&7ID: &e%head_id%",
             "&7Tags: &e%head_tags%",
             "",
             "&7Middle-Click to favourite",
-            "&7Right-Click to take 1"
+            "&7Click to take 1"
+    ));
+
+    public static final ConfigSetting GUI_CATEGORY_HEAD_LORE_FAV = new ConfigSetting(config, "gui.favourites menu.head lore favourite", Arrays.asList(
+            "&7Tags: &e%head_tags%",
+            "",
+            "&7Middle-Click to un-favourite",
+            "&7Click to take 1",
+            "",
+            "&e&lFAVOURITED"
+    ));
+
+    public static final ConfigSetting GUI_FAVOURITES_TITLE = new ConfigSetting(config, "gui.favourites menu.title", "&e&lFavourite Heads &8(%current_page%/%max_pages%)");
+    public static final ConfigSetting GUI_FAVOURITES_HEAD_TITLE = new ConfigSetting(config, "gui.favourites menu.head title", "&e%head_name%");
+    public static final ConfigSetting GUI_FAVOURITES_HEAD_LORE = new ConfigSetting(config, "gui.favourites menu.head lore", Arrays.asList(
+            "&7Tags: &e%head_tags%",
+            "",
+            "&7Middle-Click to un-favourite",
+            "&7Click to take 1"
     ));
 
     public static void setup() {

@@ -50,15 +50,4 @@ public class Skull {
         item.setItemMeta(meta);
         return item;
     }
-
-    public ItemStack getDisplayItem() {
-        ItemStack stack = getItem();
-        ItemMeta meta = stack.getItemMeta();
-        meta.setDisplayName(TextUtils.formatText(Settings.GUI_CATEGORY_HEAD_TITLE.getString().replace("%head_name%", this.name)));
-        meta.setLore(Settings.GUI_CATEGORY_HEAD_LORE.getStringList().stream().map(line -> TextUtils.formatText(
-                line.replace("%head_id%", uuid.toString()).replace("%head_tags%", String.join(",", Arrays.asList(tags)))
-        )).collect(Collectors.toList()));
-        stack.setItemMeta(meta);
-        return stack;
-    }
 }

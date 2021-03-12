@@ -6,7 +6,11 @@ package ca.tweetzy.skulls.downloader;
  * Time Created: 12:59 a.m.
  * Usage of any code found within this class is prohibited unless given explicit permission otherwise
  */
-public class HeadDownloadLinks {
+public class MinecraftHeadsLinks {
+
+    /*
+    ========================== API URLS ===========================
+    */
 
     private static final String BASE_DOWNLOAD_URL = "https://minecraft-heads.com/scripts/api.php?tags=true&cat=";
 
@@ -29,4 +33,11 @@ public class HeadDownloadLinks {
     public static final String MONSTER_HEADS = BASE_DOWNLOAD_URL + "monsters";
 
     public static final String PLANT_HEADS = BASE_DOWNLOAD_URL + "plants";
+
+    /*
+    ========================== TEXTURES ===========================
+    */
+
+    public static final String STAR_HEAD = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWM4ZTBjZmViYzdmOWM3ZTE2ZmJhYWFlMDI1ZDFiMWQxOWQ1ZWU2MzM2NjZiY2YyNWZhMGI0MGQ1YmQyMWJjZCJ9fX0=";
+    public static final String GREEN_PLUS_HEAD = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNWZmMzE0MzFkNjQ1ODdmZjZlZjk4YzA2NzU4MTA2ODFmOGMxM2JmOTZmNTFkOWNiMDdlZDc4NTJiMmZmZDEifX19=";
 }

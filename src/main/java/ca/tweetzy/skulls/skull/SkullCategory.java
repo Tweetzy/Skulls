@@ -48,4 +48,8 @@ public class SkullCategory {
     public SkullCategory(BaseCategory baseCategory) {
         this(baseCategory.getName(), baseCategory, false);
     }
+
+    public SkullCategory(String name) {
+        this(name, null, true);
+    }
 }

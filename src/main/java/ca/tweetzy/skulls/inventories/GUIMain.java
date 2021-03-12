@@ -3,9 +3,14 @@ package ca.tweetzy.skulls.inventories;
 import ca.tweetzy.core.gui.Gui;
 import ca.tweetzy.core.utils.TextUtils;
 import ca.tweetzy.skulls.api.SkullAPI;
+import ca.tweetzy.skulls.downloader.MinecraftHeadsLinks;
 import ca.tweetzy.skulls.settings.Settings;
 import ca.tweetzy.skulls.skull.SkullCategory;
+import edu.emory.mathcs.backport.java.util.Arrays;
 import org.bukkit.event.inventory.ClickType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The current file has been created by Kiran Hart
@@ -36,5 +41,8 @@ public class GUIMain extends Gui {
         setButton(2, 4, SkullAPI.getInstance().getBaseCategoryIcon(SkullCategory.BaseCategory.MISCELLANEOUS, Settings.GUI_MAIN_CATEGORY_USE_CUSTOM_SKULL.getBoolean()), e -> e.manager.showGUI(e.player, new GUICategoryList(SkullCategory.BaseCategory.MISCELLANEOUS)));
         setButton(2, 5, SkullAPI.getInstance().getBaseCategoryIcon(SkullCategory.BaseCategory.MONSTERS, Settings.GUI_MAIN_CATEGORY_USE_CUSTOM_SKULL.getBoolean()), e -> e.manager.showGUI(e.player, new GUICategoryList(SkullCategory.BaseCategory.MONSTERS)));
         setButton(2, 6, SkullAPI.getInstance().getBaseCategoryIcon(SkullCategory.BaseCategory.PLANTS, Settings.GUI_MAIN_CATEGORY_USE_CUSTOM_SKULL.getBoolean()), e -> e.manager.showGUI(e.player, new GUICategoryList(SkullCategory.BaseCategory.PLANTS)));
+
+        // additional
+        setButton(4, 5, SkullAPI.getInstance().getTexturedHead(MinecraftHeadsLinks.STAR_HEAD, Settings.GUI_MAIN_GUI_ITEMS_FAVOURITES_NAME.getString(), Settings.GUI_MAIN_GUI_ITEMS_FAVOURITES_LORE.getStringList(), null), ClickType.LEFT, e -> e.manager.showGUI(e.player, new GUIFavourites()));
     }
 }

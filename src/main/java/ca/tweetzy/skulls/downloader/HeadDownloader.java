@@ -23,40 +23,38 @@ public class HeadDownloader {
         String url = null;
         switch(baseCategory) {
             case ALPHABET:
-                url = HeadDownloadLinks.ALPHABET_HEADS;
+                url = MinecraftHeadsLinks.ALPHABET_HEADS;
                 break;
             case ANIMALS:
-                url = HeadDownloadLinks.ANIMAL_HEADS;
+                url = MinecraftHeadsLinks.ANIMAL_HEADS;
                 break;
             case BLOCKS:
-                url = HeadDownloadLinks.BLOCK_HEADS;
+                url = MinecraftHeadsLinks.BLOCK_HEADS;
                 break;
             case DECORATION:
-                url = HeadDownloadLinks.DECORATION_HEADS;
+                url = MinecraftHeadsLinks.DECORATION_HEADS;
                 break;
             case FOOD_AND_DRINKS:
-                url = HeadDownloadLinks.FOOD_AND_DRINK_HEADS;
+                url = MinecraftHeadsLinks.FOOD_AND_DRINK_HEADS;
                 break;
             case HUMANS:
-                url = HeadDownloadLinks.HUMAN_HEADS;
+                url = MinecraftHeadsLinks.HUMAN_HEADS;
                 break;
             case HUMANOID:
-                url = HeadDownloadLinks.HUMANOID_HEADS;
+                url = MinecraftHeadsLinks.HUMANOID_HEADS;
                 break;
             case MISCELLANEOUS:
-                url = HeadDownloadLinks.MISCELLANEOUS_HEADS;
+                url = MinecraftHeadsLinks.MISCELLANEOUS_HEADS;
                 break;
             case MONSTERS:
-                url = HeadDownloadLinks.MONSTER_HEADS;
+                url = MinecraftHeadsLinks.MONSTER_HEADS;
                 break;
             case PLANTS:
-                url = HeadDownloadLinks.PLANT_HEADS;
+                url = MinecraftHeadsLinks.PLANT_HEADS;
                 break;
         }
 
         try {
-            Skulls.getInstance().getLocale().newMessage(TextUtils.formatText("&aDownloading heads for &6" + baseCategory.getName())).sendPrefixedMessage(Bukkit.getConsoleSender());
-
             File dir = new File(Skulls.getInstance().getDataFolder() + "/heads");
             if (!dir.exists()) {
                 dir.mkdir();
@@ -76,10 +74,11 @@ public class HeadDownloader {
 
             try (FileWriter fileWriter = new FileWriter(Skulls.getInstance().getDataFolder() + "/heads/" + baseCategory.getName() + " Heads.json")) {
                 fileWriter.write(json.toString());
-                Skulls.getInstance().getLocale().newMessage(TextUtils.formatText("&aFinished downloading heads for &6" + baseCategory.getName())).sendPrefixedMessage(Bukkit.getConsoleSender());
+                Skulls.getInstance().getLocale().newMessage(TextUtils.formatText("&aDownloaded heads for &6" + baseCategory.getName())).sendPrefixedMessage(Bukkit.getConsoleSender());
                 Skulls.getInstance().setHeadDLTracker(Skulls.getInstance().getHeadDLTracker() + 1);
                 if (Skulls.getInstance().getHeadDLTracker() == SkullCategory.BaseCategory.values().length) {
                     Skulls.getInstance().setHeadsDownloading(false);
+                    Skulls.getInstance().setHeadDLTracker(0);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

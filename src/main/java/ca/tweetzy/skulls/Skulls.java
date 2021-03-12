@@ -152,8 +152,6 @@ public class Skulls extends TweetyPlugin {
 
             for (SkullCategory.BaseCategory value : SkullCategory.BaseCategory.values()) {
                 JsonArray jsonArray = (JsonArray) parser.parse(new FileReader(getDataFolder() + "/heads/" + value.getName() + " Heads.json"));
-                Bukkit.getConsoleSender().sendMessage(value.getName() + " size: " + jsonArray.size());
-                getLocale().newMessage(TextUtils.formatText("&aBegan loading heads for the category: &6" + value.getName())).sendPrefixedMessage(Bukkit.getConsoleSender());
                 jsonArray.getAsJsonArray().forEach(element -> {
                     JsonObject jsonObject = (JsonObject) element;
                     Skull skull = new Skull(
@@ -168,7 +166,7 @@ public class Skulls extends TweetyPlugin {
 
                     this.skullManager.addSkull(skull);
                 });
-                getLocale().newMessage(TextUtils.formatText("&aFinished loading heads for the category: &6" + value.getName())).sendPrefixedMessage(Bukkit.getConsoleSender());
+                getLocale().newMessage(TextUtils.formatText("&aFinished loading heads for the category: &6" + value.getName() + " &a(" + jsonArray.size() + "&a)")).sendPrefixedMessage(Bukkit.getConsoleSender());
             }
         } catch (FileNotFoundException e) {
             getLocale().newMessage(TextUtils.formatText("&4An error has occurred while loading the heads.")).sendPrefixedMessage(Bukkit.getConsoleSender());

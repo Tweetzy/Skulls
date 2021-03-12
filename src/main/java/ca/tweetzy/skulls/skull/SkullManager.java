@@ -64,6 +64,27 @@ public class SkullManager {
         return getCategories().stream().filter(cat -> cat.getBaseCategory() == baseCategory && cat.isCustom() == isCustom).findFirst().orElse(null);
     }
 
+    public void toggleFavouriteSkull(UUID skullID, boolean isFavourite) {
+        if (!Skulls.getInstance().getData().contains("favourite skulls") && isFavourite) {
+            Skulls.getInstance().getData().set("favourite skulls", Collections.singletonList(skullID.toString()));
+            Skulls.getInstance().getData().save();
+            this.skulls.stream().filter(skull -> skull.getUuid().equals(skullID)).findFirst().orElse(null).setFavourite(true);
+            return;
+        }
+
+        List<UUID> ids =  Skulls.getInstance().getData().getStringList("favourite skulls").stream().map(UUID::fromString).collect(Collectors.toList());
+        if (ids.stream().anyMatch(id -> id.equals(skullID)) && !isFavourite) {
+            ids.removeIf(id -> id.equals(skullID));
+            this.skulls.stream().filter(skull -> skull.getUuid().equals(skullID)).findFirst().orElse(null).setFavourite(false);
+        } else {
+            ids.add(skullID);
+            this.skulls.stream().filter(skull -> skull.getUuid().equals(skullID)).findFirst().orElse(null).setFavourite(true);
+        }
+
+        Skulls.getInstance().getData().set("favourite skulls", ids.stream().map(UUID::toString).collect(Collectors.toList()));
+        Skulls.getInstance().getData().save();
+    }
+
     public void clearTemporaryStorage() {
         skulls.clear();
         categories.clear();
