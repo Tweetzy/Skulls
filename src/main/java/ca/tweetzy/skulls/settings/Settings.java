@@ -221,7 +221,7 @@ public class Settings {
             "&6to store select heads."
     ));
 
-    public static final ConfigSetting GUI_CUSTOM_CATEGORY_TITLE = new ConfigSetting(config, "gui.custom category menu.title", "&e&l%category%&f: &c%keyword%  &8(%current_page%/%max_pages%)", "Valid Placeholders", "%category%", "%current_page%", "%max_pages%");
+    public static final ConfigSetting GUI_CUSTOM_CATEGORY_TITLE = new ConfigSetting(config, "gui.custom category menu.title", "&e&l%category%&f &8(%current_page%/%max_pages%)", "Valid Placeholders", "%category%", "%current_page%", "%max_pages%");
     public static final ConfigSetting GUI_CUSTOM_CATEGORY_HEAD_TITLE = new ConfigSetting(config, "gui.custom category menu.head title", "&e%head_name%", "Valid Placeholders", "%head_id%", "%head_name%", "%head_category%", "%head_tags%");
     public static final ConfigSetting GUI_CUSTOM_CATEGORY_HEAD_LORE = new ConfigSetting(config, "gui.custom category menu.head lore", Arrays.asList(
             "&7Original Category: &e%head_category%",

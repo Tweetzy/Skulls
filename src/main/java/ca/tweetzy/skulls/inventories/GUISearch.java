@@ -8,6 +8,7 @@ import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.SkullAPI;
 import ca.tweetzy.skulls.settings.Settings;
 import ca.tweetzy.skulls.skull.Skull;
+import ca.tweetzy.skulls.skull.SkullCategory;
 import org.bukkit.event.inventory.ClickType;
 
 import java.util.*;
@@ -56,6 +57,19 @@ public class GUISearch extends Gui {
                 } else {
                     Skulls.getInstance().getSkullManager().toggleFavouriteSkull(skull.getUuid(), !skull.isFavourite());
                     draw();
+                }
+            });
+
+            setAction(slot, ClickType.MIDDLE, e -> {
+                if (!e.player.hasPermission("skulls.addtocategory")) {
+                    Skulls.getInstance().getLocale().getMessage("skull.no_permission").sendPrefixedMessage(e.player);
+                } else {
+                    if (Skulls.getInstance().getSkullManager().getCategories().stream().anyMatch(SkullCategory::isCustom)) {
+                        Skulls.getInstance().getChangingCustomCategoryIcon().remove(e.player.getUniqueId());
+                        Skulls.getInstance().getAddingToCategory().put(e.player.getUniqueId(), skull);
+                        e.manager.showGUI(e.player, new GUICustomCategoriesList());
+                        Skulls.getInstance().getLocale().getMessage("skull.add_to_category").sendPrefixedMessage(e.player);
+                    }
                 }
             });
 

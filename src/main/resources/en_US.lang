@@ -10,6 +10,7 @@ skull:
     category_deleted: "&aRemoved the category named &6%category_id%"
     category_display_name_change: "&aChanged category name to &6%category_name%"
     category_icon_change: "&aSelect a head from any main category to change the icon"
+    add_to_category: "&aSelect a category to add the head to"
     download_confirm: "&cPlease confirm the re-download!"
     download_finished: "&aFinished downloading heads"
     download_in_progress: "&cYou must wait for the download to finish!"

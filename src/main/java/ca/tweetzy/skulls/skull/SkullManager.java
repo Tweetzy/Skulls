@@ -46,6 +46,10 @@ public class SkullManager {
         return Collections.unmodifiableList(this.skulls.stream().filter(skull -> skull.getCategory() == category).sorted(Comparator.comparing(Skull::getName)).collect(Collectors.toList()));
     }
 
+    public List<Skull> getSkulls(String name) {
+        return Collections.unmodifiableList(this.skulls.stream().filter(skull -> skull.getCategory().getName().equalsIgnoreCase(name) && skull.getCategory().isCustom()).sorted(Comparator.comparing(Skull::getName)).collect(Collectors.toList()));
+    }
+
     public List<Skull> getSkulls() {
         return Collections.unmodifiableList(this.skulls);
     }
@@ -113,6 +117,7 @@ public class SkullManager {
     public void setCustomCategoryIcon(Player player, Skull skull) {
         Skulls.getInstance().getData().set("custom category." + Skulls.getInstance().getChangingCustomCategoryIcon().get(player.getUniqueId()).getName().toLowerCase() + ".texture", skull.getTextureHash());
         Skulls.getInstance().getData().save();
+        Skulls.getInstance().getChangingCustomCategoryIcon().remove(player.getUniqueId());
     }
 
     public void clearTemporaryStorage() {

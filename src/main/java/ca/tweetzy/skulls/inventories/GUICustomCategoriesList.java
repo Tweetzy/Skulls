@@ -63,6 +63,15 @@ public class GUICustomCategoriesList extends Gui {
                         }}
                 ));
 
+                setAction(slot, ClickType.LEFT, e -> {
+                    if (Skulls.getInstance().getAddingToCategory().containsKey(e.player.getUniqueId())) {
+                        Skulls.getInstance().getSkullManager().toggleSkullCustomCategory(skullCategory.getName(), Skulls.getInstance().getAddingToCategory().get(e.player.getUniqueId()), true);
+                        Skulls.getInstance().getAddingToCategory().remove(e.player.getUniqueId());
+                    }
+
+                    e.manager.showGUI(e.player, new GUICustomCategoryList(skullCategory.getName()));
+                });
+
                 setAction(slot, ClickType.MIDDLE, e -> {
                     if (!e.player.hasPermission("skulls.changecategoryicon")) {
                         Skulls.getInstance().getLocale().getMessage("skull.no_permission").sendPrefixedMessage(e.player);

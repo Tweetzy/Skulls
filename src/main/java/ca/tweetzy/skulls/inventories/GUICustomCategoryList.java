@@ -8,7 +8,6 @@ import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.SkullAPI;
 import ca.tweetzy.skulls.settings.Settings;
 import ca.tweetzy.skulls.skull.Skull;
-import ca.tweetzy.skulls.skull.SkullCategory;
 import org.bukkit.event.inventory.ClickType;
 
 import java.util.*;
@@ -16,17 +15,19 @@ import java.util.stream.Collectors;
 
 /**
  * The current file has been created by Kiran Hart
- * Date Created: March 11 2021
- * Time Created: 11:43 p.m.
+ * Date Created: March 13 2021
+ * Time Created: 4:48 p.m.
  * Usage of any code found within this class is prohibited unless given explicit permission otherwise
  */
-public class GUICategoryList extends Gui {
+public class GUICustomCategoryList extends Gui {
 
-    final SkullCategory.BaseCategory category;
+    final String category;
+    final List<UUID> headIds;
 
-    public GUICategoryList(SkullCategory.BaseCategory category) {
+    public GUICustomCategoryList(String category) {
         this.category = category;
-        setTitle(category.getName());
+        this.headIds = Skulls.getInstance().getData().getStringList("custom category." + this.category.toLowerCase() + ".items").stream().map(UUID::fromString).collect(Collectors.toList());
+        setTitle(category);
         setRows(6);
         setAcceptsItems(false);
         draw();
@@ -36,13 +37,14 @@ public class GUICategoryList extends Gui {
         reset();
         pages = (int) Math.max(1, Math.ceil(Skulls.getInstance().getSkullManager().getSkulls(this.category).size() / (double) 45));
 
-        setTitle(TextUtils.formatText(Settings.GUI_CATEGORY_GUI_TITLE.getString().replace("%current_page%", String.valueOf(page)).replace("%max_pages%", String.valueOf(pages)).replace("%category%", category.getName())));
+        setTitle(TextUtils.formatText(Settings.GUI_CUSTOM_CATEGORY_TITLE.getString().replace("%current_page%", String.valueOf(page)).replace("%max_pages%", String.valueOf(pages)).replace("%category%", Objects.requireNonNull(Skulls.getInstance().getData().getString("custom category." + this.category.toLowerCase() + ".display name")))));
         handleNavigation();
 
         int slot = 0;
-        List<Skull> data = Skulls.getInstance().getSkullManager().getSkulls(this.category).stream().sorted(Comparator.comparing(Skull::getName)).skip((page - 1) * 45L).limit(45).collect(Collectors.toList());
+        // kinda scuffed
+        List<Skull> data = Skulls.getInstance().getSkullManager().getSkulls().stream().filter(skull -> headIds.stream().anyMatch(head -> head.equals(skull.getUuid()))).collect(Collectors.toList());
         for (Skull skull : data) {
-            setItem(slot, SkullAPI.getInstance().getTexturedHead(skull.getBase64(), true, Settings.GUI_CATEGORY_HEAD_TITLE.getString(), skull.isFavourite() ? Settings.GUI_CATEGORY_HEAD_LORE_FAV.getStringList() : Settings.GUI_CATEGORY_HEAD_LORE.getStringList(), new HashMap<String, Object>(){{
+            setItem(slot, SkullAPI.getInstance().getTexturedHead(skull.getBase64(), true, Settings.GUI_CUSTOM_CATEGORY_HEAD_TITLE.getString(), skull.isFavourite() ? Settings.GUI_CUSTOM_CATEGORY_HEAD_LORE_FAV.getStringList() : Settings.GUI_CUSTOM_CATEGORY_HEAD_LORE.getStringList(), new HashMap<String, Object>(){{
                 put("%head_id%", skull.getUuid().toString());
                 put("%head_name%", skull.getName());
                 put("%head_tags%", String.join(", ", Arrays.asList(skull.getTags())));
@@ -58,26 +60,17 @@ public class GUICategoryList extends Gui {
                 }
             });
 
-            setAction(slot, ClickType.MIDDLE, e -> {
-                if (!e.player.hasPermission("skulls.addtocategory")) {
+            setAction(slot, ClickType.SHIFT_RIGHT, e -> {
+                if (!e.player.hasPermission("skulls.removefromcategory")) {
                     Skulls.getInstance().getLocale().getMessage("skull.no_permission").sendPrefixedMessage(e.player);
                 } else {
-                    if (Skulls.getInstance().getSkullManager().getCategories().stream().anyMatch(SkullCategory::isCustom)) {
-                        Skulls.getInstance().getChangingCustomCategoryIcon().remove(e.player.getUniqueId());
-                        Skulls.getInstance().getAddingToCategory().put(e.player.getUniqueId(), skull);
-                        e.manager.showGUI(e.player, new GUICustomCategoriesList());
-                        Skulls.getInstance().getLocale().getMessage("skull.add_to_category").sendPrefixedMessage(e.player);
-                    }
+                    Skulls.getInstance().getSkullManager().toggleSkullCustomCategory(this.category, skull, false);
+                    e.manager.showGUI(e.player, new GUICustomCategoryList(this.category));
                 }
             });
 
             setAction(slot, ClickType.LEFT, e -> {
-                if (Skulls.getInstance().getChangingCustomCategoryIcon().containsKey(e.player.getUniqueId())) {
-                    Skulls.getInstance().getSkullManager().setCustomCategoryIcon(e.player, skull);
-                    e.manager.showGUI(e.player, new GUICustomCategoriesList());
-                } else {
-                    SkullAPI.getInstance().checkPermissionsBeforeGive(e.player, skull.getItem(), "skulls.takefromgui");
-                }
+                SkullAPI.getInstance().checkPermissionsBeforeGive(e.player, skull.getItem(), "skulls.takefromgui");
             });
 
             slot++;
