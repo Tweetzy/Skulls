@@ -55,8 +55,8 @@ public class GUICategoryList extends Gui {
                 draw();
             });
 
-            setAction(slot, ClickType.RIGHT, e -> PlayerUtils.giveItem(e.player, skull.getItem()));
-            setAction(slot, ClickType.LEFT, e -> PlayerUtils.giveItem(e.player, skull.getItem()));
+            setAction(slot, ClickType.RIGHT, e -> SkullAPI.getInstance().checkPermissionsBeforeGive(e.player, skull.getItem(), "skulls.takefromgui"));
+            setAction(slot, ClickType.LEFT, e -> SkullAPI.getInstance().checkPermissionsBeforeGive(e.player, skull.getItem(), "skulls.takefromgui"));
 
             slot++;
         }

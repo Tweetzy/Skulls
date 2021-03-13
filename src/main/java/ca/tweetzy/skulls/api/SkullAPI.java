@@ -1,12 +1,14 @@
 package ca.tweetzy.skulls.api;
 
 import ca.tweetzy.core.compatibility.XMaterial;
+import ca.tweetzy.core.utils.PlayerUtils;
 import ca.tweetzy.core.utils.TextUtils;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.settings.Settings;
 import ca.tweetzy.skulls.skull.SkullCategory;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -37,8 +39,6 @@ public class SkullAPI {
         }
         return instance;
     }
-
-    private Field skullMetaProfile;
 
     /**
      * Create a custom textured skull
@@ -101,7 +101,12 @@ public class SkullAPI {
         return stack;
     }
 
-
+    /**
+     * Get a basic player head
+     *
+     * @param name is the name of the player
+     * @return the player's head.
+     */
     public ItemStack getPlayerHead(String name) {
         ItemStack stack = XMaterial.PLAYER_HEAD.parseItem();
         SkullMeta meta = (SkullMeta) stack.getItemMeta();
@@ -219,5 +224,19 @@ public class SkullAPI {
 
         stack.setItemMeta(meta);
         return stack;
+    }
+
+    public void checkPermissionsBeforeGive(Player player, ItemStack item, String... permissions) {
+        boolean hasPerms = true;
+        for (String perm : permissions) {
+            if (!player.hasPermission(perm)) hasPerms = false;
+        }
+
+        if (!hasPerms) {
+            Skulls.getInstance().getLocale().getMessage("skull.no_permission").sendPrefixedMessage(player);
+            return;
+        }
+
+        PlayerUtils.giveItem(player, item);
     }
 }
