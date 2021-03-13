@@ -45,7 +45,6 @@ public class GUIPlayerHeads extends Gui {
                 put("%head_name%", p.getName());
             }}));
 
-            setAction(slot, ClickType.RIGHT, e -> SkullAPI.getInstance().checkPermissionsBeforeGive(e.player, SkullAPI.getInstance().getPlayerHead(p.getName()), "skulls.takefromgui"));
             setAction(slot, ClickType.LEFT, e -> SkullAPI.getInstance().checkPermissionsBeforeGive(e.player, SkullAPI.getInstance().getPlayerHead(p.getName()), "skulls.takefromgui"));
             slot++;
         }

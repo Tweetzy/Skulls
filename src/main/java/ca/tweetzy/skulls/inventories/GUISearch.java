@@ -50,12 +50,15 @@ public class GUISearch extends Gui {
                 put("%head_category%", skull.getCategory().getBaseCategory().getName());
             }}));
 
-            setAction(slot, ClickType.MIDDLE, e -> {
-                Skulls.getInstance().getSkullManager().toggleFavouriteSkull(skull.getUuid(), !skull.isFavourite());
-                draw();
+            setAction(slot, ClickType.RIGHT, e -> {
+                if (!e.player.hasPermission("skulls.togglefavourite")) {
+                    Skulls.getInstance().getLocale().getMessage("skull.no_permission").sendPrefixedMessage(e.player);
+                } else {
+                    Skulls.getInstance().getSkullManager().toggleFavouriteSkull(skull.getUuid(), !skull.isFavourite());
+                    draw();
+                }
             });
 
-            setAction(slot, ClickType.RIGHT, e -> SkullAPI.getInstance().checkPermissionsBeforeGive(e.player, skull.getItem(), "skulls.takefromgui"));
             setAction(slot, ClickType.LEFT, e -> SkullAPI.getInstance().checkPermissionsBeforeGive(e.player, skull.getItem(), "skulls.takefromgui"));
 
             slot++;

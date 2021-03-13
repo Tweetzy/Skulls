@@ -264,4 +264,11 @@ public class SkullAPI {
         Skulls.getInstance().getData().save();
         Skulls.getInstance().getSkullManager().addSkullCategory(new SkullCategory(id));
     }
+
+    public void removeCustomCategory(String id) {
+        if (Skulls.getInstance().getSkullManager().removeCustomCategory(id)) {
+            Skulls.getInstance().getData().set("custom category." + id.toLowerCase(), null);
+            Skulls.getInstance().getData().save();
+        }
+    }
 }

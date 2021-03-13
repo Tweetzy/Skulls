@@ -56,6 +56,10 @@ public class SkullManager {
         return getCategories().stream().filter(cat -> cat.getBaseCategory() == baseCategory && cat.isCustom() == isCustom).findFirst().orElse(null);
     }
 
+    public boolean removeCustomCategory(String id) {
+        return this.categories.removeIf(category -> category.getName().equalsIgnoreCase(id));
+    }
+
     public List<Skull> search(String keyword, boolean includeTags) {
         return getSkulls().stream().filter(skull -> match(keyword, skull.getName()) || Arrays.stream(skull.getTags()).anyMatch(tag -> match(keyword, tag)) && includeTags).collect(Collectors.toList());
     }

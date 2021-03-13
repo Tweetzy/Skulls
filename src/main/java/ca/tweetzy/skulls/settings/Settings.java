@@ -150,15 +150,17 @@ public class Settings {
     public static final ConfigSetting GUI_CATEGORY_HEAD_LORE = new ConfigSetting(config, "gui.category menu.head lore", Arrays.asList(
             "&7Tags: &e%head_tags%",
             "",
-            "&7Middle-Click to favourite",
-            "&7Click to take 1"
+            "&7Left-Click to take 1",
+            "&7Middle-Click to add to category",
+            "&7Right-Click to favourite"
     ), "Valid Placeholders", "%head_id%", "%head_name%", "%head_category%", "%head_tags%");
 
     public static final ConfigSetting GUI_CATEGORY_HEAD_LORE_FAV = new ConfigSetting(config, "gui.category menu.head lore favourite", Arrays.asList(
             "&7Tags: &e%head_tags%",
             "",
-            "&7Middle-Click to un-favourite",
-            "&7Click to take 1",
+            "&7Left-Click to take 1",
+            "&7Middle-Click to add to category",
+            "&7Right-Click to un-favourite",
             "",
             "&e&lFAVOURITED"
     ), "Valid Placeholders", "%head_id%", "%head_name%", "%head_category%", "%head_tags%");
@@ -168,8 +170,9 @@ public class Settings {
     public static final ConfigSetting GUI_FAVOURITES_HEAD_LORE = new ConfigSetting(config, "gui.favourites menu.head lore", Arrays.asList(
             "&7Tags: &e%head_tags%",
             "",
-            "&7Middle-Click to un-favourite",
-            "&7Click to take 1"
+            "&7Left-Click to take 1",
+            "&7Middle-Click to add to category",
+            "&7Right-Click to un-favourite"
     ), "Valid Placeholders", "%head_id%", "%head_name%", "%head_category%", "%head_tags%");
 
     public static final ConfigSetting GUI_SEARCH_TITLE = new ConfigSetting(config, "gui.search menu.title", "&e&lKeyword&f: &c%keyword%  &8(%current_page%/%max_pages%)", "Valid Placeholders", "%current_page%", "%max_pages%");
@@ -178,16 +181,18 @@ public class Settings {
             "&7Category: &e%head_category%",
             "&7Tags: &e%head_tags%",
             "",
-            "&7Middle-Click to favourite",
-            "&7Click to take 1"
+            "&7Left-Click to take 1",
+            "&7Middle-Click to add to category",
+            "&7Right-Click to favourite"
     ), "Valid Placeholders", "%head_id%", "%head_name%", "%head_category%", "%head_tags%");
 
     public static final ConfigSetting GUI_SEARCH_HEAD_LORE_FAV = new ConfigSetting(config, "gui.search menu.head lore favourite", Arrays.asList(
             "&7Category: &e%head_category%",
             "&7Tags: &e%head_tags%",
             "",
-            "&7Middle-Click to un-favourite",
-            "&7Click to take 1",
+            "&7Left-Click to take 1",
+            "&7Middle-Click to add to category",
+            "&7Right-Click to un-favourite",
             "",
             "&e&lFAVOURITED"
     ), "Valid Placeholders", "%head_id%", "%head_name%", "%head_category%", "%head_tags%");
@@ -202,7 +207,11 @@ public class Settings {
     public static final ConfigSetting GUI_CUSTOM_CATEGORY_LIST_ITEMS_CATEGORY_TITLE = new ConfigSetting(config, "gui.custom category list.items.category.title", "&e%category_name%", "Valid Placeholders", "%category_id%", "%category_name%");
     public static final ConfigSetting GUI_CUSTOM_CATEGORY_LIST_ITEMS_CATEGORY_LORE = new ConfigSetting(config, "gui.custom category list.items.category.lore", Arrays.asList(
             "&7Click to view heads in this category",
-            "&7Total Heads: &e%head_count%"
+            "&7Total Heads: &e%head_count%",
+            "",
+            "&7Middle-Click to change head/icon",
+            "&7Shift Right-Click to delete",
+            "&7Right-Click to rename"
     ), "Valid Placeholders", "%head_count%");
 
     public static final ConfigSetting GUI_CUSTOM_CATEGORY_LIST_ITEMS_ADD_TITLE = new ConfigSetting(config, "gui.custom category list.items.add.title", "&a&LNew Category");

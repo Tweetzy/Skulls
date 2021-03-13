@@ -63,7 +63,28 @@ public class GUICustomCategoriesList extends Gui {
                         }}
                 ));
 
+                setAction(slot, ClickType.SHIFT_RIGHT, e -> {
+                   if (!e.player.hasPermission("skulls.removecategory")) {
+                       Skulls.getInstance().getLocale().getMessage("skull.no_permission").sendPrefixedMessage(e.player);
+                   } else {
+                       SkullAPI.getInstance().removeCustomCategory(skullCategory.getName());
+                       draw();
+                   }
+                });
 
+                setAction(slot, ClickType.RIGHT, e -> {
+                    if (!e.player.hasPermission("skulls.renamecategory")) {
+                        Skulls.getInstance().getLocale().getMessage("skull.no_permission").sendPrefixedMessage(e.player);
+                    } else {
+                        ChatPrompt.showPrompt(Skulls.getInstance(), e.player, Skulls.getInstance().getLocale().getMessage("skull.category_name_ask").getMessage(), chat -> {
+                            if (!chat.getMessage().isEmpty()) {
+                                Skulls.getInstance().getData().set("custom category." + skullCategory.getName().toLowerCase() + ".display name", chat.getMessage());
+                                Skulls.getInstance().getData().save();
+                                e.manager.showGUI(e.player, new GUICustomCategoriesList());
+                            }
+                        }).setOnClose(() -> e.manager.showGUI(e.player, this)).setOnCancel(() -> e.manager.showGUI(e.player, this));
+                    }
+                });
 
                 slot++;
             }
@@ -72,17 +93,21 @@ public class GUICustomCategoriesList extends Gui {
 
     private void setAddButton(int col, int row) {
         setButton(row, col, SkullAPI.getInstance().getTexturedHead(MinecraftHeadsLinks.MC_TEXTURE_URL + Settings.GUI_CUSTOM_CATEGORY_LIST_ITEMS_ADD_TEXTURE.getString(), false, Settings.GUI_CUSTOM_CATEGORY_LIST_ITEMS_ADD_TITLE.getString(), Settings.GUI_CUSTOM_CATEGORY_LIST_ITEMS_ADD_LORE.getStringList(), null), ClickType.LEFT, e -> {
-            ChatPrompt.showPrompt(Skulls.getInstance(), e.player, Skulls.getInstance().getLocale().getMessage("skull.category_name_ask").getMessage(), chat -> {
-                if (!chat.getMessage().isEmpty()) {
-                    if (SkullAPI.getInstance().doesCustomCategoryExists(chat.getMessage().replace(" ", ""))) {
-                        Skulls.getInstance().getLocale().getMessage("skull.category_name_taken").sendPrefixedMessage(e.player);
-                    } else {
-                        SkullAPI.getInstance().createCustomCategory(chat.getMessage());
-                        Skulls.getInstance().getLocale().getMessage("skull.category_created").processPlaceholder("category_id", chat.getMessage().toLowerCase().replace(" ", "")).sendPrefixedMessage(e.player);
-                        e.manager.showGUI(e.player, new GUICustomCategoriesList());
+            if (e.player.hasPermission("skulls.createcategory")) {
+                ChatPrompt.showPrompt(Skulls.getInstance(), e.player, Skulls.getInstance().getLocale().getMessage("skull.category_name_ask").getMessage(), chat -> {
+                    if (!chat.getMessage().isEmpty()) {
+                        if (SkullAPI.getInstance().doesCustomCategoryExists(chat.getMessage().replace(" ", ""))) {
+                            Skulls.getInstance().getLocale().getMessage("skull.category_name_taken").sendPrefixedMessage(e.player);
+                        } else {
+                            SkullAPI.getInstance().createCustomCategory(chat.getMessage());
+                            Skulls.getInstance().getLocale().getMessage("skull.category_created").processPlaceholder("category_id", chat.getMessage().toLowerCase().replace(" ", "")).sendPrefixedMessage(e.player);
+                            e.manager.showGUI(e.player, new GUICustomCategoriesList());
+                        }
                     }
-                }
-            }).setOnClose(() -> e.manager.showGUI(e.player, this)).setOnCancel(() -> e.manager.showGUI(e.player, this));
+                }).setOnClose(() -> e.manager.showGUI(e.player, this)).setOnCancel(() -> e.manager.showGUI(e.player, this));
+            } else {
+                Skulls.getInstance().getLocale().getMessage("skull.no_permission").sendPrefixedMessage(e.player);
+            }
         });
     }
 

@@ -13,4 +13,4 @@ skull:
     download_finished: "&aFinished downloading heads"
     download_in_progress: "&cYou must wait for the download to finish!"
     unavailable: "&cHead download/load in progress, please wait!"
-    no_permission: "&cYou don't have permission to take heads!"
+    no_permission: "&cYou don't have permission to do that!"
