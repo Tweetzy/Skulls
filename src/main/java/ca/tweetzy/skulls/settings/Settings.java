@@ -22,6 +22,7 @@ public class Settings {
     public static final ConfigSetting METRICS = new ConfigSetting(config, "metrics", true, "Should the plugin use metrics?", "It simply allows me to see how many servers", "are currently using the skulls plugin.");
 
     public static final ConfigSetting OPTION_DOWNLOAD_HEADS_ON_LOAD = new ConfigSetting(config, "option.download heads on server load", false, "Should Skulls attempt to redownload all the heads", "everytime the server starts/is reload?");
+    public static final ConfigSetting INCLUDE_TAGS_IN_SEARCH = new ConfigSetting(config, "option.include tags in search", true, "When searching for a head, should tags be searched as well?");
 
     public static final ConfigSetting GUI_BACK_BTN_ITEM = new ConfigSetting(config, "gui.global items.back button.item", "ARROW", "Settings for the back button");
     public static final ConfigSetting GUI_BACK_BTN_NAME = new ConfigSetting(config, "gui.global items.back button.name", "&e<< Back");
@@ -145,7 +146,7 @@ public class Settings {
             "&7Click to take 1"
     ));
 
-    public static final ConfigSetting GUI_CATEGORY_HEAD_LORE_FAV = new ConfigSetting(config, "gui.favourites menu.head lore favourite", Arrays.asList(
+    public static final ConfigSetting GUI_CATEGORY_HEAD_LORE_FAV = new ConfigSetting(config, "gui.category menu.head lore favourite", Arrays.asList(
             "&7Tags: &e%head_tags%",
             "",
             "&7Middle-Click to un-favourite",

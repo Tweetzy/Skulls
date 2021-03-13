@@ -71,6 +71,13 @@ public class SkullManager {
         return getSkulls().stream().filter(skull -> match(keyword, skull.getName()) || Arrays.stream(skull.getTags()).anyMatch(tag -> match(keyword, tag)) && includeTags).collect(Collectors.toList());
     }
 
+    public boolean isSkullConfigFavourite(UUID skullID) {
+        if (Skulls.getInstance().getData().contains("favourite skulls")) {
+            return Skulls.getInstance().getData().getStringList("favourite skulls").stream().map(UUID::fromString).anyMatch(ids -> ids.equals(skullID));
+        }
+        return false;
+    }
+
     public void toggleFavouriteSkull(UUID skullID, boolean isFavourite) {
         if (!Skulls.getInstance().getData().contains("favourite skulls") && isFavourite) {
             Skulls.getInstance().getData().set("favourite skulls", Collections.singletonList(skullID.toString()));

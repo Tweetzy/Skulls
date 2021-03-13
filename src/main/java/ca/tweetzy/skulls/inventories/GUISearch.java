@@ -27,7 +27,7 @@ public class GUISearch extends Gui {
 
     public GUISearch(String keyword) {
         this.keyword = keyword;
-        this.items = Skulls.getInstance().getSkullManager().search(this.keyword, true);
+        this.items = Skulls.getInstance().getSkullManager().search(this.keyword, Settings.INCLUDE_TAGS_IN_SEARCH.getBoolean());
         setTitle(TextUtils.formatText(Settings.GUI_SEARCH_TITLE.getString()));
         setRows(6);
         setAcceptsItems(false);

@@ -9,6 +9,7 @@ import ca.tweetzy.core.configuration.Config;
 import ca.tweetzy.core.gui.GuiManager;
 import ca.tweetzy.core.utils.Metrics;
 import ca.tweetzy.core.utils.TextUtils;
+import ca.tweetzy.skulls.commands.CommandSearch;
 import ca.tweetzy.skulls.commands.CommandSkulls;
 import ca.tweetzy.skulls.downloader.HeadDownloader;
 import ca.tweetzy.skulls.settings.Settings;
@@ -73,7 +74,7 @@ public class Skulls extends TweetyPlugin {
 
         // Commands
         this.commandManager = new CommandManager(this);
-        this.commandManager.addCommand(new CommandSkulls());
+        this.commandManager.addCommand(new CommandSkulls()).addSubCommands(new CommandSearch());
 
         // Managers
         this.guiManager.init();
@@ -161,7 +162,7 @@ public class Skulls extends TweetyPlugin {
                             replace(parser.parse(new String(Base64.getDecoder().decode(replace(jsonObject.get("value").toString())))).getAsJsonObject().get("textures").getAsJsonObject().get("SKIN").getAsJsonObject().get("url").toString()),
                             this.skullManager.getCategory(value, false),
                             replace(jsonObject.get("tags").toString()).split(","),
-                            false
+                            this.skullManager.isSkullConfigFavourite(UUID.fromString(replace(jsonObject.get("uuid").toString())))
                     );
 
                     this.skullManager.addSkull(skull);
