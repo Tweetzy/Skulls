@@ -40,7 +40,7 @@ public class GUICategoryList extends Gui {
         setTitle(TextUtils.formatText(Settings.GUI_CATEGORY_GUI_TITLE.getString().replace("%current_page%", String.valueOf(page)).replace("%max_pages%", String.valueOf(pages)).replace("%category%", category.getName())));
         setItems(45, 53, XMaterial.BLACK_STAINED_GLASS_PANE.parseItem());
         setPrevPage(5, 3, new TItemBuilder(Objects.requireNonNull(Settings.GUI_BACK_BTN_ITEM.getMaterial().parseMaterial())).setName(Settings.GUI_BACK_BTN_NAME.getString()).setLore(Settings.GUI_BACK_BTN_LORE.getStringList()).toItemStack());
-        setButton(5, 4, new TItemBuilder(Objects.requireNonNull(Settings.GUI_CLOSE_BTN_ITEM.getMaterial().parseMaterial())).setName(Settings.GUI_CLOSE_BTN_NAME.getString()).setLore(Settings.GUI_CLOSE_BTN_LORE.getStringList()).toItemStack(), e -> e.manager.showGUI(e.player, new GUIMain()));
+        setButton(5, 4, new TItemBuilder(Objects.requireNonNull(Settings.GUI_CLOSE_BTN_ITEM.getMaterial().parseMaterial())).setName(Settings.GUI_CLOSE_BTN_NAME.getString()).setLore(Settings.GUI_CLOSE_BTN_LORE.getStringList()).toItemStack(), e -> e.manager.showGUI(e.player, new GUIMain(e.player)));
         setNextPage(5, 5, new TItemBuilder(Objects.requireNonNull(Settings.GUI_NEXT_BTN_ITEM.getMaterial().parseMaterial())).setName(Settings.GUI_NEXT_BTN_NAME.getString()).setLore(Settings.GUI_NEXT_BTN_LORE.getStringList()).toItemStack());
         setOnPage(e -> draw());
 
@@ -51,6 +51,7 @@ public class GUICategoryList extends Gui {
                 put("%head_id%", skull.getUuid().toString());
                 put("%head_name%", skull.getName());
                 put("%head_tags%", String.join(", ", Arrays.asList(skull.getTags())));
+                put("%head_category%", skull.getCategory().getBaseCategory().getName());
             }}));
 
             setAction(slot, ClickType.MIDDLE, e -> {

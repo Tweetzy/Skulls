@@ -9,6 +9,7 @@ import ca.tweetzy.skulls.api.SkullAPI;
 import ca.tweetzy.skulls.downloader.MinecraftHeadsLinks;
 import ca.tweetzy.skulls.settings.Settings;
 import ca.tweetzy.skulls.skull.SkullCategory;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 
 import java.util.ArrayList;
@@ -25,7 +26,10 @@ import java.util.stream.Collectors;
  */
 public class GUIMain extends Gui {
 
-    public GUIMain() {
+    final Player player;
+
+    public GUIMain(Player player) {
+        this.player = player;
         setTitle(TextUtils.formatText(Settings.GUI_MAIN_GUI_TITLE.getString()));
         setRows(6);
         setAcceptsItems(false);
@@ -48,6 +52,8 @@ public class GUIMain extends Gui {
         setButton(2, 6, SkullAPI.getInstance().getBaseCategoryIcon(SkullCategory.BaseCategory.PLANTS, Settings.GUI_MAIN_CATEGORY_USE_CUSTOM_SKULL.getBoolean()), e -> e.manager.showGUI(e.player, new GUICategoryList(SkullCategory.BaseCategory.PLANTS)));
 
         // additional
+        setButton(4, 2, SkullAPI.getInstance().getPlayerHead(player.getName(), Settings.GUI_MAIN_GUI_ITEMS_PLAYERS_NAME.getString(), Settings.GUI_MAIN_GUI_ITEMS_PLAYERS_LORE.getStringList(), null), e -> e.manager.showGUI(e.player, new GUIPlayerHeads()));
+
         setButton(4, 5, SkullAPI.getInstance().getTexturedHead(MinecraftHeadsLinks.STAR_HEAD, Settings.GUI_MAIN_GUI_ITEMS_FAVOURITES_NAME.getString(), Settings.GUI_MAIN_GUI_ITEMS_FAVOURITES_LORE.getStringList(), null), ClickType.LEFT, e -> e.manager.showGUI(e.player, new GUIFavourites()));
         setButton(4, 6, SkullAPI.getInstance().getTexturedHead(MinecraftHeadsLinks.GEODE_QUESTION_MARK, Settings.GUI_MAIN_GUI_ITEMS_SEARCH_NAME.getString(), Settings.GUI_MAIN_GUI_ITEMS_SEARCH_LORE.getStringList(), null), ClickType.LEFT, e -> {
             ChatPrompt.showPrompt(Skulls.getInstance(), e.player, Skulls.getInstance().getLocale().getMessage("skull.search_ask").getMessage(), chat -> {

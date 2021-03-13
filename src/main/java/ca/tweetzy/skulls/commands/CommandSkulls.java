@@ -35,7 +35,7 @@ public class CommandSkulls extends AbstractCommand {
                 return ReturnType.FAILURE;
             }
 
-            Skulls.getInstance().getGuiManager().showGUI(player, new GUIMain());
+            Skulls.getInstance().getGuiManager().showGUI(player, new GUIMain(player));
         }
         return ReturnType.SUCCESS;
     }

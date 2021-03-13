@@ -101,6 +101,46 @@ public class SkullAPI {
         return stack;
     }
 
+
+    public ItemStack getPlayerHead(String name) {
+        ItemStack stack = XMaterial.PLAYER_HEAD.parseItem();
+        SkullMeta meta = (SkullMeta) stack.getItemMeta();
+        meta.setOwner(name);
+        stack.setItemMeta(meta);
+        return stack;
+    }
+
+    /**
+     * Used to create a player head for a real player
+     *
+     * @param name is the name of the player
+     * @param title the name of the item stack
+     * @param lore the lore of the item stack
+     * @return player head
+     */
+    public ItemStack getPlayerHead(String name, String title, List<String> lore, HashMap<String, Object> replacements) {
+        ItemStack stack = getPlayerHead(name);
+        ItemMeta meta = stack.getItemMeta();
+        meta.setDisplayName(TextUtils.formatText(title));
+
+        if (replacements != null) {
+            for (String key : replacements.keySet()) {
+                if (title.contains(key)) title = title.replace(key, String.valueOf(replacements.get(key)));
+            }
+
+            for (int i = 0; i < lore.size(); i++) {
+                for (String key : replacements.keySet()) {
+                    if (lore.get(i).contains(key)) lore.set(i, lore.get(i).replace(key, String.valueOf(replacements.get(key))));
+                }
+            }
+        }
+
+        meta.setDisplayName(TextUtils.formatText(title));
+        meta.setLore(lore.stream().map(TextUtils::formatText).collect(Collectors.toList()));
+        stack.setItemMeta(meta);
+        return stack;
+    }
+
     /**
      * Used to create the base category icons, this is really just meant
      * to be used by Skulls, but if you have a use case, go for it.
