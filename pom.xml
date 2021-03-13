@@ -13,16 +13,7 @@
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <github.global.server>github</github.global.server>
     </properties>
-
-    <distributionManagement>
-        <repository>
-            <id>github</id>
-            <name>Skulls - The Ultimate Head Database Deploy</name>
-            <url>https://maven.pkg.github.com/Tweetzy/Skulls</url>
-        </repository>
-    </distributionManagement>
 
     <build>
         <defaultGoal>clean install</defaultGoal>
@@ -139,11 +130,6 @@
             <artifactId>gson</artifactId>
             <version>2.8.5</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-deploy-plugin</artifactId>
-            <version>2.8.2</version>
         </dependency>
     </dependencies>
 </project>
