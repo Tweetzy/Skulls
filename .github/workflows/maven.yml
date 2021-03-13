@@ -27,8 +27,11 @@ jobs:
       - name: Build with Maven
         run: mvn verify -B --file pom.xml
 
-      - name: List files
-        run: ls -lR | more
+      - name: Create release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: './target/^Skulls-(\d+\.)?(\d+\.)?(\*|\d+).jar$'
+          token: ${{ secrets.GITHUB_TOKEN }}
 
   jitpack:
     runs-on: ubuntu-latest
