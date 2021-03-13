@@ -43,7 +43,7 @@ public class GUISearch extends Gui {
         int slot = 0;
         List<Skull> data = this.items.stream().sorted(Comparator.comparing(Skull::getName)).skip((page - 1) * 45L).limit(45).collect(Collectors.toList());
         for (Skull skull : data) {
-            setItem(slot, SkullAPI.getInstance().getTexturedHead(skull.getBase64(), Settings.GUI_SEARCH_HEAD_TITLE.getString(), skull.isFavourite() ? Settings.GUI_SEARCH_HEAD_LORE_FAV.getStringList() : Settings.GUI_SEARCH_HEAD_LORE.getStringList(), new HashMap<String, Object>() {{
+            setItem(slot, SkullAPI.getInstance().getTexturedHead(skull.getBase64(), true, Settings.GUI_SEARCH_HEAD_TITLE.getString(), skull.isFavourite() ? Settings.GUI_SEARCH_HEAD_LORE_FAV.getStringList() : Settings.GUI_SEARCH_HEAD_LORE.getStringList(), new HashMap<String, Object>() {{
                 put("%head_id%", skull.getUuid().toString());
                 put("%head_name%", skull.getName());
                 put("%head_tags%", String.join(", ", Arrays.asList(skull.getTags())));

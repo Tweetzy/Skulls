@@ -9,6 +9,7 @@ import ca.tweetzy.core.configuration.Config;
 import ca.tweetzy.core.gui.GuiManager;
 import ca.tweetzy.core.utils.Metrics;
 import ca.tweetzy.core.utils.TextUtils;
+import ca.tweetzy.skulls.api.SkullAPI;
 import ca.tweetzy.skulls.commands.CommandDownload;
 import ca.tweetzy.skulls.commands.CommandSearch;
 import ca.tweetzy.skulls.commands.CommandSettings;
@@ -153,6 +154,10 @@ public class Skulls extends TweetyPlugin {
         try {
             this.skullManager.clearTemporaryStorage();
             Arrays.stream(SkullCategory.BaseCategory.values()).forEach(base -> this.skullManager.addSkullCategory(new SkullCategory(base)));
+            // load custom created categories
+            if (SkullAPI.getInstance().anyCustomCategories()) {
+                this.data.getConfigurationSection("custom category").getKeys(false).forEach(category -> this.skullManager.addSkullCategory(new SkullCategory(category)));
+            }
 
             for (SkullCategory.BaseCategory value : SkullCategory.BaseCategory.values()) {
                 JsonArray jsonArray = (JsonArray) parser.parse(new FileReader(getDataFolder() + "/heads/" + value.getName() + " Heads.json"));

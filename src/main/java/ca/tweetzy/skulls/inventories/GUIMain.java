@@ -47,9 +47,10 @@ public class GUIMain extends Gui {
 
         // additional
         setButton(4, 2, SkullAPI.getInstance().getPlayerHead(player.getName(), Settings.GUI_MAIN_GUI_ITEMS_PLAYERS_NAME.getString(), Settings.GUI_MAIN_GUI_ITEMS_PLAYERS_LORE.getStringList(), null), e -> e.manager.showGUI(e.player, new GUIPlayerHeads()));
+        setButton(4, 3, SkullAPI.getInstance().getTexturedHead(MinecraftHeadsLinks.MC_TEXTURE_URL + Settings.GUI_MAIN_GUI_ITEMS_CUSTOM_CATEGORIES_TEXTURE.getString(), false, Settings.GUI_MAIN_GUI_ITEMS_CUSTOM_CATEGORIES_NAME.getString(), Settings.GUI_MAIN_GUI_ITEMS_CUSTOM_CATEGORIES_LORE.getStringList(), null), ClickType.LEFT, e -> e.manager.showGUI(e.player, new GUICustomCategoriesList()));
 
-        setButton(4, 5, SkullAPI.getInstance().getTexturedHead(MinecraftHeadsLinks.STAR_HEAD, Settings.GUI_MAIN_GUI_ITEMS_FAVOURITES_NAME.getString(), Settings.GUI_MAIN_GUI_ITEMS_FAVOURITES_LORE.getStringList(), null), ClickType.LEFT, e -> e.manager.showGUI(e.player, new GUIFavourites()));
-        setButton(4, 6, SkullAPI.getInstance().getTexturedHead(MinecraftHeadsLinks.GEODE_QUESTION_MARK, Settings.GUI_MAIN_GUI_ITEMS_SEARCH_NAME.getString(), Settings.GUI_MAIN_GUI_ITEMS_SEARCH_LORE.getStringList(), null), ClickType.LEFT, e -> ChatPrompt.showPrompt(Skulls.getInstance(), e.player, Skulls.getInstance().getLocale().getMessage("skull.search_ask").getMessage(), chat -> {
+        setButton(4, 5, SkullAPI.getInstance().getTexturedHead(MinecraftHeadsLinks.MC_TEXTURE_URL + Settings.GUI_MAIN_GUI_ITEMS_FAVOURITES_TEXTURE.getString(), false, Settings.GUI_MAIN_GUI_ITEMS_FAVOURITES_NAME.getString(), Settings.GUI_MAIN_GUI_ITEMS_FAVOURITES_LORE.getStringList(), null), ClickType.LEFT, e -> e.manager.showGUI(e.player, new GUIFavourites()));
+        setButton(4, 6, SkullAPI.getInstance().getTexturedHead(MinecraftHeadsLinks.MC_TEXTURE_URL + Settings.GUI_MAIN_GUI_ITEMS_SEARCH_TEXTURE.getString(), false, Settings.GUI_MAIN_GUI_ITEMS_SEARCH_NAME.getString(), Settings.GUI_MAIN_GUI_ITEMS_SEARCH_LORE.getStringList(), null), ClickType.LEFT, e -> ChatPrompt.showPrompt(Skulls.getInstance(), e.player, Skulls.getInstance().getLocale().getMessage("skull.search_ask").getMessage(), chat -> {
             if (!Skulls.getInstance().getSkullManager().search(chat.getMessage(), Settings.INCLUDE_TAGS_IN_SEARCH.getBoolean()).isEmpty()) {
                 e.manager.showGUI(e.player, new GUISearch(chat.getMessage()));
             } else {

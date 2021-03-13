@@ -4,6 +4,7 @@ import ca.tweetzy.core.compatibility.XMaterial;
 import ca.tweetzy.core.utils.PlayerUtils;
 import ca.tweetzy.core.utils.TextUtils;
 import ca.tweetzy.skulls.Skulls;
+import ca.tweetzy.skulls.downloader.MinecraftHeadsLinks;
 import ca.tweetzy.skulls.settings.Settings;
 import ca.tweetzy.skulls.skull.SkullCategory;
 import com.mojang.authlib.GameProfile;
@@ -76,8 +77,8 @@ public class SkullAPI {
      * @param replacements is any replacements you want done, can be null.
      * @return the head w/replacements
      */
-    public ItemStack getTexturedHead(String texture, String name, List<String> lore, HashMap<String, Object> replacements) {
-        ItemStack stack = getCustomTextureHead(texture, true);
+    public ItemStack getTexturedHead(String texture, boolean base64, String name, List<String> lore, HashMap<String, Object> replacements) {
+        ItemStack stack = getCustomTextureHead(texture, base64);
         ItemMeta meta = stack.getItemMeta();
         Objects.requireNonNull(meta).setDisplayName(TextUtils.formatText(name));
 
@@ -224,6 +225,13 @@ public class SkullAPI {
         return stack;
     }
 
+    /**
+     * Used to give a head to a player if they have the required permissions
+     *
+     * @param player is the player being given the head
+     * @param item is the item stack
+     * @param permissions is the list of permissions to check
+     */
     public void checkPermissionsBeforeGive(Player player, ItemStack item, String... permissions) {
         boolean hasPerms = true;
         for (String perm : permissions) {
@@ -236,5 +244,24 @@ public class SkullAPI {
         }
 
         PlayerUtils.giveItem(player, item);
+    }
+
+    public boolean anyCustomCategories() {
+        return Skulls.getInstance().getData().contains("custom category") && Objects.requireNonNull(Skulls.getInstance().getData().getConfigurationSection("custom category")).getKeys(false).size() != 0;
+    }
+
+    public boolean doesCustomCategoryExists(String name) {
+        return Skulls.getInstance().getData().contains("custom category." + name.toLowerCase());
+    }
+
+    public void createCustomCategory(String name) {
+        if (doesCustomCategoryExists(name)) return;
+        String id = name.toLowerCase().replace(" ", "");
+        Skulls.getInstance().getData().set("custom category." + id + ".id", id);
+        Skulls.getInstance().getData().set("custom category." + id + ".display name", "&e" + name);
+        Skulls.getInstance().getData().set("custom category." + id + ".texture", MinecraftHeadsLinks.PAPER_STACK);
+        Skulls.getInstance().getData().set("custom category." + id + ".items", Collections.emptyList());
+        Skulls.getInstance().getData().save();
+        Skulls.getInstance().getSkullManager().addSkullCategory(new SkullCategory(id));
     }
 }
