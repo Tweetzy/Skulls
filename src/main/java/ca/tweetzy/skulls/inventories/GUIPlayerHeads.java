@@ -36,11 +36,7 @@ public class GUIPlayerHeads extends Gui {
         pages = (int) Math.max(1, Math.ceil(Bukkit.getOnlinePlayers().size() / (double) 45));
 
         setTitle(TextUtils.formatText(Settings.GUI_PLAYERS_TITLE.getString().replace("%current_page%", String.valueOf(page)).replace("%max_pages%", String.valueOf(pages))));
-        setItems(45, 53, XMaterial.BLACK_STAINED_GLASS_PANE.parseItem());
-        setPrevPage(5, 3, new TItemBuilder(Objects.requireNonNull(Settings.GUI_BACK_BTN_ITEM.getMaterial().parseMaterial())).setName(Settings.GUI_BACK_BTN_NAME.getString()).setLore(Settings.GUI_BACK_BTN_LORE.getStringList()).toItemStack());
-        setButton(5, 4, new TItemBuilder(Objects.requireNonNull(Settings.GUI_CLOSE_BTN_ITEM.getMaterial().parseMaterial())).setName(Settings.GUI_CLOSE_BTN_NAME.getString()).setLore(Settings.GUI_CLOSE_BTN_LORE.getStringList()).toItemStack(), e -> e.manager.showGUI(e.player, new GUIMain(e.player)));
-        setNextPage(5, 5, new TItemBuilder(Objects.requireNonNull(Settings.GUI_NEXT_BTN_ITEM.getMaterial().parseMaterial())).setName(Settings.GUI_NEXT_BTN_NAME.getString()).setLore(Settings.GUI_NEXT_BTN_LORE.getStringList()).toItemStack());
-        setOnPage(e -> draw());
+        handleNavigation();
 
         int slot = 0;
         List<Player> data = Bukkit.getOnlinePlayers().stream().sorted(Comparator.comparing(Player::getName)).skip((page - 1) * 45L).limit(45).collect(Collectors.toList());
@@ -53,5 +49,15 @@ public class GUIPlayerHeads extends Gui {
             setAction(slot, ClickType.LEFT, e -> PlayerUtils.giveItem(e.player, SkullAPI.getInstance().getPlayerHead(p.getName())));
             slot++;
         }
+    }
+
+    private void handleNavigation() {
+        setItems(45, 53, XMaterial.BLACK_STAINED_GLASS_PANE.parseItem());
+        setPrevPage(5, 3, new TItemBuilder(Objects.requireNonNull(Settings.GUI_BACK_BTN_ITEM.getMaterial().parseMaterial())).setName(Settings.GUI_BACK_BTN_NAME.getString()).setLore(Settings.GUI_BACK_BTN_LORE.getStringList()).toItemStack());
+        setButton(5, 4, new TItemBuilder(Objects.requireNonNull(Settings.GUI_CLOSE_BTN_ITEM.getMaterial().parseMaterial())).setName(Settings.GUI_CLOSE_BTN_NAME.getString()).setLore(Settings.GUI_CLOSE_BTN_LORE.getStringList()).toItemStack(), e -> e.manager.showGUI(e.player, new GUIMain(e.player)));
+        setNextPage(5, 5, new TItemBuilder(Objects.requireNonNull(Settings.GUI_NEXT_BTN_ITEM.getMaterial().parseMaterial())).setName(Settings.GUI_NEXT_BTN_NAME.getString()).setLore(Settings.GUI_NEXT_BTN_LORE.getStringList()).toItemStack());
+        setAction(5, 3, ClickType.SHIFT_LEFT, e -> changePage(-Settings.GUI_BACK_SHIFT_CLICK_AMT.getInt()));
+        setAction(5, 5, ClickType.SHIFT_LEFT, e -> changePage(Settings.GUI_NEXT_SHIFT_CLICK_AMT.getInt()));
+        setOnPage(e -> draw());
     }
 }

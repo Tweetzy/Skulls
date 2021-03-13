@@ -34,6 +34,9 @@ public class Settings {
     public static final ConfigSetting GUI_NEXT_BTN_NAME = new ConfigSetting(config, "gui.global items.next button.name", "&eNext >>");
     public static final ConfigSetting GUI_NEXT_BTN_LORE = new ConfigSetting(config, "gui.global items.next button.lore", Arrays.asList("&7Click the button to go", "&7to the next page."));
 
+    public static final ConfigSetting GUI_BACK_SHIFT_CLICK_AMT = new ConfigSetting(config, "gui.shift click back button pages", 5, "How many pages should be navigated when", "you shift click the back button in a gui");
+    public static final ConfigSetting GUI_NEXT_SHIFT_CLICK_AMT = new ConfigSetting(config, "gui.shift click next button pages", 5, "How many pages should be navigated when", "you shift click the next button in a gui");
+
     public static final ConfigSetting GUI_MAIN_GUI_TITLE = new ConfigSetting(config, "gui.main menu.title", "&eSkulls Main Menu");
     public static final ConfigSetting GUI_MAIN_CATEGORY_USE_CUSTOM_SKULL = new ConfigSetting(config, "gui.main menu.use custom skulls for categories", true, "Should the inventory use a custom textured", "head for the button/icon");
     public static final ConfigSetting GUI_MAIN_GUI_FILL_BACKGROUND = new ConfigSetting(config, "gui.main menu.fill background", true, "Should the empty slots be filled with an item?");
