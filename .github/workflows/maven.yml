@@ -27,13 +27,6 @@ jobs:
       - name: Build with Maven
         run: mvn verify -B --file pom.xml
 
-      - name: Create release
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: './target/^Skulls-(\d+\.)?(\d+\.)?(\*|\d+).jar$'
-          token: ${{ secrets.GITHUB_TOKEN }}
-          tag: github.ref
-
   jitpack:
     runs-on: ubuntu-latest
     steps:
