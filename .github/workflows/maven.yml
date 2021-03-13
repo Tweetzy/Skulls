@@ -32,6 +32,7 @@ jobs:
         with:
           artifacts: './target/^Skulls-(\d+\.)?(\d+\.)?(\*|\d+).jar$'
           token: ${{ secrets.GITHUB_TOKEN }}
+          tag: github.ref
 
   jitpack:
     runs-on: ubuntu-latest
