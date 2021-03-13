@@ -26,6 +26,11 @@ public class CommandSearch extends AbstractCommand {
         if (args.length == 0) return ReturnType.SYNTAX_ERROR;
         Player player = (Player) sender;
 
+        if (Skulls.getInstance().isHeadsDownloading()) {
+            Skulls.getInstance().getLocale().getMessage("skull.unavailable").sendPrefixedMessage(player);
+            return ReturnType.FAILURE;
+        }
+
         StringBuilder builder = new StringBuilder();
         for (String arg : args) {
             builder.append(arg).append(" ");

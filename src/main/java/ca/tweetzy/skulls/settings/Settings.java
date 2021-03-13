@@ -19,8 +19,6 @@ public class Settings {
     static final Config config = Skulls.getInstance().getCoreConfig();
 
     public static final ConfigSetting LANG = new ConfigSetting(config, "lang", "en_US", "Default language file");
-    public static final ConfigSetting METRICS = new ConfigSetting(config, "metrics", true, "Should the plugin use metrics?", "It simply allows me to see how many servers", "are currently using the skulls plugin.");
-
     public static final ConfigSetting OPTION_DOWNLOAD_HEADS_ON_LOAD = new ConfigSetting(config, "option.download heads on server load", false, "Should Skulls attempt to redownload all the heads", "everytime the server starts/is reload?");
     public static final ConfigSetting INCLUDE_TAGS_IN_SEARCH = new ConfigSetting(config, "option.include tags in search", true, "When searching for a head, should tags be searched as well?");
 

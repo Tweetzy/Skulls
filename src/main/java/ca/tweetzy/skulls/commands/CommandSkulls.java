@@ -29,6 +29,12 @@ public class CommandSkulls extends AbstractCommand {
         } else {
             // Open the inventory
             Player player = (Player) sender;
+
+            if (Skulls.getInstance().isHeadsDownloading()) {
+                Skulls.getInstance().getLocale().getMessage("skull.unavailable").sendPrefixedMessage(player);
+                return ReturnType.FAILURE;
+            }
+
             Skulls.getInstance().getGuiManager().showGUI(player, new GUIMain());
         }
         return ReturnType.SUCCESS;

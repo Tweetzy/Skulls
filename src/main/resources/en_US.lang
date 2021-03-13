@@ -4,3 +4,7 @@ general:
 skull:
     search_ask: "&aPlease enter a keyword to search"
     no_results: "&cCould not find any results for the keyword: &6%keyword%"
+    download_confirm: "&cPlease confirm the re-download!"
+    download_finished: "&aFinished downloading heads"
+    download_in_progress: "&cYou must wait for the download to finish!"
+    unavailable: "&cHead download/load in progress, please wait!"

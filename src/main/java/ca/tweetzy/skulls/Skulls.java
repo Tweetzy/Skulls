@@ -9,7 +9,9 @@ import ca.tweetzy.core.configuration.Config;
 import ca.tweetzy.core.gui.GuiManager;
 import ca.tweetzy.core.utils.Metrics;
 import ca.tweetzy.core.utils.TextUtils;
+import ca.tweetzy.skulls.commands.CommandDownload;
 import ca.tweetzy.skulls.commands.CommandSearch;
+import ca.tweetzy.skulls.commands.CommandSettings;
 import ca.tweetzy.skulls.commands.CommandSkulls;
 import ca.tweetzy.skulls.downloader.HeadDownloader;
 import ca.tweetzy.skulls.settings.Settings;
@@ -20,6 +22,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -74,7 +78,7 @@ public class Skulls extends TweetyPlugin {
 
         // Commands
         this.commandManager = new CommandManager(this);
-        this.commandManager.addCommand(new CommandSkulls()).addSubCommands(new CommandSearch());
+        this.commandManager.addCommand(new CommandSkulls()).addSubCommands(new CommandSearch(), new CommandSettings(), new CommandDownload());
 
         // Managers
         this.guiManager.init();
@@ -89,9 +93,7 @@ public class Skulls extends TweetyPlugin {
         }
 
         // Metrics
-        if (Settings.METRICS.getBoolean()) {
-            this.metrics = new Metrics(this, 10616);
-        }
+        this.metrics = new Metrics(this, 10616);
     }
 
     @Override
@@ -175,7 +177,7 @@ public class Skulls extends TweetyPlugin {
         }
     }
 
-    public void downloadHeads() {
+    public void downloadHeads(CommandSender... downloader) {
         getLocale().newMessage(TextUtils.formatText("&4[!] --- &eHeads could not be found --- &4[!]")).sendPrefixedMessage(Bukkit.getConsoleSender());
         getLocale().newMessage(TextUtils.formatText("&4[!] --- &eAttempting to download them (this may take some time) --- &4[!]")).sendPrefixedMessage(Bukkit.getConsoleSender());
         setHeadsDownloading(true);
@@ -186,6 +188,11 @@ public class Skulls extends TweetyPlugin {
         getServer().getScheduler().runTaskTimer(this, (task) -> {
             if (!isHeadsDownloading()) {
                 loadHeads();
+                if (downloader != null) {
+                    for (CommandSender sender : downloader) {
+                        getLocale().getMessage("skull.download_finished").sendPrefixedMessage(sender);
+                    }
+                }
                 task.cancel();
             }
         }, 20L, 20L);
