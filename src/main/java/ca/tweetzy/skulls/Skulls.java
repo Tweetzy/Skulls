@@ -23,13 +23,13 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * The current file has been created by Kiran Hart
@@ -48,6 +48,7 @@ public class Skulls extends TweetyPlugin {
 
     private CommandManager commandManager;
     private SkullManager skullManager;
+    @SuppressWarnings("unused")
     Metrics metrics;
 
 
@@ -181,9 +182,7 @@ public class Skulls extends TweetyPlugin {
         getLocale().newMessage(TextUtils.formatText("&4[!] --- &eHeads could not be found --- &4[!]")).sendPrefixedMessage(Bukkit.getConsoleSender());
         getLocale().newMessage(TextUtils.formatText("&4[!] --- &eAttempting to download them (this may take some time) --- &4[!]")).sendPrefixedMessage(Bukkit.getConsoleSender());
         setHeadsDownloading(true);
-        getServer().getScheduler().runTaskLaterAsynchronously(this, () -> {
-            Arrays.asList(SkullCategory.BaseCategory.values()).forEach(HeadDownloader::download);
-        }, 1L);
+        getServer().getScheduler().runTaskLaterAsynchronously(this, () -> Arrays.asList(SkullCategory.BaseCategory.values()).forEach(HeadDownloader::download), 1L);
 
         getServer().getScheduler().runTaskTimer(this, (task) -> {
             if (!isHeadsDownloading()) {

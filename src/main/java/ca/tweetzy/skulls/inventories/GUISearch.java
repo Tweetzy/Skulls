@@ -2,7 +2,6 @@ package ca.tweetzy.skulls.inventories;
 
 import ca.tweetzy.core.compatibility.XMaterial;
 import ca.tweetzy.core.gui.Gui;
-import ca.tweetzy.core.utils.PlayerUtils;
 import ca.tweetzy.core.utils.TextUtils;
 import ca.tweetzy.core.utils.items.TItemBuilder;
 import ca.tweetzy.skulls.Skulls;

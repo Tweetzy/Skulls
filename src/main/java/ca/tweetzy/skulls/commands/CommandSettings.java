@@ -16,6 +16,7 @@ import java.util.List;
  */
 public class CommandSettings extends AbstractCommand {
 
+    @SuppressWarnings("unused")
     public CommandSettings() {
         super(CommandType.PLAYER_ONLY, "settings");
     }

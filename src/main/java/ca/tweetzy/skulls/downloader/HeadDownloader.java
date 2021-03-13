@@ -9,7 +9,7 @@ import org.bukkit.Bukkit;
 
 import java.io.*;
 import java.net.URL;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /**
  * The current file has been created by Kiran Hart
@@ -57,11 +57,12 @@ public class HeadDownloader {
         try {
             File dir = new File(Skulls.getInstance().getDataFolder() + "/heads");
             if (!dir.exists()) {
+                //noinspection ResultOfMethodCallIgnored
                 dir.mkdir();
             }
 
             InputStream inputStream = new URL(url).openStream();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
             StringBuilder builder = new StringBuilder();
 
             int character;

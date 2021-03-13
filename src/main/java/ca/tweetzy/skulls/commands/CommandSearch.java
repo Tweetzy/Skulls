@@ -15,6 +15,7 @@ import java.util.List;
  * Time Created: 5:59 p.m.
  * Usage of any code found within this class is prohibited unless given explicit permission otherwise
  */
+@SuppressWarnings("ALL")
 public class CommandSearch extends AbstractCommand {
 
     public CommandSearch() {

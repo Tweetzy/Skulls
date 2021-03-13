@@ -49,6 +49,7 @@ public class SkullCategory {
         this(baseCategory.getName(), baseCategory, false);
     }
 
+    @SuppressWarnings("unused")
     public SkullCategory(String name) {
         this(name, null, true);
     }

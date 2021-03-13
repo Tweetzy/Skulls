@@ -14,10 +14,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.lang.reflect.Field;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -26,6 +23,7 @@ import java.util.stream.Collectors;
  * Time Created: 7:17 p.m.
  * Usage of any code found within this class is prohibited unless given explicit permission otherwise
  */
+@SuppressWarnings("deprecation")
 public class SkullAPI {
 
     private SkullAPI() {
@@ -49,7 +47,7 @@ public class SkullAPI {
      */
     public ItemStack getCustomTextureHead(String texture, boolean base64) {
         ItemStack head = XMaterial.PLAYER_HEAD.parseItem();
-        SkullMeta meta = (SkullMeta) head.getItemMeta();
+        SkullMeta meta = (SkullMeta) Objects.requireNonNull(head).getItemMeta();
         GameProfile profile = new GameProfile(UUID.randomUUID(), "");
         if (base64) {
             profile.getProperties().put("textures", new Property("textures", texture));
@@ -59,7 +57,7 @@ public class SkullAPI {
         }
         Field profileField;
         try {
-            profileField = meta.getClass().getDeclaredField("profile");
+            profileField = Objects.requireNonNull(meta).getClass().getDeclaredField("profile");
             profileField.setAccessible(true);
             profileField.set(meta, profile);
         } catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
@@ -81,7 +79,7 @@ public class SkullAPI {
     public ItemStack getTexturedHead(String texture, String name, List<String> lore, HashMap<String, Object> replacements) {
         ItemStack stack = getCustomTextureHead(texture, true);
         ItemMeta meta = stack.getItemMeta();
-        meta.setDisplayName(TextUtils.formatText(name));
+        Objects.requireNonNull(meta).setDisplayName(TextUtils.formatText(name));
 
         if (replacements != null) {
             for (String key : replacements.keySet()) {
@@ -109,8 +107,8 @@ public class SkullAPI {
      */
     public ItemStack getPlayerHead(String name) {
         ItemStack stack = XMaterial.PLAYER_HEAD.parseItem();
-        SkullMeta meta = (SkullMeta) stack.getItemMeta();
-        meta.setOwner(name);
+        SkullMeta meta = (SkullMeta) Objects.requireNonNull(stack).getItemMeta();
+        Objects.requireNonNull(meta).setOwner(name);
         stack.setItemMeta(meta);
         return stack;
     }
@@ -126,7 +124,7 @@ public class SkullAPI {
     public ItemStack getPlayerHead(String name, String title, List<String> lore, HashMap<String, Object> replacements) {
         ItemStack stack = getPlayerHead(name);
         ItemMeta meta = stack.getItemMeta();
-        meta.setDisplayName(TextUtils.formatText(title));
+        Objects.requireNonNull(meta).setDisplayName(TextUtils.formatText(title));
 
         if (replacements != null) {
             for (String key : replacements.keySet()) {
@@ -162,62 +160,62 @@ public class SkullAPI {
         switch(baseCategory){
             case ALPHABET:
                 stack = useCustomHead ? getCustomTextureHead(LINK_PREFIX + Settings.GUI_MAIN_GUI_ITEMS_ALPHABET_TEXTURE.getString(), false) : Settings.GUI_MAIN_GUI_ITEMS_ALPHABET_ITEM.getMaterial().parseItem();
-                meta = stack.getItemMeta();
-                meta.setDisplayName(TextUtils.formatText(Settings.GUI_MAIN_GUI_ITEMS_ALPHABET_NAME.getString()));
+                meta = Objects.requireNonNull(stack).getItemMeta();
+                Objects.requireNonNull(meta).setDisplayName(TextUtils.formatText(Settings.GUI_MAIN_GUI_ITEMS_ALPHABET_NAME.getString()));
                 meta.setLore(Settings.GUI_MAIN_GUI_ITEMS_ALPHABET_LORE.getStringList().stream().map(line -> TextUtils.formatText(line.replace("%head_count%", String.valueOf(Skulls.getInstance().getSkullManager().getSkulls(baseCategory).size())))).collect(Collectors.toList()));
                 break;
             case ANIMALS:
                 stack = useCustomHead ? getCustomTextureHead(LINK_PREFIX + Settings.GUI_MAIN_GUI_ITEMS_ANIMAL_TEXTURE.getString(), false) : Settings.GUI_MAIN_GUI_ITEMS_ANIMAL_ITEM.getMaterial().parseItem();
-                meta = stack.getItemMeta();
-                meta.setDisplayName(TextUtils.formatText(Settings.GUI_MAIN_GUI_ITEMS_ANIMAL_NAME.getString()));
+                meta = Objects.requireNonNull(stack).getItemMeta();
+                Objects.requireNonNull(meta).setDisplayName(TextUtils.formatText(Settings.GUI_MAIN_GUI_ITEMS_ANIMAL_NAME.getString()));
                 meta.setLore(Settings.GUI_MAIN_GUI_ITEMS_ANIMAL_LORE.getStringList().stream().map(line -> TextUtils.formatText(line.replace("%head_count%", String.valueOf(Skulls.getInstance().getSkullManager().getSkulls(baseCategory).size())))).collect(Collectors.toList()));
                 break;
             case BLOCKS:
                 stack = useCustomHead ? getCustomTextureHead(LINK_PREFIX + Settings.GUI_MAIN_GUI_ITEMS_BLOCK_TEXTURE.getString(), false) : Settings.GUI_MAIN_GUI_ITEMS_BLOCK_ITEM.getMaterial().parseItem();
-                meta = stack.getItemMeta();
-                meta.setDisplayName(TextUtils.formatText(Settings.GUI_MAIN_GUI_ITEMS_BLOCK_NAME.getString()));
+                meta = Objects.requireNonNull(stack).getItemMeta();
+                Objects.requireNonNull(meta).setDisplayName(TextUtils.formatText(Settings.GUI_MAIN_GUI_ITEMS_BLOCK_NAME.getString()));
                 meta.setLore(Settings.GUI_MAIN_GUI_ITEMS_BLOCK_LORE.getStringList().stream().map(line -> TextUtils.formatText(line.replace("%head_count%", String.valueOf(Skulls.getInstance().getSkullManager().getSkulls(baseCategory).size())))).collect(Collectors.toList()));
                 break;
             case DECORATION:
                 stack = useCustomHead ? getCustomTextureHead(LINK_PREFIX + Settings.GUI_MAIN_GUI_ITEMS_DECORATION_TEXTURE.getString(), false) : Settings.GUI_MAIN_GUI_ITEMS_DECORATION_ITEM.getMaterial().parseItem();
-                meta = stack.getItemMeta();
-                meta.setDisplayName(TextUtils.formatText(Settings.GUI_MAIN_GUI_ITEMS_DECORATION_NAME.getString()));
+                meta = Objects.requireNonNull(stack).getItemMeta();
+                Objects.requireNonNull(meta).setDisplayName(TextUtils.formatText(Settings.GUI_MAIN_GUI_ITEMS_DECORATION_NAME.getString()));
                 meta.setLore(Settings.GUI_MAIN_GUI_ITEMS_DECORATION_LORE.getStringList().stream().map(line -> TextUtils.formatText(line.replace("%head_count%", String.valueOf(Skulls.getInstance().getSkullManager().getSkulls(baseCategory).size())))).collect(Collectors.toList()));
                 break;
             case FOOD_AND_DRINKS:
                 stack = useCustomHead ? getCustomTextureHead(LINK_PREFIX + Settings.GUI_MAIN_GUI_ITEMS_FOODS_TEXTURE.getString(), false) : Settings.GUI_MAIN_GUI_ITEMS_FOODS_ITEM.getMaterial().parseItem();
-                meta = stack.getItemMeta();
-                meta.setDisplayName(TextUtils.formatText(Settings.GUI_MAIN_GUI_ITEMS_FOODS_NAME.getString()));
+                meta = Objects.requireNonNull(stack).getItemMeta();
+                Objects.requireNonNull(meta).setDisplayName(TextUtils.formatText(Settings.GUI_MAIN_GUI_ITEMS_FOODS_NAME.getString()));
                 meta.setLore(Settings.GUI_MAIN_GUI_ITEMS_FOODS_LORE.getStringList().stream().map(line -> TextUtils.formatText(line.replace("%head_count%", String.valueOf(Skulls.getInstance().getSkullManager().getSkulls(baseCategory).size())))).collect(Collectors.toList()));
                 break;
             case HUMANS:
                 stack = useCustomHead ? getCustomTextureHead(LINK_PREFIX + Settings.GUI_MAIN_GUI_ITEMS_HUMANS_TEXTURE.getString(), false) : Settings.GUI_MAIN_GUI_ITEMS_HUMANS_ITEM.getMaterial().parseItem();
-                meta = stack.getItemMeta();
-                meta.setDisplayName(TextUtils.formatText(Settings.GUI_MAIN_GUI_ITEMS_HUMANS_NAME.getString()));
+                meta = Objects.requireNonNull(stack).getItemMeta();
+                Objects.requireNonNull(meta).setDisplayName(TextUtils.formatText(Settings.GUI_MAIN_GUI_ITEMS_HUMANS_NAME.getString()));
                 meta.setLore(Settings.GUI_MAIN_GUI_ITEMS_HUMANS_LORE.getStringList().stream().map(line -> TextUtils.formatText(line.replace("%head_count%", String.valueOf(Skulls.getInstance().getSkullManager().getSkulls(baseCategory).size())))).collect(Collectors.toList()));
                 break;
             case HUMANOID:
                 stack = useCustomHead ? getCustomTextureHead(LINK_PREFIX + Settings.GUI_MAIN_GUI_ITEMS_HUMANOID_TEXTURE.getString(), false) : Settings.GUI_MAIN_GUI_ITEMS_HUMANOID_ITEM.getMaterial().parseItem();
-                meta = stack.getItemMeta();
-                meta.setDisplayName(TextUtils.formatText(Settings.GUI_MAIN_GUI_ITEMS_HUMANOID_NAME.getString()));
+                meta = Objects.requireNonNull(stack).getItemMeta();
+                Objects.requireNonNull(meta).setDisplayName(TextUtils.formatText(Settings.GUI_MAIN_GUI_ITEMS_HUMANOID_NAME.getString()));
                 meta.setLore(Settings.GUI_MAIN_GUI_ITEMS_HUMANOID_LORE.getStringList().stream().map(line -> TextUtils.formatText(line.replace("%head_count%", String.valueOf(Skulls.getInstance().getSkullManager().getSkulls(baseCategory).size())))).collect(Collectors.toList()));
                 break;
             case MISCELLANEOUS:
                 stack = useCustomHead ? getCustomTextureHead(LINK_PREFIX + Settings.GUI_MAIN_GUI_ITEMS_MISCELLANEOUS_TEXTURE.getString(), false) : Settings.GUI_MAIN_GUI_ITEMS_MISCELLANEOUS_ITEM.getMaterial().parseItem();
-                meta = stack.getItemMeta();
-                meta.setDisplayName(TextUtils.formatText(Settings.GUI_MAIN_GUI_ITEMS_MISCELLANEOUS_NAME.getString()));
+                meta = Objects.requireNonNull(stack).getItemMeta();
+                Objects.requireNonNull(meta).setDisplayName(TextUtils.formatText(Settings.GUI_MAIN_GUI_ITEMS_MISCELLANEOUS_NAME.getString()));
                 meta.setLore(Settings.GUI_MAIN_GUI_ITEMS_MISCELLANEOUS_LORE.getStringList().stream().map(line -> TextUtils.formatText(line.replace("%head_count%", String.valueOf(Skulls.getInstance().getSkullManager().getSkulls(baseCategory).size())))).collect(Collectors.toList()));
                 break;
             case MONSTERS:
                 stack = useCustomHead ? getCustomTextureHead(LINK_PREFIX + Settings.GUI_MAIN_GUI_ITEMS_MONSTERS_TEXTURE.getString(), false) : Settings.GUI_MAIN_GUI_ITEMS_MONSTERS_ITEM.getMaterial().parseItem();
-                meta = stack.getItemMeta();
-                meta.setDisplayName(TextUtils.formatText(Settings.GUI_MAIN_GUI_ITEMS_MONSTERS_NAME.getString()));
+                meta = Objects.requireNonNull(stack).getItemMeta();
+                Objects.requireNonNull(meta).setDisplayName(TextUtils.formatText(Settings.GUI_MAIN_GUI_ITEMS_MONSTERS_NAME.getString()));
                 meta.setLore(Settings.GUI_MAIN_GUI_ITEMS_MONSTERS_LORE.getStringList().stream().map(line -> TextUtils.formatText(line.replace("%head_count%", String.valueOf(Skulls.getInstance().getSkullManager().getSkulls(baseCategory).size())))).collect(Collectors.toList()));
                 break;
             case PLANTS:
                 stack = useCustomHead ? getCustomTextureHead(LINK_PREFIX + Settings.GUI_MAIN_GUI_ITEMS_PLANTS_TEXTURE.getString(), false) : Settings.GUI_MAIN_GUI_ITEMS_PLANTS_ITEM.getMaterial().parseItem();
-                meta = stack.getItemMeta();
-                meta.setDisplayName(TextUtils.formatText(Settings.GUI_MAIN_GUI_ITEMS_PLANTS_NAME.getString()));
+                meta = Objects.requireNonNull(stack).getItemMeta();
+                Objects.requireNonNull(meta).setDisplayName(TextUtils.formatText(Settings.GUI_MAIN_GUI_ITEMS_PLANTS_NAME.getString()));
                 meta.setLore(Settings.GUI_MAIN_GUI_ITEMS_PLANTS_LORE.getStringList().stream().map(line -> TextUtils.formatText(line.replace("%head_count%", String.valueOf(Skulls.getInstance().getSkullManager().getSkulls(baseCategory).size())))).collect(Collectors.toList()));
                 break;
         }

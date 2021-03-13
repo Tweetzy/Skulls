@@ -3,15 +3,13 @@ package ca.tweetzy.skulls.skull;
 import ca.tweetzy.core.compatibility.XMaterial;
 import ca.tweetzy.core.utils.TextUtils;
 import ca.tweetzy.skulls.api.SkullAPI;
-import ca.tweetzy.skulls.settings.Settings;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.Arrays;
+import java.util.Objects;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /**
  * The current file has been created by Kiran Hart
@@ -46,7 +44,7 @@ public class Skull {
         ItemStack item = SkullAPI.getInstance().getCustomTextureHead(this.base64, true);
         if (item == null) return XMaterial.PLAYER_HEAD.parseItem();
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(TextUtils.formatText(this.name));
+        Objects.requireNonNull(meta).setDisplayName(TextUtils.formatText(this.name));
         item.setItemMeta(meta);
         return item;
     }

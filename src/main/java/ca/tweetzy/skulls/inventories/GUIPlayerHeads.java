@@ -2,18 +2,18 @@ package ca.tweetzy.skulls.inventories;
 
 import ca.tweetzy.core.compatibility.XMaterial;
 import ca.tweetzy.core.gui.Gui;
-import ca.tweetzy.core.utils.PlayerUtils;
 import ca.tweetzy.core.utils.TextUtils;
 import ca.tweetzy.core.utils.items.TItemBuilder;
-import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.SkullAPI;
 import ca.tweetzy.skulls.settings.Settings;
-import ca.tweetzy.skulls.skull.Skull;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**

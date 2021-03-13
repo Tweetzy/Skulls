@@ -3,7 +3,6 @@ package ca.tweetzy.skulls.settings;
 import ca.tweetzy.core.configuration.Config;
 import ca.tweetzy.core.configuration.ConfigSetting;
 import ca.tweetzy.skulls.Skulls;
-import ca.tweetzy.skulls.downloader.MinecraftHeadsLinks;
 
 import java.util.Arrays;
 import java.util.Collections;

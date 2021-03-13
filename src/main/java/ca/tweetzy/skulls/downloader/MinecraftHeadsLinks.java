@@ -6,6 +6,7 @@ package ca.tweetzy.skulls.downloader;
  * Time Created: 12:59 a.m.
  * Usage of any code found within this class is prohibited unless given explicit permission otherwise
  */
+@SuppressWarnings("unused")
 public class MinecraftHeadsLinks {
 
     /*
