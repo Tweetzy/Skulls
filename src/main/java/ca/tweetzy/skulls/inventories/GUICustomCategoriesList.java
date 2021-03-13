@@ -63,12 +63,23 @@ public class GUICustomCategoriesList extends Gui {
                         }}
                 ));
 
+                setAction(slot, ClickType.MIDDLE, e -> {
+                    if (!e.player.hasPermission("skulls.changecategoryicon")) {
+                        Skulls.getInstance().getLocale().getMessage("skull.no_permission").sendPrefixedMessage(e.player);
+                    } else {
+                        Skulls.getInstance().getChangingCustomCategoryIcon().put(e.player.getUniqueId(), skullCategory);
+                        Skulls.getInstance().getAddingToCategory().remove(e.player.getUniqueId());
+                        Skulls.getInstance().getLocale().getMessage("skull.category_icon_change").sendPrefixedMessage(e.player);
+                        e.manager.showGUI(e.player, new GUIMain(e.player));
+                    }
+                });
+
                 setAction(slot, ClickType.SHIFT_RIGHT, e -> {
                    if (!e.player.hasPermission("skulls.removecategory")) {
                        Skulls.getInstance().getLocale().getMessage("skull.no_permission").sendPrefixedMessage(e.player);
                    } else {
                        SkullAPI.getInstance().removeCustomCategory(skullCategory.getName());
-                       draw();
+                       e.manager.showGUI(e.player, new GUICustomCategoriesList());
                    }
                 });
 

@@ -1,6 +1,8 @@
 package ca.tweetzy.skulls.skull;
 
 import ca.tweetzy.skulls.Skulls;
+import ca.tweetzy.skulls.api.SkullAPI;
+import org.bukkit.entity.Player;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -89,6 +91,27 @@ public class SkullManager {
         }
 
         Skulls.getInstance().getData().set("favourite skulls", ids.stream().map(UUID::toString).collect(Collectors.toList()));
+        Skulls.getInstance().getData().save();
+    }
+
+    public void toggleSkullCustomCategory(String category, Skull skull, boolean add) {
+        if (!SkullAPI.getInstance().anyCustomCategories() || !SkullAPI.getInstance().doesCustomCategoryExists(category)) {
+            return;
+        }
+
+        List<UUID> ids =  Skulls.getInstance().getData().getStringList("custom category." + category.toLowerCase() + ".items").stream().map(UUID::fromString).collect(Collectors.toList());
+        if (ids.stream().anyMatch(id -> id.equals(skull.getUuid())) && !add) {
+            ids.removeIf(id -> id.equals(skull.getUuid()));
+        } else {
+            ids.add(skull.getUuid());
+        }
+
+        Skulls.getInstance().getData().set("custom category." + category.toLowerCase() + ".items", ids.stream().map(UUID::toString).collect(Collectors.toList()));
+        Skulls.getInstance().getData().save();
+    }
+
+    public void setCustomCategoryIcon(Player player, Skull skull) {
+        Skulls.getInstance().getData().set("custom category." + Skulls.getInstance().getChangingCustomCategoryIcon().get(player.getUniqueId()).getName().toLowerCase() + ".texture", skull.getTextureHash());
         Skulls.getInstance().getData().save();
     }
 

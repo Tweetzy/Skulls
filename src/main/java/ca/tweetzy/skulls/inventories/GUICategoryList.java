@@ -58,7 +58,14 @@ public class GUICategoryList extends Gui {
                 }
             });
 
-            setAction(slot, ClickType.LEFT, e -> SkullAPI.getInstance().checkPermissionsBeforeGive(e.player, skull.getItem(), "skulls.takefromgui"));
+            setAction(slot, ClickType.LEFT, e -> {
+                if (Skulls.getInstance().getChangingCustomCategoryIcon().containsKey(e.player.getUniqueId())) {
+                    Skulls.getInstance().getSkullManager().setCustomCategoryIcon(e.player, skull);
+                    e.manager.showGUI(e.player, new GUICustomCategoriesList());
+                } else {
+                    SkullAPI.getInstance().checkPermissionsBeforeGive(e.player, skull.getItem(), "skulls.takefromgui");
+                }
+            });
 
             slot++;
         }

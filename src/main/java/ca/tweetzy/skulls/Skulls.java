@@ -24,13 +24,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * The current file has been created by Kiran Hart
@@ -43,6 +41,8 @@ public class Skulls extends TweetyPlugin {
     private static Skulls instance;
     private final Config data = new Config(this, "data.yml");
     private final GuiManager guiManager = new GuiManager(this);
+    private final HashMap<UUID, SkullCategory> changingCustomCategoryIcon = new HashMap<>();
+    private final HashMap<UUID, Skull> addingToCategory = new HashMap<>();
 
     private boolean headsDownloading = false;
     private int headDLTracker = 0;
@@ -147,6 +147,14 @@ public class Skulls extends TweetyPlugin {
 
     public void setHeadDLTracker(int headDLTracker) {
         this.headDLTracker = headDLTracker;
+    }
+
+    public HashMap<UUID, Skull> getAddingToCategory() {
+        return addingToCategory;
+    }
+
+    public HashMap<UUID, SkullCategory> getChangingCustomCategoryIcon() {
+        return changingCustomCategoryIcon;
     }
 
     public void loadHeads() {

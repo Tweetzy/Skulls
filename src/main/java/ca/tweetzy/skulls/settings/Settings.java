@@ -221,6 +221,28 @@ public class Settings {
             "&6to store select heads."
     ));
 
+    public static final ConfigSetting GUI_CUSTOM_CATEGORY_TITLE = new ConfigSetting(config, "gui.custom category menu.title", "&e&l%category%&f: &c%keyword%  &8(%current_page%/%max_pages%)", "Valid Placeholders", "%category%", "%current_page%", "%max_pages%");
+    public static final ConfigSetting GUI_CUSTOM_CATEGORY_HEAD_TITLE = new ConfigSetting(config, "gui.custom category menu.head title", "&e%head_name%", "Valid Placeholders", "%head_id%", "%head_name%", "%head_category%", "%head_tags%");
+    public static final ConfigSetting GUI_CUSTOM_CATEGORY_HEAD_LORE = new ConfigSetting(config, "gui.custom category menu.head lore", Arrays.asList(
+            "&7Original Category: &e%head_category%",
+            "&7Tags: &e%head_tags%",
+            "",
+            "&7Left-Click to take 1",
+            "&7Shift Right-Click to delete",
+            "&7Right-Click to favourite"
+    ), "Valid Placeholders", "%head_id%", "%head_name%", "%head_category%", "%head_tags%");
+
+    public static final ConfigSetting GUI_CUSTOM_CATEGORY_HEAD_LORE_FAV = new ConfigSetting(config, "gui.search menu.head lore favourite", Arrays.asList(
+            "&7Original Category: &e%head_category%",
+            "&7Tags: &e%head_tags%",
+            "",
+            "&7Left-Click to take 1",
+            "&7Shift Right-Click to delete",
+            "&7Right-Click to un-favourite",
+            "",
+            "&e&lFAVOURITED"
+    ), "Valid Placeholders", "%head_id%", "%head_name%", "%head_category%", "%head_tags%");
+
     public static void setup() {
         config.load();
         config.setAutoremove(true).setAutosave(true);

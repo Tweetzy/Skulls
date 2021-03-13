@@ -48,4 +48,13 @@ public class Skull {
         item.setItemMeta(meta);
         return item;
     }
+
+    /**
+     * I don't even know what to call that last part of the link
+     *
+     * @return the texture name?? from the textures.minecraft url
+     */
+    public String getTextureHash() {
+        return this.texture.split("/")[this.texture.split("/").length - 1];
+    }
 }
