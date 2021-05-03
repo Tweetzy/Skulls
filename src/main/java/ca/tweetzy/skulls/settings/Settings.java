@@ -22,6 +22,19 @@ public class Settings {
     public static final ConfigSetting OPTION_DOWNLOAD_HEADS_ON_LOAD = new ConfigSetting(config, "option.download heads on server load", false, "Should Skulls attempt to redownload all the heads", "everytime the server starts/is reload?");
     public static final ConfigSetting INCLUDE_TAGS_IN_SEARCH = new ConfigSetting(config, "option.include tags in search", true, "When searching for a head, should tags be searched as well?");
 
+    public static final ConfigSetting CHARGE_FOR_HEADS = new ConfigSetting(config, "option.charge for heads", true, "Should players be charged to take x1 head from the gui?");
+
+    public static final ConfigSetting BASE_PRICE_ALPHABET = new ConfigSetting(config, "option.default prices.alphabet", 5.0, "What should the default price be for this category?");
+    public static final ConfigSetting BASE_PRICE_ANIMALS = new ConfigSetting(config, "option.default prices.animals", 5.0, "What should the default price be for this category?");
+    public static final ConfigSetting BASE_PRICE_BLOCKS = new ConfigSetting(config, "option.default prices.blocks", 5.0, "What should the default price be for this category?");
+    public static final ConfigSetting BASE_PRICE_DECORATION = new ConfigSetting(config, "option.default prices.decoration", 5.0, "What should the default price be for this category?");
+    public static final ConfigSetting BASE_PRICE_FOOD_AND_DRINK = new ConfigSetting(config, "option.default prices.food and drink", 5.0, "What should the default price be for this category?");
+    public static final ConfigSetting BASE_PRICE_HUMANOID = new ConfigSetting(config, "option.default prices.humanoid", 5.0, "What should the default price be for this category?");
+    public static final ConfigSetting BASE_PRICE_HUMANS = new ConfigSetting(config, "option.default prices.humans", 5.0, "What should the default price be for this category?");
+    public static final ConfigSetting BASE_PRICE_MISCELLANEOUS = new ConfigSetting(config, "option.default prices.miscellaneous", 5.0, "What should the default price be for this category?");
+    public static final ConfigSetting BASE_PRICE_MONSTERS = new ConfigSetting(config, "option.default prices.monsters", 5.0, "What should the default price be for this category?");
+    public static final ConfigSetting BASE_PRICE_PLANTS = new ConfigSetting(config, "option.default prices.plants", 5.0, "What should the default price be for this category?");
+
     public static final ConfigSetting GUI_BACK_BTN_ITEM = new ConfigSetting(config, "gui.global items.back button.item", "ARROW", "Settings for the back button");
     public static final ConfigSetting GUI_BACK_BTN_NAME = new ConfigSetting(config, "gui.global items.back button.name", "&e<< Back");
     public static final ConfigSetting GUI_BACK_BTN_LORE = new ConfigSetting(config, "gui.global items.back button.lore", Arrays.asList("&7Click the button to go", "&7back to the previous page."));
@@ -152,8 +165,10 @@ public class Settings {
             "",
             "&7Left-Click to take 1",
             "&7Middle-Click to add to category",
-            "&7Right-Click to favourite"
-    ), "Valid Placeholders", "%head_id%", "%head_name%", "%head_category%", "%head_tags%");
+            "&7Right-Click to favourite",
+            "&7Shift Right-Click to edit price",
+            "&a$%head_price%"
+    ), "Valid Placeholders", "%head_id%", "%head_name%", "%head_category%", "%head_tags%", "%head_price%");
 
     public static final ConfigSetting GUI_CATEGORY_HEAD_LORE_FAV = new ConfigSetting(config, "gui.category menu.head lore favourite", Arrays.asList(
             "&7Tags: &e%head_tags%",
@@ -161,9 +176,11 @@ public class Settings {
             "&7Left-Click to take 1",
             "&7Middle-Click to add to category",
             "&7Right-Click to un-favourite",
+            "&7Shift Right-Click to edit price",
+            "&a$%head_price%",
             "",
             "&e&lFAVOURITED"
-    ), "Valid Placeholders", "%head_id%", "%head_name%", "%head_category%", "%head_tags%");
+    ), "Valid Placeholders", "%head_id%", "%head_name%", "%head_category%", "%head_tags%", "%head_price%");
 
     public static final ConfigSetting GUI_FAVOURITES_TITLE = new ConfigSetting(config, "gui.favourites menu.title", "&e&lFavourite Heads &8(%current_page%/%max_pages%)", "Valid Placeholders", "%current_page%", "%max_pages%");
     public static final ConfigSetting GUI_FAVOURITES_HEAD_TITLE = new ConfigSetting(config, "gui.favourites menu.head title", "&e%head_name%", "Valid Placeholders", "%head_id%", "%head_name%", "%head_category%", "%head_tags%");
@@ -172,8 +189,10 @@ public class Settings {
             "",
             "&7Left-Click to take 1",
             "&7Middle-Click to add to category",
-            "&7Right-Click to un-favourite"
-    ), "Valid Placeholders", "%head_id%", "%head_name%", "%head_category%", "%head_tags%");
+            "&7Right-Click to un-favourite",
+            "&7Shift Right-Click to edit price",
+            "&a$%head_price%"
+    ), "Valid Placeholders", "%head_id%", "%head_name%", "%head_category%", "%head_tags%", "%head_price%");
 
     public static final ConfigSetting GUI_SEARCH_TITLE = new ConfigSetting(config, "gui.search menu.title", "&e&lKeyword&f: &c%keyword%  &8(%current_page%/%max_pages%)", "Valid Placeholders", "%current_page%", "%max_pages%");
     public static final ConfigSetting GUI_SEARCH_HEAD_TITLE = new ConfigSetting(config, "gui.search menu.head title", "&e%head_name%", "Valid Placeholders", "%head_id%", "%head_name%", "%head_category%", "%head_tags%");
@@ -183,8 +202,10 @@ public class Settings {
             "",
             "&7Left-Click to take 1",
             "&7Middle-Click to add to category",
-            "&7Right-Click to favourite"
-    ), "Valid Placeholders", "%head_id%", "%head_name%", "%head_category%", "%head_tags%");
+            "&7Right-Click to favourite",
+            "&7Shift Right-Click to edit price",
+            "&a$%head_price%"
+    ), "Valid Placeholders", "%head_id%", "%head_name%", "%head_category%", "%head_tags%", "%head_price%");
 
     public static final ConfigSetting GUI_SEARCH_HEAD_LORE_FAV = new ConfigSetting(config, "gui.search menu.head lore favourite", Arrays.asList(
             "&7Category: &e%head_category%",
@@ -193,9 +214,11 @@ public class Settings {
             "&7Left-Click to take 1",
             "&7Middle-Click to add to category",
             "&7Right-Click to un-favourite",
+            "&7Shift Right-Click to edit price",
+            "&a$%head_price%",
             "",
             "&e&lFAVOURITED"
-    ), "Valid Placeholders", "%head_id%", "%head_name%", "%head_category%", "%head_tags%");
+    ), "Valid Placeholders", "%head_id%", "%head_name%", "%head_category%", "%head_tags%", "%head_price%");
 
     public static final ConfigSetting GUI_PLAYERS_TITLE = new ConfigSetting(config, "gui.players menu.title", "&e&lOnline Players &8(%current_page%/%max_pages%)", "Valid Placeholders", "%current_page%", "%max_pages%");
     public static final ConfigSetting GUI_PLAYERS_HEAD_TITLE = new ConfigSetting(config, "gui.players menu.head title", "&e%head_name%", "Valid Placeholders:", "%head_name%");
@@ -229,8 +252,10 @@ public class Settings {
             "",
             "&7Left-Click to take 1",
             "&7Shift Right-Click to delete",
-            "&7Right-Click to favourite"
-    ), "Valid Placeholders", "%head_id%", "%head_name%", "%head_category%", "%head_tags%");
+            "&7Right-Click to favourite",
+            "&7Shift Right-Click to edit price",
+            "&a$%head_price%"
+    ), "Valid Placeholders", "%head_id%", "%head_name%", "%head_category%", "%head_tags%", "%head_price%");
 
     public static final ConfigSetting GUI_CUSTOM_CATEGORY_HEAD_LORE_FAV = new ConfigSetting(config, "gui.search menu.head lore favourite", Arrays.asList(
             "&7Original Category: &e%head_category%",
@@ -239,9 +264,11 @@ public class Settings {
             "&7Left-Click to take 1",
             "&7Shift Right-Click to delete",
             "&7Right-Click to un-favourite",
+            "&7Shift Right-Click to edit price",
+            "&a$%head_price%",
             "",
             "&e&lFAVOURITED"
-    ), "Valid Placeholders", "%head_id%", "%head_name%", "%head_category%", "%head_tags%");
+    ), "Valid Placeholders", "%head_id%", "%head_name%", "%head_category%", "%head_tags%", "%head_price%");
 
     public static void setup() {
         config.load();

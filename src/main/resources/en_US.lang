@@ -16,3 +16,7 @@ skull:
     download_in_progress: "&cYou must wait for the download to finish!"
     unavailable: "&cHead download/load in progress, please wait!"
     no_permission: "&cYou don't have permission to do that!"
+    enter_new_price: "&aEnter the new price for this skull:"
+    price_updated: "&aUpdated price that skull to &2$%price%"
+    no_money: "&cYou do not have enough money to buy that skull!"
+    money_remove: "&c-$%price%"

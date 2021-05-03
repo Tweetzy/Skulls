@@ -2,6 +2,7 @@ package ca.tweetzy.skulls.skull;
 
 import ca.tweetzy.core.compatibility.XMaterial;
 import ca.tweetzy.core.utils.TextUtils;
+import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.SkullAPI;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,6 +29,7 @@ public class Skull {
     private String texture;
     private SkullCategory category;
     private String[] tags;
+    private double price;
     private boolean isFavourite;
 
     public Skull(String name, UUID uuid, String base64, String texture, SkullCategory category, String[] tags, boolean isFavourite) {
@@ -37,6 +39,7 @@ public class Skull {
         this.texture = texture;
         this.category = category;
         this.tags = tags;
+        this.price = Skulls.getInstance().getSkullManager().hasPriceOverride(uuid) ? Skulls.getInstance().getSkullManager().getOverridenPrice(uuid) : category.getBaseCategory().getPrice();
         this.isFavourite = isFavourite;
     }
 

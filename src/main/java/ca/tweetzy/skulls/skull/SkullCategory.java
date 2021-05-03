@@ -1,5 +1,6 @@
 package ca.tweetzy.skulls.skull;
 
+import ca.tweetzy.skulls.settings.Settings;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,22 +17,27 @@ public class SkullCategory {
 
     public enum BaseCategory {
 
-        ALPHABET("Alphabet"),
-        ANIMALS("Animals"),
-        BLOCKS("Blocks"),
-        DECORATION("Decoration"),
-        FOOD_AND_DRINKS("Food and Drinks"),
-        HUMANS("Humans"),
-        HUMANOID("Humanoid"),
-        MISCELLANEOUS("Miscellaneous"),
-        MONSTERS("Monsters"),
-        PLANTS("Plants");
+        ALPHABET("Alphabet", Settings.BASE_PRICE_ALPHABET.getDouble()),
+        ANIMALS("Animals", Settings.BASE_PRICE_ANIMALS.getDouble()),
+        BLOCKS("Blocks", Settings.BASE_PRICE_BLOCKS.getDouble()),
+        DECORATION("Decoration", Settings.BASE_PRICE_DECORATION.getDouble()),
+        FOOD_AND_DRINKS("Food and Drinks", Settings.BASE_PRICE_FOOD_AND_DRINK.getDouble()),
+        HUMANS("Humans", Settings.BASE_PRICE_HUMANS.getDouble()),
+        HUMANOID("Humanoid", Settings.BASE_PRICE_HUMANOID.getDouble()),
+        MISCELLANEOUS("Miscellaneous", Settings.BASE_PRICE_MISCELLANEOUS.getDouble()),
+        MONSTERS("Monsters", Settings.BASE_PRICE_MONSTERS.getDouble()),
+        PLANTS("Plants", Settings.BASE_PRICE_PLANTS.getDouble());
 
         @Getter
         final String name;
 
-        BaseCategory(String name) {
+        @Getter
+        final double price;
+
+
+        BaseCategory(String name, double price) {
             this.name = name;
+            this.price = price;
         }
     }
 

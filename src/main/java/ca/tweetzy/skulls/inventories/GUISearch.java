@@ -2,6 +2,9 @@ package ca.tweetzy.skulls.inventories;
 
 import ca.tweetzy.core.compatibility.XMaterial;
 import ca.tweetzy.core.gui.Gui;
+import ca.tweetzy.core.input.ChatPrompt;
+import ca.tweetzy.core.utils.NumberUtils;
+import ca.tweetzy.core.utils.PlayerUtils;
 import ca.tweetzy.core.utils.TextUtils;
 import ca.tweetzy.core.utils.items.TItemBuilder;
 import ca.tweetzy.skulls.Skulls;
@@ -49,6 +52,7 @@ public class GUISearch extends Gui {
                 put("%head_name%", skull.getName());
                 put("%head_tags%", String.join(", ", Arrays.asList(skull.getTags())));
                 put("%head_category%", skull.getCategory().getBaseCategory().getName());
+                put("%head_price%", skull.getPrice());
             }}));
 
             setAction(slot, ClickType.RIGHT, e -> {
@@ -78,9 +82,42 @@ public class GUISearch extends Gui {
                     Skulls.getInstance().getSkullManager().setCustomCategoryIcon(e.player, skull);
                     e.manager.showGUI(e.player, new GUICustomCategoriesList());
                 } else {
-                    SkullAPI.getInstance().checkPermissionsBeforeGive(e.player, skull.getItem(), "skulls.takefromgui");
+                    if (Settings.CHARGE_FOR_HEADS.getBoolean()) {
+                        if (e.player.hasPermission("skulls.freeheads")) {
+                            PlayerUtils.giveItem(e.player, skull.getItem());
+                            return;
+                        }
+
+                        if (!Skulls.getInstance().getEconomy().has(e.player, skull.getPrice())) {
+                            Skulls.getInstance().getLocale().getMessage("skull.no_money").sendPrefixedMessage(e.player);
+                            return;
+                        }
+
+                        PlayerUtils.giveItem(e.player, skull.getItem());
+                        Skulls.getInstance().getEconomy().withdrawPlayer(e.player, skull.getPrice());
+                        Skulls.getInstance().getLocale().getMessage("skull.money_remove").processPlaceholder("price", skull.getPrice()).sendPrefixedMessage(e.player);
+
+                    } else {
+                        SkullAPI.getInstance().checkPermissionsBeforeGive(e.player, skull.getItem(), "skulls.takefromgui");
+                    }
                 }
             });
+
+            setAction(slot, ClickType.SHIFT_RIGHT, e -> {
+                if (!e.player.hasPermission("skulls.editprice")) {
+                    Skulls.getInstance().getLocale().getMessage("skull.no_permission").sendPrefixedMessage(e.player);
+                } else {
+                    ChatPrompt.showPrompt(Skulls.getInstance(), e.player, TextUtils.formatText(Skulls.getInstance().getLocale().getMessage("skull.enter_new_price").getMessage()), chat -> {
+                        if (NumberUtils.isDouble(chat.getMessage().trim())) {
+                            skull.setPrice(Double.parseDouble(chat.getMessage().trim()));
+                            Skulls.getInstance().getData().set("price overrides." + skull.getUuid().toString(), Double.parseDouble(chat.getMessage().trim()));
+                            Skulls.getInstance().getData().save();
+                            Skulls.getInstance().getLocale().getMessage("skull.price_updated").processPlaceholder("price", chat.getMessage().trim()).sendPrefixedMessage(e.player);
+                        }
+                    }).setOnCancel(() -> e.manager.showGUI(e.player, new GUISearch(this.keyword))).setOnClose(() -> e.manager.showGUI(e.player, new GUISearch(this.keyword)));
+                }
+            });
+
             slot++;
         }
     }

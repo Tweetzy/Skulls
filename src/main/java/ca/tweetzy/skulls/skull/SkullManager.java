@@ -2,6 +2,7 @@ package ca.tweetzy.skulls.skull;
 
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.SkullAPI;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -75,6 +76,17 @@ public class SkullManager {
             return Skulls.getInstance().getData().getStringList("favourite skulls").stream().map(UUID::fromString).anyMatch(ids -> ids.equals(skullID));
         }
         return false;
+    }
+
+    public boolean hasPriceOverride(UUID skullID) {
+        ConfigurationSection section = Skulls.getInstance().getData().getConfigurationSection("price overrides");
+        if (section == null || section.getKeys(false).size() == 0) return false;
+        if (!Skulls.getInstance().getData().isSet("price overrides." + skullID.toString())) return false;
+        return true;
+    }
+
+    public double getOverridenPrice(UUID skullID) {
+        return Skulls.getInstance().getData().getDouble("price overrides." + skullID.toString());
     }
 
     public void toggleFavouriteSkull(UUID skullID, boolean isFavourite) {

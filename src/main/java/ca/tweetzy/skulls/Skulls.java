@@ -10,6 +10,7 @@ import ca.tweetzy.core.gui.GuiManager;
 import ca.tweetzy.core.utils.Metrics;
 import ca.tweetzy.core.utils.TextUtils;
 import ca.tweetzy.skulls.api.SkullAPI;
+import ca.tweetzy.skulls.api.UpdateChecker;
 import ca.tweetzy.skulls.commands.CommandDownload;
 import ca.tweetzy.skulls.commands.CommandSearch;
 import ca.tweetzy.skulls.commands.CommandSettings;
@@ -22,9 +23,12 @@ import ca.tweetzy.skulls.skull.SkullManager;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import lombok.Getter;
+import lombok.Setter;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import org.bukkit.plugin.RegisteredServiceProvider;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -39,19 +43,39 @@ import java.util.*;
 public class Skulls extends TweetyPlugin {
 
     private static Skulls instance;
-    private final Config data = new Config(this, "data.yml");
-    private final GuiManager guiManager = new GuiManager(this);
-    private final HashMap<UUID, SkullCategory> changingCustomCategoryIcon = new HashMap<>();
-    private final HashMap<UUID, Skull> addingToCategory = new HashMap<>();
 
+    @Getter
+    private final Config data = new Config(this, "data.yml");
+
+    @Getter
+    private final GuiManager guiManager = new GuiManager(this);
+
+    @Getter
+    private final HashMap<UUID, SkullCategory> changingCustomCategoryIcon = new HashMap<>();
+
+    @Getter
+    @Setter
+    private HashMap<UUID, Skull> addingToCategory = new HashMap<>();
+
+    @Getter
+    @Setter
     private boolean headsDownloading = false;
+
+    @Getter
+    @Setter
     private int headDLTracker = 0;
 
+    @Getter
     private CommandManager commandManager;
+
+    @Getter
     private SkullManager skullManager;
+
+    @Getter
+    private Economy economy;
+
     @SuppressWarnings("unused")
     Metrics metrics;
-
 
     @Override
     public void onPluginLoad() {
@@ -61,12 +85,17 @@ public class Skulls extends TweetyPlugin {
     @Override
     public void onPluginEnable() {
         TweetyCore.registerPlugin(this, 7, XMaterial.PLAYER_HEAD.name());
-        TweetyCore.initEvents(this);
 
         // Shutdown plugin if server version is not 1.8+
         if (ServerVersion.isServerVersionAtOrBelow(ServerVersion.V1_7)) {
             getServer().getPluginManager().disablePlugin(this);
             return;
+        }
+
+        // Vault check
+        if (getServer().getPluginManager().isPluginEnabled("Vault")) {
+            RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+            if (rsp != null) this.economy = rsp.getProvider();
         }
 
         // Settings setup
@@ -94,6 +123,9 @@ public class Skulls extends TweetyPlugin {
             loadHeads();
         }
 
+        // Perform the update check
+        getServer().getScheduler().runTaskLaterAsynchronously(this, () -> new UpdateChecker(this, 90098, getConsole()).check(), 1L);
+
         // Metrics
         this.metrics = new Metrics(this, 10616);
     }
@@ -115,46 +147,6 @@ public class Skulls extends TweetyPlugin {
 
     public static Skulls getInstance() {
         return instance;
-    }
-
-    public CommandManager getCommandManager() {
-        return commandManager;
-    }
-
-    public Config getData() {
-        return data;
-    }
-
-    public GuiManager getGuiManager() {
-        return guiManager;
-    }
-
-    public SkullManager getSkullManager() {
-        return skullManager;
-    }
-
-    public int getHeadDLTracker() {
-        return headDLTracker;
-    }
-
-    public boolean isHeadsDownloading() {
-        return headsDownloading;
-    }
-
-    public void setHeadsDownloading(boolean headsDownloading) {
-        this.headsDownloading = headsDownloading;
-    }
-
-    public void setHeadDLTracker(int headDLTracker) {
-        this.headDLTracker = headDLTracker;
-    }
-
-    public HashMap<UUID, Skull> getAddingToCategory() {
-        return addingToCategory;
-    }
-
-    public HashMap<UUID, SkullCategory> getChangingCustomCategoryIcon() {
-        return changingCustomCategoryIcon;
     }
 
     public void loadHeads() {
@@ -191,13 +183,15 @@ public class Skulls extends TweetyPlugin {
         }
     }
 
+    protected int taskId;
+
     public void downloadHeads(CommandSender... downloader) {
         getLocale().newMessage(TextUtils.formatText("&4[!] --- &eHeads could not be found --- &4[!]")).sendPrefixedMessage(Bukkit.getConsoleSender());
         getLocale().newMessage(TextUtils.formatText("&4[!] --- &eAttempting to download them (this may take some time) --- &4[!]")).sendPrefixedMessage(Bukkit.getConsoleSender());
         setHeadsDownloading(true);
         getServer().getScheduler().runTaskLaterAsynchronously(this, () -> Arrays.asList(SkullCategory.BaseCategory.values()).forEach(HeadDownloader::download), 1L);
 
-        getServer().getScheduler().runTaskTimer(this, (task) -> {
+        taskId = getServer().getScheduler().scheduleSyncRepeatingTask(this, () -> {
             if (!isHeadsDownloading()) {
                 loadHeads();
                 if (downloader != null) {
@@ -205,9 +199,14 @@ public class Skulls extends TweetyPlugin {
                         getLocale().getMessage("skull.download_finished").sendPrefixedMessage(sender);
                     }
                 }
-                task.cancel();
+                cancelDownloadTask();
             }
         }, 20L, 20L);
+    }
+
+    private void cancelDownloadTask() {
+        getServer().getScheduler().cancelTask(taskId);
+        getLocale().newMessage(TextUtils.formatText("&fDownload task was killed")).sendPrefixedMessage(Bukkit.getConsoleSender());
     }
 
     private static String replace(String in) {
