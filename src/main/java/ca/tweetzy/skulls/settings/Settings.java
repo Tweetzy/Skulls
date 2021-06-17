@@ -1,5 +1,6 @@
 package ca.tweetzy.skulls.settings;
 
+import ca.tweetzy.core.compatibility.XMaterial;
 import ca.tweetzy.core.configuration.Config;
 import ca.tweetzy.core.configuration.ConfigSetting;
 import ca.tweetzy.skulls.Skulls;
@@ -23,6 +24,9 @@ public class Settings {
     public static final ConfigSetting INCLUDE_TAGS_IN_SEARCH = new ConfigSetting(config, "option.include tags in search", true, "When searching for a head, should tags be searched as well?");
 
     public static final ConfigSetting CHARGE_FOR_HEADS = new ConfigSetting(config, "option.charge for heads", true, "Should players be charged to take x1 head from the gui?");
+    public static final ConfigSetting REQUIRE_PERMISSIONS_FOR_CATEGORY = new ConfigSetting(config, "option.require permissions per category", true, "Should each category require a separate permission to access?", "Example: skulls.category.alphabet -> Allows access to the alphabet category");
+    public static final ConfigSetting USE_ITEM_ECONOMY = new ConfigSetting(config, "option.item economy.use over vault", false, "Should Skulls use an item economy (Raw material type over money)");
+    public static final ConfigSetting ITEM_ECONOMY_MATERIAL = new ConfigSetting(config, "option.item economy.material", XMaterial.DIAMOND.name(), "The item that will act as the currency in place of $");
 
     public static final ConfigSetting BASE_PRICE_ALPHABET = new ConfigSetting(config, "option.default prices.alphabet", 5.0, "What should the default price be for this category?");
     public static final ConfigSetting BASE_PRICE_ANIMALS = new ConfigSetting(config, "option.default prices.animals", 5.0, "What should the default price be for this category?");

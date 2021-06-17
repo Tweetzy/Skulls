@@ -11,11 +11,10 @@ import ca.tweetzy.core.utils.Metrics;
 import ca.tweetzy.core.utils.TextUtils;
 import ca.tweetzy.skulls.api.SkullAPI;
 import ca.tweetzy.skulls.api.UpdateChecker;
-import ca.tweetzy.skulls.commands.CommandDownload;
-import ca.tweetzy.skulls.commands.CommandSearch;
-import ca.tweetzy.skulls.commands.CommandSettings;
-import ca.tweetzy.skulls.commands.CommandSkulls;
+import ca.tweetzy.skulls.commands.*;
 import ca.tweetzy.skulls.downloader.HeadDownloader;
+import ca.tweetzy.skulls.economy.EconomyManager;
+import ca.tweetzy.skulls.settings.LocaleSettings;
 import ca.tweetzy.skulls.settings.Settings;
 import ca.tweetzy.skulls.skull.Skull;
 import ca.tweetzy.skulls.skull.SkullCategory;
@@ -72,6 +71,9 @@ public class Skulls extends TweetyPlugin {
     private SkullManager skullManager;
 
     @Getter
+    private EconomyManager economyManager;
+
+    @Getter
     private Economy economy;
 
     @SuppressWarnings("unused")
@@ -102,14 +104,18 @@ public class Skulls extends TweetyPlugin {
         Settings.setup();
 
         // Locale
-        setLocale(Settings.LANG.getString(), false);
+        setLocale(Settings.LANG.getString());
+        LocaleSettings.setup();
+
+        // Economy Manager
+        this.economyManager = new EconomyManager();
 
         // Data File
         this.data.load();
 
         // Commands
         this.commandManager = new CommandManager(this);
-        this.commandManager.addCommand(new CommandSkulls()).addSubCommands(new CommandSearch(), new CommandSettings(), new CommandDownload());
+        this.commandManager.addCommand(new CommandSkulls()).addSubCommands(new CommandSearch(), new CommandSettings(), new CommandDownload(), new CommandReload());
 
         // Managers
         this.guiManager.init();
@@ -137,7 +143,9 @@ public class Skulls extends TweetyPlugin {
 
     @Override
     public void onConfigReload() {
-
+        Settings.setup();
+        setLocale(Settings.LANG.getString());
+        this.economyManager = new EconomyManager();
     }
 
     @Override

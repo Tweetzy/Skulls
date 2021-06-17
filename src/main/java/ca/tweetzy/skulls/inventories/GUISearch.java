@@ -88,13 +88,13 @@ public class GUISearch extends Gui {
                             return;
                         }
 
-                        if (!Skulls.getInstance().getEconomy().has(e.player, skull.getPrice())) {
+                        if (!Skulls.getInstance().getEconomyManager().has(e.player, skull.getPrice())) {
                             Skulls.getInstance().getLocale().getMessage("skull.no_money").sendPrefixedMessage(e.player);
                             return;
                         }
 
                         PlayerUtils.giveItem(e.player, skull.getItem());
-                        Skulls.getInstance().getEconomy().withdrawPlayer(e.player, skull.getPrice());
+                        Skulls.getInstance().getEconomyManager().withdrawPlayer(e.player, skull.getPrice());
                         Skulls.getInstance().getLocale().getMessage("skull.money_remove").processPlaceholder("price", skull.getPrice()).sendPrefixedMessage(e.player);
 
                     } else {

@@ -27,24 +27,6 @@ jobs:
       - name: Build with Maven
         run: mvn verify -B --file pom.xml
 
-  transfer:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Transfer main branch to Tweetzy
-        uses: andstor/copycat-action@v3
-        with:
-          personal_token: ${{ secrets.API_TOKEN_GITHUB }}
-          src_path: /.
-          dst_owner: Tweetzy
-          dst_repo_name: Packages
-          email: kiran.hart@live.com
-          src_branch: main
-          dst_branch: main
-          commit_message: ${{ github.event.head_commit.message }}
-          exclude: .github/*
-          clean: true
-
   jitpack:
     runs-on: ubuntu-latest
     steps:

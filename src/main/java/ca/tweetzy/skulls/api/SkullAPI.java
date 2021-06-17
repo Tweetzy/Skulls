@@ -3,6 +3,7 @@ package ca.tweetzy.skulls.api;
 import ca.tweetzy.core.compatibility.XMaterial;
 import ca.tweetzy.core.utils.PlayerUtils;
 import ca.tweetzy.core.utils.TextUtils;
+import ca.tweetzy.core.utils.nms.NBTEditor;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.downloader.MinecraftHeadsLinks;
 import ca.tweetzy.skulls.settings.Settings;
@@ -246,14 +247,30 @@ public class SkullAPI {
         PlayerUtils.giveItem(player, item);
     }
 
+    /**
+     * Used to check if any custom categories are created already
+     *
+     * @return true if at least one custom category is found.
+     */
     public boolean anyCustomCategories() {
         return Skulls.getInstance().getData().contains("custom category") && Objects.requireNonNull(Skulls.getInstance().getData().getConfigurationSection("custom category")).getKeys(false).size() != 0;
     }
 
+    /**
+     * Used to check if a custom category already exists
+     *
+     * @param name is the name of the category being checked for
+     * @return true if the category is found
+     */
     public boolean doesCustomCategoryExists(String name) {
         return Skulls.getInstance().getData().contains("custom category." + name.toLowerCase());
     }
 
+    /**
+     * Used to create a new custom category
+     *
+     * @param name is what you want the new category to be named
+     */
     public void createCustomCategory(String name) {
         if (doesCustomCategoryExists(name)) return;
         String id = name.toLowerCase().replace(" ", "");
@@ -265,10 +282,69 @@ public class SkullAPI {
         Skulls.getInstance().getSkullManager().addSkullCategory(new SkullCategory(id));
     }
 
+    /**
+     * Used to remove a custom category
+     *
+     * @param id is the category you want to remove
+     */
     public void removeCustomCategory(String id) {
         if (Skulls.getInstance().getSkullManager().removeCustomCategory(id)) {
             Skulls.getInstance().getData().set("custom category." + id.toLowerCase(), null);
             Skulls.getInstance().getData().save();
+        }
+    }
+
+    /**
+     * Get the total amount of an item in the player's inventory
+     *
+     * @param player is the player being checked
+     * @param stack is the item you want to find
+     * @return the total count of the item(s)
+     */
+    public int getItemCountInPlayerInventory(Player player, ItemStack stack) {
+        int total = 0;
+        if (stack.getType() == XMaterial.PLAYER_HEAD.parseMaterial()) {
+            for (ItemStack item : player.getInventory().getContents()) {
+                if (item == null || item.getType() != XMaterial.PLAYER_HEAD.parseMaterial()) continue;
+                if (NBTEditor.getTexture(item).equals(NBTEditor.getTexture(stack))) total += item.getAmount();
+            }
+        } else {
+            for (ItemStack item : player.getInventory().getContents()) {
+                if (item == null || !item.isSimilar(stack)) continue;
+                total += item.getAmount();
+            }
+        }
+        return total;
+    }
+
+    /**
+     * Removes a set amount of a specific item from the player inventory
+     *
+     * @param player is the player you want to remove the item from
+     * @param stack is the item that you want to remove
+     * @param amount is the amount of items you want to remove.
+     */
+    public void removeSpecificItemQuantityFromPlayer(Player player, ItemStack stack, int amount) {
+        int i = amount;
+        for (int j = 0; j < player.getInventory().getSize(); j++) {
+            ItemStack item = player.getInventory().getItem(j);
+            if (item == null) continue;
+            if (stack.getType() == XMaterial.PLAYER_HEAD.parseMaterial() && item.getType() == XMaterial.PLAYER_HEAD.parseMaterial()) {
+                if (!NBTEditor.getTexture(item).equals(NBTEditor.getTexture(stack))) continue;
+            } else {
+                if (!item.isSimilar(stack)) continue;
+
+            }
+
+            if (i >= item.getAmount()) {
+                player.getInventory().clear(j);
+                i -= item.getAmount();
+            } else if (i > 0) {
+                item.setAmount(item.getAmount() - i);
+                i = 0;
+            } else {
+                break;
+            }
         }
     }
 }
