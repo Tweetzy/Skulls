@@ -115,7 +115,7 @@ public class GUIMain extends Gui {
 
     private void showMainCategory(GuiClickEvent e, SkullCategory.BaseCategory category) {
         if (Settings.REQUIRE_PERMISSIONS_FOR_CATEGORY.getBoolean()) {
-            if (!checkPermission(e.player, "skulls.category." + category.getName().toLowerCase())) {
+            if (!checkPermission(e.player, "skulls.category." + category.getName().replace(" ", "").toLowerCase())) {
                 return;
             }
         }
