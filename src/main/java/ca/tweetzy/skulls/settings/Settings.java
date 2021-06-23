@@ -38,6 +38,8 @@ public class Settings {
     public static final ConfigSetting BASE_PRICE_MISCELLANEOUS = new ConfigSetting(config, "option.default prices.miscellaneous", 5.0, "What should the default price be for this category?");
     public static final ConfigSetting BASE_PRICE_MONSTERS = new ConfigSetting(config, "option.default prices.monsters", 5.0, "What should the default price be for this category?");
     public static final ConfigSetting BASE_PRICE_PLANTS = new ConfigSetting(config, "option.default prices.plants", 5.0, "What should the default price be for this category?");
+    public static final ConfigSetting USE_BLOCK_WORLDS = new ConfigSetting(config, "option.use blocked worlds", false, "Should skulls block usage within certain worlds");
+    public static final ConfigSetting BLOCKED_WORLDS = new ConfigSetting(config, "option.blocked worlds", Arrays.asList("WORLD_NETHER", "ANOTHER_WORLD"), "The list of worlds that skulls should be blocked in");
 
     public static final ConfigSetting GUI_BACK_BTN_ITEM = new ConfigSetting(config, "gui.global items.back button.item", "ARROW", "Settings for the back button");
     public static final ConfigSetting GUI_BACK_BTN_NAME = new ConfigSetting(config, "gui.global items.back button.name", "&e<< Back");

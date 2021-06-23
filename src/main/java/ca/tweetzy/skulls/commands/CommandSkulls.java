@@ -4,6 +4,7 @@ import ca.tweetzy.core.commands.AbstractCommand;
 import ca.tweetzy.core.utils.TextUtils;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.inventories.GUIMain;
+import ca.tweetzy.skulls.settings.Settings;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -29,6 +30,11 @@ public class CommandSkulls extends AbstractCommand {
         } else {
             // Open the inventory
             Player player = (Player) sender;
+
+            if (Settings.USE_BLOCK_WORLDS.getBoolean() && Settings.BLOCKED_WORLDS.getStringList().stream().anyMatch(world -> world.equals(player.getWorld().getName()))) {
+                Skulls.getInstance().getLocale().getMessage("general.blocked_world").sendPrefixedMessage(player);
+                return ReturnType.FAILURE;
+            }
 
             if (Skulls.getInstance().isHeadsDownloading()) {
                 Skulls.getInstance().getLocale().getMessage("skull.unavailable").sendPrefixedMessage(player);

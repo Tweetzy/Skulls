@@ -17,6 +17,7 @@ public class LocaleSettings {
 
     static {
         languageNodes.put("general.prefix", "&8[&eSkulls&8]");
+        languageNodes.put("general.blocked_world", "&cYou cannot use skulls within this world");
         languageNodes.put("skull.search_ask", "&aPlease enter a keyword to search");
         languageNodes.put("skull.no_results", "&cCould not find any results for the keyword: &6%keyword%");
         languageNodes.put("skull.category_name_ask", "&aPlease enter the category name");

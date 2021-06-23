@@ -27,6 +27,11 @@ public class CommandSearch extends AbstractCommand {
         if (args.length == 0) return ReturnType.SYNTAX_ERROR;
         Player player = (Player) sender;
 
+        if (Settings.USE_BLOCK_WORLDS.getBoolean() && Settings.BLOCKED_WORLDS.getStringList().stream().anyMatch(world -> world.equals(player.getWorld().getName()))) {
+            Skulls.getInstance().getLocale().getMessage("general.blocked_world").sendPrefixedMessage(player);
+            return ReturnType.FAILURE;
+        }
+
         if (Skulls.getInstance().isHeadsDownloading()) {
             Skulls.getInstance().getLocale().getMessage("skull.unavailable").sendPrefixedMessage(player);
             return ReturnType.FAILURE;
