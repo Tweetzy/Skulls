@@ -115,7 +115,13 @@ public class Skulls extends TweetyPlugin {
 
         // Commands
         this.commandManager = new CommandManager(this);
-        this.commandManager.addCommand(new CommandSkulls()).addSubCommands(new CommandSearch(), new CommandSettings(), new CommandDownload(), new CommandReload());
+        this.commandManager.addCommand(new CommandSkulls()).addSubCommands(
+                new CommandSearch(),
+                new CommandSettings(),
+                new CommandDownload(),
+                new CommandReload(),
+                new CommandGiveRandom()
+        );
 
         // Managers
         this.guiManager.init();

@@ -23,6 +23,8 @@ import java.util.stream.Collectors;
  * Time Created: 11:43 p.m.
  * Usage of any code found within this class is prohibited unless given explicit permission otherwise
  */
+
+// TODO REDO THE NAVIGATION SYSTEM -> PREVENT THE CURSOR / MOUSE FROM BEING RESET FROM IT'S LAST POSITION TO THE BOTTOM CENTER OF THE GUI
 public class GUICategoryList extends Gui {
 
     final SkullCategory.BaseCategory category;
