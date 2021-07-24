@@ -20,6 +20,7 @@ public class LocaleSettings {
         languageNodes.put("general.blocked_world", "&cYou cannot use skulls within this world");
         languageNodes.put("skull.search_ask", "&aPlease enter a keyword to search");
         languageNodes.put("skull.no_results", "&cCould not find any results for the keyword: &6%keyword%");
+        languageNodes.put("skull.no_results_id", "&cCould not find a head with the id: &6%id%");
         languageNodes.put("skull.player_offline", "&cCould not find that player");
         languageNodes.put("skull.invalid_category", "&cThat is not a valid category");
         languageNodes.put("skull.gave_random_to_all", "&aYou gave &2%amount% &arandom skull(s) from &2%skull_category% &ato everyone.");

@@ -25,8 +25,8 @@ import java.util.stream.Collectors;
  */
 public class GUISearch extends Gui {
 
-    final String keyword;
-    final List<Skull> items;
+    private final String keyword;
+    private final List<Skull> items;
 
     public GUISearch(String keyword) {
         this.keyword = keyword;

@@ -37,6 +37,7 @@ public class GUICategoryList extends Gui {
         draw();
     }
 
+
     private void draw() {
         reset();
         pages = (int) Math.max(1, Math.ceil(Skulls.getInstance().getSkullManager().getSkulls(this.category).size() / (double) 45));

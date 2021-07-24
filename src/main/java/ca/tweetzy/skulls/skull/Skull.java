@@ -23,6 +23,7 @@ import java.util.UUID;
 @Getter
 public class Skull {
 
+    private int websiteId;
     private UUID uuid;
     private String name;
     private String base64;
@@ -41,6 +42,7 @@ public class Skull {
         this.tags = tags;
         this.price = Skulls.getInstance().getSkullManager().hasPriceOverride(uuid) ? Skulls.getInstance().getSkullManager().getOverridenPrice(uuid) : category.getBaseCategory().getPrice();
         this.isFavourite = isFavourite;
+        this.websiteId = -1;
     }
 
     public ItemStack getItem() {

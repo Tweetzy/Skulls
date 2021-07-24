@@ -1,9 +1,12 @@
 package ca.tweetzy.skulls.commands;
 
 import ca.tweetzy.core.commands.AbstractCommand;
+import ca.tweetzy.core.utils.NumberUtils;
 import ca.tweetzy.skulls.Skulls;
+import ca.tweetzy.skulls.api.SkullAPI;
 import ca.tweetzy.skulls.inventories.GUISearch;
 import ca.tweetzy.skulls.settings.Settings;
+import ca.tweetzy.skulls.skull.Skull;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -26,6 +29,8 @@ public class CommandSearch extends AbstractCommand {
     protected ReturnType runCommand(CommandSender sender, String... args) {
         if (args.length == 0) return ReturnType.SYNTAX_ERROR;
         Player player = (Player) sender;
+        int headId = -1;
+        boolean idLookup = false;
 
         if (Settings.USE_BLOCK_WORLDS.getBoolean() && Settings.BLOCKED_WORLDS.getStringList().stream().anyMatch(world -> world.equals(player.getWorld().getName()))) {
             Skulls.getInstance().getLocale().getMessage("general.blocked_world").sendPrefixedMessage(player);
@@ -39,15 +44,46 @@ public class CommandSearch extends AbstractCommand {
 
         StringBuilder builder = new StringBuilder();
         for (String arg : args) {
-            builder.append(arg).append(" ");
+            if (arg.contains("id:") && NumberUtils.isInt(arg.split("id:")[1])) {
+                idLookup = true;
+                headId = Integer.parseInt(arg.split("id:")[1]);
+            } else {
+                builder.append(arg).append(" ");
+            }
         }
 
-        if (Skulls.getInstance().getSkullManager().search(builder.toString().trim(), Settings.INCLUDE_TAGS_IN_SEARCH.getBoolean()).isEmpty()) {
-            Skulls.getInstance().getLocale().getMessage("skull.no_results").processPlaceholder("keyword", builder.toString()).sendPrefixedMessage(player);
-            return ReturnType.FAILURE;
+        if (!idLookup) {
+            if (Skulls.getInstance().getSkullManager().search(builder.toString().trim(), Settings.INCLUDE_TAGS_IN_SEARCH.getBoolean()).isEmpty()) {
+                Skulls.getInstance().getLocale().getMessage("skull.no_results").processPlaceholder("keyword", builder.toString()).sendPrefixedMessage(player);
+                return ReturnType.FAILURE;
+            }
+
+            Skulls.getInstance().getGuiManager().showGUI(player, new GUISearch(builder.toString().trim()));
+            return ReturnType.SUCCESS;
         }
 
-        Skulls.getInstance().getGuiManager().showGUI(player, new GUISearch(builder.toString().trim()));
+        int finalHeadId = headId;
+        if (Skulls.getInstance().getSkullManager().getSkulls().stream().anyMatch(skull -> skull.getWebsiteId() == finalHeadId)) {
+            Skulls.getInstance().getGuiManager().showGUI(player, new GUISearch(finalHeadId+""));
+            return ReturnType.SUCCESS;
+        }
+        Skulls.newChain().asyncFirst(() -> SkullAPI.getInstance().searchHeadDatabaseId(finalHeadId)).syncLast((texture) -> {
+            if (texture == null) {
+                Skulls.getInstance().getLocale().getMessage("skull.no_results_id").processPlaceholder("id", finalHeadId).sendPrefixedMessage(player);
+                return;
+            }
+
+            Skull skull = Skulls.getInstance().getSkullManager().getSkulls().stream().filter(all -> all.getBase64().equals(texture)).findFirst().orElse(null);
+            if (skull == null) {
+                Skulls.getInstance().getLocale().getMessage("skull.no_results_id").processPlaceholder("id", finalHeadId).sendPrefixedMessage(player);
+                return;
+            }
+
+            skull.setWebsiteId(finalHeadId);
+            Skulls.getInstance().getGuiManager().showGUI(player, new GUISearch(finalHeadId+""));
+
+        }).execute();
+
         return ReturnType.SUCCESS;
     }
 
@@ -58,7 +94,7 @@ public class CommandSearch extends AbstractCommand {
 
     @Override
     public String getSyntax() {
-        return "search <keywords>";
+        return "search <keywords> / id:head-id";
     }
 
     @Override

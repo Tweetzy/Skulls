@@ -14,7 +14,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -346,5 +349,20 @@ public class SkullAPI {
                 break;
             }
         }
+    }
+
+    public String searchHeadDatabaseId(int id) {
+        String texture = null;
+        String url = "https://minecraft-heads.com/custom-heads/";
+
+        try {
+            Document document = Jsoup.connect(url + id).get();
+            if (document.title().contains("404")) return null;
+            texture = document.getElementById("UUID-Value").text();
+        } catch (IOException e) {
+            return null;
+        }
+
+        return texture;
     }
 }

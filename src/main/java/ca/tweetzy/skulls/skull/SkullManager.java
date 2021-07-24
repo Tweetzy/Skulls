@@ -1,5 +1,6 @@
 package ca.tweetzy.skulls.skull;
 
+import ca.tweetzy.core.utils.NumberUtils;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.SkullAPI;
 import org.bukkit.configuration.ConfigurationSection;
@@ -68,7 +69,7 @@ public class SkullManager {
     }
 
     public List<Skull> search(String keyword, boolean includeTags) {
-        return getSkulls().stream().filter(skull -> match(keyword, skull.getName()) || Arrays.stream(skull.getTags()).anyMatch(tag -> match(keyword, tag)) && includeTags).collect(Collectors.toList());
+        return getSkulls().stream().filter(skull -> NumberUtils.isInt(keyword) ? skull.getWebsiteId() == Integer.parseInt(keyword) :  skull.getUuid().toString().equals(keyword) || match(keyword, skull.getName()) || Arrays.stream(skull.getTags()).anyMatch(tag -> match(keyword, tag)) && includeTags).collect(Collectors.toList());
     }
 
     public boolean isSkullConfigFavourite(UUID skullID) {
@@ -87,6 +88,15 @@ public class SkullManager {
 
     public double getOverridenPrice(UUID skullID) {
         return Skulls.getInstance().getData().getDouble("price overrides." + skullID.toString());
+    }
+
+    public void saveSkullWebIds() {
+        this.skulls.forEach(skull -> {
+            if (skull.getWebsiteId() != -1) {
+                Skulls.getInstance().getData().set("website id cache." + skull.getUuid().toString(), skull.getWebsiteId());
+            }
+        });
+        Skulls.getInstance().getData().save();
     }
 
     public void toggleFavouriteSkull(UUID skullID, boolean isFavourite) {

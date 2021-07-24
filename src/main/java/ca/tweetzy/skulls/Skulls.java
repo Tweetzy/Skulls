@@ -19,6 +19,9 @@ import ca.tweetzy.skulls.settings.Settings;
 import ca.tweetzy.skulls.skull.Skull;
 import ca.tweetzy.skulls.skull.SkullCategory;
 import ca.tweetzy.skulls.skull.SkullManager;
+import co.aikar.taskchain.BukkitTaskChainFactory;
+import co.aikar.taskchain.TaskChain;
+import co.aikar.taskchain.TaskChainFactory;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -42,6 +45,7 @@ import java.util.*;
 public class Skulls extends TweetyPlugin {
 
     private static Skulls instance;
+    private static TaskChainFactory taskChainFactory;
 
     @Getter
     private final Config data = new Config(this, "data.yml");
@@ -100,6 +104,9 @@ public class Skulls extends TweetyPlugin {
             if (rsp != null) this.economy = rsp.getProvider();
         }
 
+        // Task Chain
+        taskChainFactory =  BukkitTaskChainFactory.create(this);
+
         // Settings setup
         Settings.setup();
 
@@ -144,6 +151,7 @@ public class Skulls extends TweetyPlugin {
 
     @Override
     public void onPluginDisable() {
+        this.skullManager.saveSkullWebIds();
         instance = null;
     }
 
@@ -152,6 +160,10 @@ public class Skulls extends TweetyPlugin {
         Settings.setup();
         setLocale(Settings.LANG.getString());
         this.economyManager = new EconomyManager();
+    }
+
+    public static <T> TaskChain<T> newChain() {
+        return taskChainFactory.newChain();
     }
 
     @Override
@@ -186,6 +198,10 @@ public class Skulls extends TweetyPlugin {
                             replace(jsonObject.get("tags").toString()).split(","),
                             this.skullManager.isSkullConfigFavourite(UUID.fromString(replace(jsonObject.get("uuid").toString())))
                     );
+
+                    if (this.data.contains("website id cache." + skull.getUuid().toString())) {
+                        skull.setWebsiteId(this.data.getInt("website id cache." + skull.getUuid().toString()));
+                    }
 
                     this.skullManager.addSkull(skull);
                 });

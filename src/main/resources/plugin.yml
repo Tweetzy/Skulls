@@ -4,6 +4,8 @@ api-version: 1.13
 main: ca.tweetzy.skulls.Skulls
 description: A collection of 20K+ custom heads
 authors: [Kiran Hart]
+depend: [Vault]
+softdepend: [PlayerPoints, Reserve]
 
 commands:
   skulls:
