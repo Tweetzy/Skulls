@@ -1,0 +1,108 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>ca.tweetzy</groupId>
+    <artifactId>skulls</artifactId>
+
+    <name>Skulls</name>
+    <version>2.0.0</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <author>Kiran Hart</author>
+        <jarName>Skulls</jarName>
+        <main.class>${project.groupId}.${project.artifactId}.${project.name}</main.class>
+        <java.version>1.8</java.version>
+        <tweety.version>1.3.9</tweety.version>
+        <tweety.path>ca.tweetzy</tweety.path>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/kiranhart/*</url>
+        </repository>
+    </repositories>
+
+    <!-- UNCOMMENT ONLY IF YOUR java.version IS SET TO JAVA 16 OR HIGHER. -->
+<!--    <pluginRepositories>-->
+<!--        <pluginRepository>-->
+<!--            <id>maven-snapshots</id>-->
+<!--            <url>https://repository.apache.org/content/repositories/snapshots/</url>-->
+<!--        </pluginRepository>-->
+<!--    </pluginRepositories>-->
+
+    <dependencies>
+        <dependency>
+            <groupId>${tweety.path}</groupId>
+            <artifactId>tweety</artifactId>
+            <version>${tweety.version}</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <finalName>${jarName}-${project.version}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.4</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <createDependencyReducedPom>false</createDependencyReducedPom>
+                    <artifactSet>
+                        <includes>
+                            <include>${tweety.path}:tweety*</include>
+                        </includes>
+                    </artifactSet>
+                    <filters>
+                        <filter>
+                            <artifact>*:*</artifact>
+                            <excludes>
+                                <exclude>META-INF/*.SF</exclude>
+                                <exclude>META-INF/*.DSA</exclude>
+                                <exclude>META-INF/*.RSA</exclude>
+                                <exclude>META-INF/MANIFEST.MF</exclude>
+                            </excludes>
+                        </filter>
+                    </filters>
+                    <relocations>
+                        <relocation>
+                            <pattern>ca.tweetzy.tweety</pattern>
+                            <shadedPattern>${project.groupId}.${project.artifactId}.core</shadedPattern>
+                        </relocation>
+                    </relocations>
+                </configuration>
+            </plugin>
+        </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
+</project>

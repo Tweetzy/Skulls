@@ -1,0 +1,180 @@
+Charge For Heads: false
+Economy Provider: Vault
+Item Economy Material: GOLD_INGOT
+
+Gui:
+  Listing:
+    Search Title: "&e&lSearch&f: &a{search_term} &7({current_page}/{max_pages})"
+    Category Title: "&e&l{category_name} &7({current_page}/{max_pages})"
+    Skull Format:
+      Name: "&e{skull_name}"
+      Id: "&7ID: &e{skull_id}"
+      Category: "&7Category: &e{skull_category}"
+      Tags: "&7Tags: &e{skull_tags}"
+      Take: "&eLeft Click &7to take one"
+      Add To Category: "&eMiddle Click &7to add to category"
+      Edit Price: "&eShift Right Click &7to edit price"
+      Favourite: "&eRight Click &7to favourite head"
+      Unfavourite: "&eRight Click &7to un-favourite head"
+      Favourited: "&e&lFAVOURITED"
+      Price: "&7Cost: &a${skull_price}"
+
+  Main:
+    Title: "&eSkulls"
+    Background: BLACK_STAINED_GLASS_PANE
+    Items:
+      Favourites:
+        Material: "Skulls:39696"
+        Name: "&eFavourited Heads"
+        Lore:
+          - "&e{category_head_count} &7total heads"
+          - "&7have been favourited"
+          - ""
+          - "&eLeft Click &7to view heads"
+      Alphabet:
+        Material: "Skulls:164"
+        Name: "&eAlphabet Heads"
+        Lore:
+          - "&e{category_head_count} &7total heads"
+          - "&7within this category"
+          - ""
+          - "&eLeft Click &7to view heads"
+      Animals:
+        Material: "Skulls:26960"
+        Name: "&eAnimal Heads"
+        Lore:
+          - "&e{category_head_count} &7total heads"
+          - "&7within this category"
+          - ""
+          - "&eLeft Click &7to view heads"
+      Blocks:
+        Material: "Skulls:24064"
+        Name: "&eBlocks Heads"
+        Lore:
+          - "&e{category_head_count} &7total heads"
+          - "&7within this category"
+          - ""
+          - "&eLeft Click &7to view heads"
+      Decoration:
+        Material: "Skulls:46908"
+        Name: "&eDecoration Heads"
+        Lore:
+          - "&e{category_head_count} &7total heads"
+          - "&7within this category"
+          - ""
+          - "&eLeft Click &7to view heads"
+      Food And Drinks:
+        Material: "Skulls:2686"
+        Name: "&eFood & Drink Heads"
+        Lore:
+          - "&e{category_head_count} &7total heads"
+          - "&7within this category"
+          - ""
+          - "&eLeft Click &7to view heads"
+      Humans:
+        Material: "Skulls:47833"
+        Name: "&eHuman Heads"
+        Lore:
+          - "&e{category_head_count} &7total heads"
+          - "&7within this category"
+          - ""
+          - "&eLeft Click &7to view heads"
+      Humanoids:
+        Material: "Skulls:46664"
+        Name: "&eHumanoid Heads"
+        Lore:
+          - "&e{category_head_count} &7total heads"
+          - "&7within this category"
+          - ""
+          - "&eLeft Click &7to view heads"
+      Miscellaneous:
+        Material: "Skulls:45534"
+        Name: "&eMiscellaneous Heads"
+        Lore:
+          - "&e{category_head_count} &7total heads"
+          - "&7within this category"
+          - ""
+          - "&eLeft Click &7to view heads"
+      Monsters:
+        Material: "Skulls:47778"
+        Name: "&eMonsters Heads"
+        Lore:
+          - "&e{category_head_count} &7total heads"
+          - "&7within this category"
+          - ""
+          - "&eLeft Click &7to view heads"
+      Plants:
+        Material: "Skulls:44334"
+        Name: "&ePlants Heads"
+        Lore:
+          - "&e{category_head_count} &7total heads"
+          - "&7within this category"
+          - ""
+          - "&eLeft Click &7to view heads"
+
+# -------------------------------------------------------------------------------------------------
+# Default Category Settings
+# -------------------------------------------------------------------------------------------------
+Categories:
+  Alphabet:
+    Name: "Alphabet"
+    Price: 1.0
+  Animals:
+    Name: "Animals"
+    Price: 1.0
+  Blocks:
+    Name: "Blocks"
+    Price: 1.0
+  Decoration:
+    Name: "Decoration"
+    Price: 1.0
+  Food And Drinks:
+    Name: "Food & Drinks"
+    Price: 1.0
+  Humans:
+    Name: "Humans"
+    Price: 1.0
+  Humanoids:
+    Name: "Humanoids"
+    Price: 1.0
+  Miscellaneous:
+    Name: "Miscellaneous"
+    Price: 1.0
+  Monsters:
+    Name: "Monsters"
+    Price: 1.0
+  Plants:
+    Name: "Plants"
+    Price: 1.0
+
+# -------------------------------------------------------------------------------------------------
+# The format used in the {timestamp} placeholder (google "Java timestamp format" for options).
+# -------------------------------------------------------------------------------------------------
+Timestamp_Format: "MMM/dd/yyyy HH:mm:ss aa"
+
+# -------------------------------------------------------------------------------------------------
+# * THE FIRST ALIAS IS THE MAIN LABEL, PLEASE DO NOT REMOVE IT. *
+# -------------------------------------------------------------------------------------------------
+Command_Aliases: [skulls, skull]
+
+# -------------------------------------------------------------------------------------------------
+# What language should we use for messages? If it exists, the language file will be copied
+# to your messages/ folder where you can edit it.
+# -------------------------------------------------------------------------------------------------
+Locale: en
+
+# -------------------------------------------------------------------------------------------------
+# The prefix used in front of most chat or console messages
+# -------------------------------------------------------------------------------------------------
+Prefix: "&8[&eSkulls&8]"
+
+# -------------------------------------------------------------------------------------------------
+# We log a console message if an operation takes over the time below (milliseconds).
+# Set to -1 to disable.
+# -------------------------------------------------------------------------------------------------
+Log_Lag_Over_Milis: 100
+
+# -------------------------------------------------------------------------------------------------
+# Do not change this value, otherwise it will corrupt your plugin installation!
+# -------------------------------------------------------------------------------------------------
+Version: 1

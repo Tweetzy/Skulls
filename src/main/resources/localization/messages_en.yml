@@ -1,0 +1,8 @@
+Loading: "&cSkulls is currently loading, please wait."
+No Money: "&cYou do not have enough money"
+Withdraw: "&c&l- ${value}"
+
+# -------------------------------------------------------------------------------------------------
+# Do not change this value, otherwise it will corrupt your plugin installation!
+# -------------------------------------------------------------------------------------------------
+Version: 1
