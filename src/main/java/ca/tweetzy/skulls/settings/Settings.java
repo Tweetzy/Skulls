@@ -29,6 +29,7 @@ public final class Settings extends SimpleSettings {
 
 		public static String SEARCH_TITLE;
 		public static String CATEGORY_TITLE;
+		public static String FAVOURITES_TITLE;
 
 		public static final class Format {
 
@@ -65,6 +66,7 @@ public final class Settings extends SimpleSettings {
 			pathPrefix("Gui.Listing");
 			SEARCH_TITLE = getString("Search Title");
 			CATEGORY_TITLE = getString("Category Title");
+			FAVOURITES_TITLE = getString("Favourite Title");
 		}
 	}
 
@@ -125,6 +127,10 @@ public final class Settings extends SimpleSettings {
 			public static String FAVOURITES_NAME;
 			public static List<String> FAVOURITES_LORE;
 
+			public static String SEARCH_ITEM;
+			public static String SEARCH_NAME;
+			public static List<String> SEARCH_LORE;
+
 			private static void init() {
 				pathPrefix("Gui.Main.Items");
 
@@ -171,6 +177,10 @@ public final class Settings extends SimpleSettings {
 				FAVOURITES_ITEM = getString("Favourites.Material");
 				FAVOURITES_NAME = getString("Favourites.Name");
 				FAVOURITES_LORE = getStringList("Favourites.Lore");
+
+				SEARCH_ITEM = getString("Search.Material");
+				SEARCH_NAME = getString("Search.Name");
+				SEARCH_LORE = getStringList("Search.Lore");
 			}
 		}
 	}

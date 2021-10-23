@@ -6,6 +6,7 @@ Gui:
   Listing:
     Search Title: "&e&lSearch&f: &a{search_term} &7({current_page}/{max_pages})"
     Category Title: "&e&l{category_name} &7({current_page}/{max_pages})"
+    Favourite Title: "&e&lFavourites &7({current_page}/{max_pages})"
     Skull Format:
       Name: "&e{skull_name}"
       Id: "&7ID: &e{skull_id}"
@@ -23,6 +24,11 @@ Gui:
     Title: "&eSkulls"
     Background: BLACK_STAINED_GLASS_PANE
     Items:
+      Search:
+        Material: "Skulls:5650"
+        Name: "&eSearch Heads"
+        Lore:
+          - "&eLeft Click &7to search heads"
       Favourites:
         Material: "Skulls:39696"
         Name: "&eFavourited Heads"

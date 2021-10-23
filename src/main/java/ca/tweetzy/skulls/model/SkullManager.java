@@ -6,6 +6,7 @@ import ca.tweetzy.skulls.impl.Skull;
 import ca.tweetzy.skulls.impl.SkullCategory;
 import ca.tweetzy.tweety.Common;
 import ca.tweetzy.tweety.FileUtil;
+import ca.tweetzy.tweety.RandomUtil;
 import ca.tweetzy.tweety.collection.StrictList;
 import ca.tweetzy.tweety.remain.Remain;
 import com.google.gson.JsonArray;
@@ -58,6 +59,10 @@ public final class SkullManager {
 		return this.skulls.getSource().stream().filter(all -> all.getId() == id).findFirst().orElse(null);
 	}
 
+	public Skull getRandomSkull() {
+		return RandomUtil.nextItem(this.skulls);
+	}
+
 	public ItemStack getSkullItemStack(final int id) {
 		return this.getSkull(id).getItemStack();
 	}
@@ -83,6 +88,14 @@ public final class SkullManager {
 				locatedSkulls.add(skull);
 		}
 
+		return locatedSkulls;
+	}
+
+	public List<Skull> getSkullsByIds(@NonNull final List<Integer> ids) {
+		final List<Skull> locatedSkulls = new ArrayList<>();
+		for (final int id : ids) {
+				locatedSkulls.add(getSkull(id));
+		}
 		return locatedSkulls;
 	}
 

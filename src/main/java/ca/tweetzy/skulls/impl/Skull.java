@@ -58,6 +58,11 @@ public final class Skull implements ISkull {
 
 	@Override
 	public ItemStack getItemStack() {
-		return ItemCreator.of(SkullCreator.itemFromUrl(this.texture)).name(this.name).build().make();
+		return ItemCreator
+				.of(SkullCreator.itemFromUrl(this.texture))
+				.name(this.name)
+				.tag("Skulls:ID", String.valueOf(this.id))
+				.tag("Skulls:Texture", this.texture)
+				.build().make();
 	}
 }

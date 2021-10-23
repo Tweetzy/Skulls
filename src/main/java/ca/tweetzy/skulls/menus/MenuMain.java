@@ -5,13 +5,21 @@ import ca.tweetzy.skulls.api.enums.SkullsDefaultCategory;
 import ca.tweetzy.skulls.api.enums.SkullsMenuListingType;
 import ca.tweetzy.skulls.impl.SkullPlayer;
 import ca.tweetzy.skulls.model.SkullMaterial;
+import ca.tweetzy.skulls.settings.Localization;
 import ca.tweetzy.skulls.settings.Settings;
+import ca.tweetzy.tweety.Common;
+import ca.tweetzy.tweety.conversation.SimplePrompt;
 import ca.tweetzy.tweety.menu.Menu;
 import ca.tweetzy.tweety.menu.button.Button;
+import ca.tweetzy.tweety.menu.button.ButtonConversation;
 import ca.tweetzy.tweety.menu.model.ItemCreator;
 import ca.tweetzy.tweety.model.Replacer;
 import lombok.NonNull;
+import org.bukkit.conversations.ConversationContext;
+import org.bukkit.conversations.Prompt;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The current file has been created by Kiran Hart
@@ -33,6 +41,8 @@ public final class MenuMain extends Menu {
 	private final Button plantsButton;
 
 	private final Button favouritesButton;
+	private final Button searchButton;
+
 
 	public MenuMain(@NonNull final SkullPlayer skullPlayer) {
 		setTitle(Settings.MainMenu.TITLE);
@@ -124,7 +134,24 @@ public final class MenuMain extends Menu {
 				.name(Settings.MainMenu.Items.FAVOURITES_NAME)
 				.lores(Replacer.replaceArray(Settings.MainMenu.Items.FAVOURITES_LORE, "category_head_count", skullPlayer.favouriteSkulls().size())), player -> {
 
+			new MenuList(SkullsAPI.getPlayer(player.getUniqueId())).displayTo(player);
 		});
+
+
+		this.searchButton = new ButtonConversation(new SimplePrompt() {
+			@Override
+			protected String getPrompt(ConversationContext context) {
+				return Localization.SEARCH;
+			}
+
+			@Nullable
+			@Override
+			protected Prompt acceptValidatedInput(@NotNull ConversationContext conversationContext, @NotNull String input) {
+				Common.runLater(() -> new MenuList(getViewer(), SkullsAPI.getSkullsByTerm(input), input).displayTo(getViewer()));
+				return END_OF_CONVERSATION;
+			}
+
+		}, ItemCreator.of(SkullMaterial.get(Settings.MainMenu.Items.SEARCH_ITEM)).name(Settings.MainMenu.Items.SEARCH_NAME).lores(Settings.MainMenu.Items.SEARCH_LORE));
 	}
 
 	@Override
@@ -152,6 +179,8 @@ public final class MenuMain extends Menu {
 				return this.plantsButton.getItem();
 			case (9 * 4) - 1 + 6:
 				return this.favouritesButton.getItem();
+			case (9 * 4) - 1 + 7:
+				return this.searchButton.getItem();
 			default:
 				return Settings.MainMenu.BACKGROUND.toItem();
 		}

@@ -17,6 +17,7 @@ import ca.tweetzy.tweety.PlayerUtil;
 import ca.tweetzy.tweety.Valid;
 import ca.tweetzy.tweety.menu.MenuPagged;
 import ca.tweetzy.tweety.menu.model.ItemCreator;
+import ca.tweetzy.tweety.remain.Remain;
 import lombok.NonNull;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -57,6 +58,15 @@ public final class MenuList extends MenuPagged<Skull> {
 		this.listingType = SkullsMenuListingType.SEARCH;
 	}
 
+	public MenuList(@NonNull final SkullPlayer player) {
+		super(RowByContentSize.get(player.favouriteSkulls().size()), SkullsAPI.getSkullsByIds(player.favouriteSkulls().getSource()));
+		setTitle(Settings.ListingMenu.FAVOURITES_TITLE);
+		this.fromMain = true;
+		this.player = Remain.getPlayerByUUID(player.getPlayerId());
+		this.skullPlayer = player;
+		this.listingType = SkullsMenuListingType.FAVOURITES;
+	}
+
 	@Override
 	protected ItemStack convertToItemStack(Skull item) {
 		final List<String> lore = new ArrayList<>();
@@ -74,7 +84,7 @@ public final class MenuList extends MenuPagged<Skull> {
 		lore.add("");
 		lore.add(Settings.ListingMenu.Format.TAKE);
 
-		if (Valid.checkPermission(player, Permissions.ADD_TO_CATEGORY))
+		if (Valid.checkPermission(player, Permissions.ADD_TO_CATEGORY) && this.listingType != SkullsMenuListingType.FAVOURITES)
 			lore.add(Settings.ListingMenu.Format.ADD_TO_CATEGORY);
 
 		if (player.isOp() || Valid.checkPermission(player, Permissions.FAVOURITE)) {
@@ -114,7 +124,11 @@ public final class MenuList extends MenuPagged<Skull> {
 					this.skullPlayer.favouriteSkulls().add(item.getId());
 				else
 					this.skullPlayer.favouriteSkulls().remove(Integer.valueOf(item.getId()));
-				redraw();
+
+				if (listingType == SkullsMenuListingType.FAVOURITES)
+					new MenuList(this.skullPlayer).displayTo(player);
+				else
+					redraw();
 				break;
 			case MIDDLE:
 				break;

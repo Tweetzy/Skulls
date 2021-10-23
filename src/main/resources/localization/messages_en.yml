@@ -1,6 +1,19 @@
 Loading: "&cSkulls is currently loading, please wait."
 No Money: "&cYou do not have enough money"
 Withdraw: "&c&l- ${value}"
+Search: "&aPlease enter your search terms in chat."
+Player Not Found: "&cCould not find that player"
+Invalid Number: "&cPlease enter a valid number"
+Nothing In Hand: "&cYou aren't holding anything in your hand"
+Not A Skull: "&cNot holding a skull"
+
+Skull Info:
+  - "&8{chat_line}"
+  - ""
+  - "&eID&f: &7{skull_id}"
+  - "&eTexture&f: &7{skull_texture}"
+  - ""
+  - "&8{chat_line}"
 
 # -------------------------------------------------------------------------------------------------
 # Do not change this value, otherwise it will corrupt your plugin installation!

@@ -9,5 +9,6 @@ package ca.tweetzy.skulls.api.enums;
 public enum SkullsMenuListingType {
 
 	SEARCH,
-	CATEGORY
+	CATEGORY,
+	FAVOURITES
 }

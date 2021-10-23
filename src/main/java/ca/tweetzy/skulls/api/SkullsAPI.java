@@ -57,6 +57,15 @@ public final class SkullsAPI {
 	}
 
 	/**
+	 * Get a random skull from the list
+	 *
+	 * @return a random {@link Skull}
+	 */
+	public Skull getRandomSkull() {
+		return SKULL_MANAGER.getRandomSkull();
+	}
+
+	/**
 	 * Used to quickly get the textured skull, this doesn't
 	 * have tags / nbt on it
 	 *
@@ -124,20 +133,51 @@ public final class SkullsAPI {
 		return SKULL_CATEGORY_MANAGER.getCategory(id);
 	}
 
+	/**
+	 * Add a new skull player to the list
+	 *
+	 * @param skullPlayer is the {@link SkullPlayer} object
+	 */
 	public void addPlayer(@NonNull final SkullPlayer skullPlayer) {
 		SKULL_PLAYER_MANAGER.addPlayer(skullPlayer);
 	}
 
+	/**
+	 * Used to remove an existing skull player
+	 *
+	 * @param skullPlayer is the instance of {@link SkullPlayer}
+	 */
 	public void removePlayer(@NonNull final SkullPlayer skullPlayer) {
 		SKULL_PLAYER_MANAGER.removePlayer(skullPlayer);
 	}
 
+	/**
+	 * Used to remove an existing skull player
+	 *
+	 * @param uuid is the id of the {@link SkullPlayer}
+	 */
 	public void removePlayer(@NonNull final UUID uuid) {
 		SKULL_PLAYER_MANAGER.removePlayer(uuid);
 	}
 
+	/**
+	 * Get a skull player from the list
+	 *
+	 * @param uuid is the {@link UUID} of the player
+	 * @return the {@link SkullPlayer} or null
+	 */
 	public SkullPlayer getPlayer(@NonNull final UUID uuid) {
 		return SKULL_PLAYER_MANAGER.getPlayer(uuid);
+	}
+
+	/**
+	 * Used to get a list of heads based on the provided ids
+	 *
+	 * @param ids the ids of the skulls
+	 * @return a list of skulls from the ids
+	 */
+	public List<Skull> getSkullsByIds(@NonNull final List<Integer> ids) {
+		return SKULL_MANAGER.getSkullsByIds(ids);
 	}
 
 	/**

@@ -9,31 +9,28 @@ import org.bukkit.entity.Player;
 
 /**
  * The current file has been created by Kiran Hart
- * Date Created: October 19 2021
- * Time Created: 5:58 p.m.
+ * Date Created: October 23 2021
+ * Time Created: 3:07 p.m.
  * Usage of any code found within this class is prohibited unless given explicit permission otherwise
  */
-public final class CommandSearch extends SkullsSubCommand {
+public final class CommandFavourites extends SkullsSubCommand{
 
-	public CommandSearch() {
-		super("search");
-		setMinArguments(1);
-		setUsage("<keywords>");
-		setDescription("Search for skulls");
+	public CommandFavourites() {
+		super("favourites|favs");
+		setDescription("View your favourited skulls");
 	}
 
 	@Override
 	protected void onCommand() {
-		checkConsole();
+		 checkConsole();
 
-		final Player player = getPlayer();
-		final String keywords = joinArgs(0);
+		 final Player player = getPlayer();
 
 		if (Skulls.getSkullManager().isLoading()) {
 			Common.tell(player, Localization.LOADING);
 			return;
 		}
 
-		new MenuList(player, SkullsAPI.getSkullsByTerm(keywords), keywords).displayTo(player);
+		 new MenuList(SkullsAPI.getPlayer(player.getUniqueId())).displayTo(player);
 	}
 }
