@@ -17,12 +17,14 @@ import ca.tweetzy.tweety.PlayerUtil;
 import ca.tweetzy.tweety.Valid;
 import ca.tweetzy.tweety.menu.MenuPagged;
 import ca.tweetzy.tweety.menu.model.ItemCreator;
+import ca.tweetzy.tweety.plugin.SimplePlugin;
 import ca.tweetzy.tweety.remain.Remain;
 import lombok.NonNull;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,18 +37,20 @@ import java.util.List;
  */
 public final class MenuList extends MenuPagged<Skull> {
 
-	private final boolean fromMain;
+	private boolean fromMain;
 	private final Player player;
 	private final SkullPlayer skullPlayer;
 	private final SkullsMenuListingType listingType;
+	private final SkullCategory category;
 
 	public MenuList(@NonNull final Player player, @NonNull final SkullCategory category, @NonNull final SkullsMenuListingType listingType) {
-		super(6, Skulls.getSkullManager().getSkullsByCategory(category));
+		super(6, listingType == SkullsMenuListingType.CATEGORY ? Skulls.getSkullManager().getSkullsByCategory(category) : SkullsAPI.getSkullsByIds(category.getSkulls().getSource()));
 		setTitle(Settings.ListingMenu.CATEGORY_TITLE.replace("{category_name}", category.getName()));
 		this.fromMain = true;
 		this.player = player;
 		this.skullPlayer = SkullsAPI.getPlayer(player.getUniqueId());
 		this.listingType = listingType;
+		this.category = category;
 	}
 
 	public MenuList(@NonNull final Player player, @NonNull final List<Skull> skulls, @NonNull final String keywords) {
@@ -56,6 +60,7 @@ public final class MenuList extends MenuPagged<Skull> {
 		this.player = player;
 		this.skullPlayer = SkullsAPI.getPlayer(player.getUniqueId());
 		this.listingType = SkullsMenuListingType.SEARCH;
+		this.category = null;
 	}
 
 	public MenuList(@NonNull final SkullPlayer player) {
@@ -65,6 +70,7 @@ public final class MenuList extends MenuPagged<Skull> {
 		this.player = Remain.getPlayerByUUID(player.getPlayerId());
 		this.skullPlayer = player;
 		this.listingType = SkullsMenuListingType.FAVOURITES;
+		this.category = null;
 	}
 
 	@Override
@@ -84,8 +90,13 @@ public final class MenuList extends MenuPagged<Skull> {
 		lore.add("");
 		lore.add(Settings.ListingMenu.Format.TAKE);
 
-		if (Valid.checkPermission(player, Permissions.ADD_TO_CATEGORY) && this.listingType != SkullsMenuListingType.FAVOURITES)
-			lore.add(Settings.ListingMenu.Format.ADD_TO_CATEGORY);
+		if (this.category != null && this.category.isCustom()) {
+			if (Valid.checkPermission(player, Permissions.REMOVE_FROM_CATEGORY) && this.listingType != SkullsMenuListingType.FAVOURITES)
+				lore.add(Settings.ListingMenu.Format.REMOVE_FROM_CATEGORY);
+		} else {
+			if (Valid.checkPermission(player, Permissions.ADD_TO_CATEGORY) && this.listingType != SkullsMenuListingType.FAVOURITES)
+				lore.add(Settings.ListingMenu.Format.ADD_TO_CATEGORY);
+		}
 
 		if (player.isOp() || Valid.checkPermission(player, Permissions.FAVOURITE)) {
 			if (this.skullPlayer.favouriteSkulls().contains(item.getId()))
@@ -131,12 +142,27 @@ public final class MenuList extends MenuPagged<Skull> {
 					redraw();
 				break;
 			case MIDDLE:
+				if (this.category != null &&this.category.isCustom()) {
+					SkullsAPI.removeSkull(this.category, item.getId());
+					new MenuList(player, this.category, SkullsMenuListingType.CUSTOM_CATEGORY).displayTo(player);
+					break;
+				}
+
+				player.setMetadata("Skulls:Adding", new FixedMetadataValue(SimplePlugin.getInstance(), item.getId()));
+				player.setMetadata("Skulls:ListMenu", new FixedMetadataValue(SimplePlugin.getInstance(), this));
+				this.fromMain = false;
+				new MenuCategoryList(this.skullPlayer, true).displayTo(player);
 				break;
 		}
 	}
 
 	@Override
 	protected void onMenuClose(Player player, Inventory inventory) {
+		if (this.listingType == SkullsMenuListingType.CUSTOM_CATEGORY) {
+			new MenuCategoryList(this.skullPlayer, false).displayTo(player);
+			return;
+		}
+
 		if (this.fromMain)
 			new MenuMain(SkullsAPI.getPlayer(player.getUniqueId())).displayTo(player);
 	}

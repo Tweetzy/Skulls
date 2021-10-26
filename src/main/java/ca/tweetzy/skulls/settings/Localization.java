@@ -12,7 +12,6 @@ import java.util.List;
  */
 public final class Localization extends SimpleLocalization {
 
-
 	public static String LOADING;
 	public static String NO_MONEY;
 	public static String WITHDRAW;
@@ -22,6 +21,9 @@ public final class Localization extends SimpleLocalization {
 	public static String NOTHING_IN_HAND;
 	public static String NOT_A_SKULL;
 	public static List<String> SKULL_INFO;
+	public static String ENTER_CATEGORY_ID;
+	public static String CATEGORY_ID_TAKEN;
+	public static String CATEGORY_CREATED;
 
 	private static void init() {
 		pathPrefix(null);
@@ -34,6 +36,9 @@ public final class Localization extends SimpleLocalization {
 		NOTHING_IN_HAND = getString("Nothing In Hand");
 		NOT_A_SKULL = getString("Not A Skull");
 		SKULL_INFO = getStringList("Skull Info");
+		ENTER_CATEGORY_ID = getString("Enter Category Id");
+		CATEGORY_ID_TAKEN = getString("Category Id Taken");
+		CATEGORY_CREATED = getString("Category Created");
 	}
 
 	@Override

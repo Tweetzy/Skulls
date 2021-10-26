@@ -54,8 +54,10 @@ public final class Skulls extends SimplePlugin {
 
 		Common.runAsync(() -> {
 			for (SkullsDefaultCategory value : SkullsDefaultCategory.values()) {
-				SkullsAPI.addCategory(new SkullCategory(value.getId(), value.getName()));
+				SkullsAPI.addCategory(new SkullCategory(value.getId(), value.getName(), false, null));
 			}
+
+			this.skullCategoryManager.loadCustomCategories();
 
 			skullManager.downloadHeads(false);
 		});
@@ -76,7 +78,11 @@ public final class Skulls extends SimplePlugin {
 	protected void onPluginStop() {
 		this.skullPlayerManager.savePlayers();
 		this.skullPlayerManager.getPlayers().clear();
+
+		this.skullCategoryManager.saveCategories();
+		this.skullCategoryManager.getCategories().clear();
 	}
+
 
 	@Override
 	public int getMetricsPluginId() {

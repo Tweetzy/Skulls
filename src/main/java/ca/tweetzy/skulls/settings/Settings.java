@@ -39,6 +39,7 @@ public final class Settings extends SimpleSettings {
 			public static String TAGS;
 			public static String TAKE;
 			public static String ADD_TO_CATEGORY;
+			public static String REMOVE_FROM_CATEGORY;
 			public static String EDIT_PRICE;
 			public static String FAVOURITE;
 			public static String UN_FAVOURITE;
@@ -54,6 +55,7 @@ public final class Settings extends SimpleSettings {
 				TAGS = getString("Tags");
 				TAKE = getString("Take");
 				ADD_TO_CATEGORY = getString("Add To Category");
+				REMOVE_FROM_CATEGORY = getString("Remove From Category");
 				EDIT_PRICE = getString("Edit Price");
 				FAVOURITE = getString("Favourite");
 				UN_FAVOURITE = getString("Unfavourite");
@@ -67,6 +69,43 @@ public final class Settings extends SimpleSettings {
 			SEARCH_TITLE = getString("Search Title");
 			CATEGORY_TITLE = getString("Category Title");
 			FAVOURITES_TITLE = getString("Favourite Title");
+		}
+	}
+
+	public static final class CategoryListMenu {
+
+		public static String TITLE;
+		public static CompMaterial BACKGROUND;
+
+		public static final class Items {
+
+			public static String NEW_ITEM;
+			public static String NEW_NAME;
+			public static List<String> NEW_LORE;
+
+			public static String CATEGORY_ITEM;
+			public static String CATEGORY_NAME;
+			public static String CATEGORY_LORE_DELETE;
+			public static String CATEGORY_LORE_VIEW;
+
+			private static void init() {
+				pathPrefix("Gui.Category List.Items");
+
+				NEW_ITEM = getString("New.Material");
+				NEW_NAME = getString("New.Name");
+				NEW_LORE = getStringList("New.Lore");
+
+				CATEGORY_ITEM = getString("Category.Material");
+				CATEGORY_NAME = getString("Category.Name");
+				CATEGORY_LORE_DELETE = getString("Category.Lore Format.Delete");
+				CATEGORY_LORE_VIEW = getString("Category.Lore Format.View");
+			}
+		}
+
+		private static void init() {
+			pathPrefix("Gui.Category List");
+			TITLE = getString("Title");
+			BACKGROUND = getMaterial("Background");
 		}
 	}
 
@@ -131,6 +170,10 @@ public final class Settings extends SimpleSettings {
 			public static String SEARCH_NAME;
 			public static List<String> SEARCH_LORE;
 
+			public static String CUSTOM_CATEGORY_ITEM;
+			public static String CUSTOM_CATEGORY_NAME;
+			public static List<String> CUSTOM_CATEGORY_LORE;
+
 			private static void init() {
 				pathPrefix("Gui.Main.Items");
 
@@ -181,6 +224,10 @@ public final class Settings extends SimpleSettings {
 				SEARCH_ITEM = getString("Search.Material");
 				SEARCH_NAME = getString("Search.Name");
 				SEARCH_LORE = getStringList("Search.Lore");
+
+				CUSTOM_CATEGORY_ITEM = getString("Custom Category.Material");
+				CUSTOM_CATEGORY_NAME = getString("Custom Category.Name");
+				CUSTOM_CATEGORY_LORE = getStringList("Custom Category.Lore");
 			}
 		}
 	}

@@ -3,6 +3,22 @@ Economy Provider: Vault
 Item Economy Material: GOLD_INGOT
 
 Gui:
+  Category List:
+    Title: "&eSkulls &f- &7Custom Categories"
+    Background: BLACK_STAINED_GLASS_PANE
+    Items:
+      New:
+        Material: LIME_DYE
+        Name: "&eNew Category"
+        Lore:
+          - "&eLeft Click&7 to create a new category"
+      Category:
+        Material: NETHER_STAR
+        Name: "&e{category_name}"
+        Lore Format:
+          Delete: "&eMiddle Click &7to delete category"
+          View: "&eLeft Click &7to view heads"
+
   Listing:
     Search Title: "&e&lSearch&f: &a{search_term} &7({current_page}/{max_pages})"
     Category Title: "&e&l{category_name} &7({current_page}/{max_pages})"
@@ -14,6 +30,7 @@ Gui:
       Tags: "&7Tags: &e{skull_tags}"
       Take: "&eLeft Click &7to take one"
       Add To Category: "&eMiddle Click &7to add to category"
+      Remove From Category: "&eMiddle Click &7to remove from category"
       Edit Price: "&eShift Right Click &7to edit price"
       Favourite: "&eRight Click &7to favourite head"
       Unfavourite: "&eRight Click &7to un-favourite head"
@@ -24,6 +41,11 @@ Gui:
     Title: "&eSkulls"
     Background: BLACK_STAINED_GLASS_PANE
     Items:
+      Custom Category:
+        Material: "Skulls:225"
+        Name: "&eCustom Categories"
+        Lore:
+          - "&eLeft Click &7to view custom categories"
       Search:
         Material: "Skulls:5650"
         Name: "&eSearch Heads"

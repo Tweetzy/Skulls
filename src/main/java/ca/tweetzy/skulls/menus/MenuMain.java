@@ -3,6 +3,7 @@ package ca.tweetzy.skulls.menus;
 import ca.tweetzy.skulls.api.SkullsAPI;
 import ca.tweetzy.skulls.api.enums.SkullsDefaultCategory;
 import ca.tweetzy.skulls.api.enums.SkullsMenuListingType;
+import ca.tweetzy.skulls.impl.Skull;
 import ca.tweetzy.skulls.impl.SkullPlayer;
 import ca.tweetzy.skulls.model.SkullMaterial;
 import ca.tweetzy.skulls.settings.Localization;
@@ -40,11 +41,15 @@ public final class MenuMain extends Menu {
 	private final Button monstersButton;
 	private final Button plantsButton;
 
+	private final Button customCategoryButton;
 	private final Button favouritesButton;
 	private final Button searchButton;
 
+	private final SkullPlayer skullPlayer;
+
 
 	public MenuMain(@NonNull final SkullPlayer skullPlayer) {
+		this.skullPlayer = skullPlayer;
 		setTitle(Settings.MainMenu.TITLE);
 		setSize(9 * 6);
 
@@ -129,6 +134,15 @@ public final class MenuMain extends Menu {
 			new MenuList(player, SkullsAPI.getCategory(SkullsDefaultCategory.PLANTS.getId()), SkullsMenuListingType.CATEGORY).displayTo(player);
 		});
 
+		this.customCategoryButton = Button.makeSimple(ItemCreator
+				.of(SkullMaterial.get(Settings.MainMenu.Items.CUSTOM_CATEGORY_ITEM))
+				.name(Settings.MainMenu.Items.CUSTOM_CATEGORY_NAME)
+				.lores(Settings.MainMenu.Items.CUSTOM_CATEGORY_LORE), player -> {
+
+			new MenuCategoryList(SkullsAPI.getPlayer(player.getUniqueId()), false).displayTo(player);
+
+		});
+
 		this.favouritesButton = Button.makeSimple(ItemCreator
 				.of(SkullMaterial.get(Settings.MainMenu.Items.FAVOURITES_ITEM))
 				.name(Settings.MainMenu.Items.FAVOURITES_NAME)
@@ -136,7 +150,6 @@ public final class MenuMain extends Menu {
 
 			new MenuList(SkullsAPI.getPlayer(player.getUniqueId())).displayTo(player);
 		});
-
 
 		this.searchButton = new ButtonConversation(new SimplePrompt() {
 			@Override
@@ -147,7 +160,7 @@ public final class MenuMain extends Menu {
 			@Nullable
 			@Override
 			protected Prompt acceptValidatedInput(@NotNull ConversationContext conversationContext, @NotNull String input) {
-				Common.runLater(() -> new MenuList(getViewer(), SkullsAPI.getSkullsByTerm(input), input).displayTo(getViewer()));
+				Common.runLater(() -> new MenuList(getViewer(), SkullsAPI.getSkullsByTerm(SkullsAPI.cleanSearch(input)), SkullsAPI.cleanSearch(input)).displayTo(getViewer()));
 				return END_OF_CONVERSATION;
 			}
 
@@ -177,12 +190,19 @@ public final class MenuMain extends Menu {
 				return this.monstersButton.getItem();
 			case (9 * 2) - 1 + 7:
 				return this.plantsButton.getItem();
-			case (9 * 4) - 1 + 6:
+			case (9 * 4) - 1 + 3:
+				return this.customCategoryButton.getItem();
+			case (9 * 4) - 1 + 5:
 				return this.favouritesButton.getItem();
 			case (9 * 4) - 1 + 7:
 				return this.searchButton.getItem();
 			default:
 				return Settings.MainMenu.BACKGROUND.toItem();
 		}
+	}
+
+	@Override
+	public Menu newInstance() {
+		return new MenuMain(this.skullPlayer);
 	}
 }

@@ -10,5 +10,6 @@ public enum SkullsMenuListingType {
 
 	SEARCH,
 	CATEGORY,
-	FAVOURITES
+	FAVOURITES,
+	CUSTOM_CATEGORY
 }

@@ -87,6 +87,15 @@ public final class SkullsAPI {
 	}
 
 	/**
+	 * Used to get all categories that are custom-made
+	 *
+	 * @return a list of custom-made categories
+	 */
+	public List<SkullCategory> getCustomCategories() {
+		return SKULL_CATEGORY_MANAGER.getCustomCategories();
+	}
+
+	/**
 	 * Used to get all the skulls by a particular category
 	 *
 	 * @param category is the {@link SkullCategory}
@@ -94,6 +103,26 @@ public final class SkullsAPI {
 	 */
 	public List<Skull> getSkullsByCategory(@NonNull final SkullCategory category) {
 		return getSkullsByCategory(category.getId());
+	}
+
+	/**
+	 * Add a skull to a custom category
+	 *
+	 * @param category is the {@link SkullCategory}
+	 * @param id       is the id of the {@link Skull}
+	 */
+	public void addSkull(@NonNull final SkullCategory category, final int id) {
+		SKULL_CATEGORY_MANAGER.addSkull(category, id);
+	}
+
+	/**
+	 * Removes a skull from a custom category
+	 *
+	 * @param category is the {@link SkullCategory}
+	 * @param id       is the id of the {@link Skull}
+	 */
+	public void removeSkull(@NonNull final SkullCategory category, final int id) {
+		SKULL_CATEGORY_MANAGER.removeSkull(category, id);
 	}
 
 	/**
@@ -181,10 +210,20 @@ public final class SkullsAPI {
 	}
 
 	/**
+	 * For internal use
+	 */
+	public String cleanSearch(@NonNull String keywords) {
+		if (keywords.length() > 0 && keywords.charAt(keywords.length() - 1) == '\\') {
+			keywords = keywords.substring(0, keywords.length() - 1);
+		}
+		return keywords;
+	}
+
+	/**
 	 * Get the total amount of an item in the player's inventory
 	 *
 	 * @param player is the player being checked
-	 * @param stack is the item you want to find
+	 * @param stack  is the item you want to find
 	 * @return the total count of the item(s)
 	 */
 	public int getItemCountInPlayerInventory(@NonNull final Player player, ItemStack stack) {
@@ -200,7 +239,7 @@ public final class SkullsAPI {
 	 * Removes a set amount of a specific item from the player inventory
 	 *
 	 * @param player is the player you want to remove the item from
-	 * @param stack is the item that you want to remove
+	 * @param stack  is the item that you want to remove
 	 * @param amount is the amount of items you want to remove.
 	 */
 	public void removeSpecificItemQuantityFromPlayer(@NonNull final Player player, @NonNull final ItemStack stack, int amount) {

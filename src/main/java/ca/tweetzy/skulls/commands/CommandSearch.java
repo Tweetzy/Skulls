@@ -34,6 +34,6 @@ public final class CommandSearch extends SkullsSubCommand {
 			return;
 		}
 
-		new MenuList(player, SkullsAPI.getSkullsByTerm(keywords), keywords).displayTo(player);
+		new MenuList(player, SkullsAPI.getSkullsByTerm(SkullsAPI.cleanSearch(keywords)), SkullsAPI.cleanSearch(keywords)).displayTo(player);
 	}
 }

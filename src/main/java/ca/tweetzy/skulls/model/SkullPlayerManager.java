@@ -2,6 +2,7 @@ package ca.tweetzy.skulls.model;
 
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.impl.SkullPlayer;
+import ca.tweetzy.tweety.Common;
 import ca.tweetzy.tweety.SerializeUtil;
 import ca.tweetzy.tweety.collection.StrictMap;
 import lombok.Getter;
@@ -47,9 +48,11 @@ public final class SkullPlayerManager {
 	}
 
 	public void loadPlayer(@NonNull final UUID playerId) {
-		SkullPlayer skullPlayer = SerializeUtil.deserialize(SkullPlayer.class, Skulls.getInstance().getDataFile().getConfigField("Players." + playerId.toString()));
-		if (skullPlayer != null)
-			this.players.get(playerId).favouriteSkulls().addAll(skullPlayer.favouriteSkulls());
-		skullPlayer = null;
+		Common.runAsync(() -> {
+			SkullPlayer skullPlayer = SerializeUtil.deserialize(SkullPlayer.class, Skulls.getInstance().getDataFile().getConfigField("Players." + playerId.toString()));
+			if (skullPlayer != null)
+				this.players.get(playerId).favouriteSkulls().addAll(skullPlayer.favouriteSkulls());
+			skullPlayer = null;
+		});
 	}
 }

@@ -6,6 +6,9 @@ Player Not Found: "&cCould not find that player"
 Invalid Number: "&cPlease enter a valid number"
 Nothing In Hand: "&cYou aren't holding anything in your hand"
 Not A Skull: "&cNot holding a skull"
+Enter Category Id: "&aPlease enter an id for the category."
+Category Id Taken: "&cThat id is already in use."
+Category Created: "&aCreated new category with the id &2{category_id}"
 
 Skull Info:
   - "&8{chat_line}"

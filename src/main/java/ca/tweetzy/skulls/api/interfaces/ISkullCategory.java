@@ -1,5 +1,7 @@
 package ca.tweetzy.skulls.api.interfaces;
 
+import ca.tweetzy.tweety.collection.StrictList;
+
 /**
  * The current file has been created by Kiran Hart
  * Date Created: September 27 2021
@@ -22,4 +24,13 @@ public interface ISkullCategory {
 	 * @return the display name of this category
 	 */
 	String getName();
+
+	/**
+	 * Used to determine whether a category is custom made
+	 *
+	 * @return true if the category is custom
+	 */
+	boolean isCustom();
+
+	StrictList<Integer> getSkulls();
 }

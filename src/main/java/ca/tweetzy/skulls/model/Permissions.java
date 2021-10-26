@@ -20,6 +20,15 @@ public final class Permissions extends TweetyPermissions {
 	@Permission("Allows the player to add a skull to a custom category")
 	public static final String ADD_TO_CATEGORY = "skulls.addtocategory";
 
+	@Permission("Allows the player to remove a skull from a custom category")
+	public static final String REMOVE_FROM_CATEGORY = "skulls.removefromcategory";
+
+	@Permission("Allows the player to add a custom category")
+	public static final String ADD_NEW_CATEGORY = "skulls.addnewcategory";
+
+	@Permission("Allows the player to delete a custom category")
+	public static final String DELETE_CATEGORY = "skulls.deletecategory";
+
 	@Permission("Allows the player to favourite a skull")
 	public static final String FAVOURITE = "skulls.favourite";
 }
