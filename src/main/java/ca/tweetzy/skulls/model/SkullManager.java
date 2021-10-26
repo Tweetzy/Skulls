@@ -165,12 +165,15 @@ public final class SkullManager {
 	public void downloadHeads(final boolean redownload) {
 		if (redownload) {
 			final File directory = FileUtil.getFile("/heads");
-			if (directory.exists())
-				directory.delete();
+			if (directory.exists()) {
+				for (File file : FileUtil.getFiles("heads", "json")) {
+					file.delete();
+				}
+			}
 		}
 
 		final File[] knownFiles = FileUtil.getFiles("/heads", "json");
-		if (knownFiles.length != 10) {
+		if (knownFiles.length != 10 || redownload) {
 			for (SkullsDefaultCategory category : SkullsDefaultCategory.values()) {
 				final File headFile = FileUtil.getFile("/heads/" + category.getId() + ".json");
 				if (!headFile.exists()) {
@@ -189,6 +192,7 @@ public final class SkullManager {
 	private void loadHeads() {
 		final File[] headFiles = FileUtil.getFiles("/heads", "json");
 		final JsonParser parser = new JsonParser();
+		this.skulls.clear();
 		this.loading = true;
 
 		try {

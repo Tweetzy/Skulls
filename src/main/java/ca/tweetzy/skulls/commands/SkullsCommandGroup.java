@@ -49,6 +49,7 @@ public final class SkullsCommandGroup extends SimpleCommandGroup {
 		registerSubcommand(new CommandFavourites());
 		registerSubcommand(new CommandGive());
 		registerSubcommand(new CommandInfo());
+		registerSubcommand(new CommandDownload());
 	}
 
 	@Override
