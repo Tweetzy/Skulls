@@ -9,6 +9,7 @@ Not A Skull: "&cNot holding a skull"
 Enter Category Id: "&aPlease enter an id for the category."
 Category Id Taken: "&cThat id is already in use."
 Category Created: "&aCreated new category with the id &2{category_id}"
+Enter Skull Price: "&aEnter a new price for the skull."
 
 Skull Info:
   - "&8{chat_line}"

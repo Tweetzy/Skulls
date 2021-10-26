@@ -15,10 +15,14 @@ import ca.tweetzy.tweety.Common;
 import ca.tweetzy.tweety.MathUtil;
 import ca.tweetzy.tweety.PlayerUtil;
 import ca.tweetzy.tweety.Valid;
+import ca.tweetzy.tweety.conversation.SimpleConversation;
+import ca.tweetzy.tweety.conversation.SimpleDecimalPrompt;
+import ca.tweetzy.tweety.conversation.SimplePrompt;
 import ca.tweetzy.tweety.menu.MenuPagged;
 import ca.tweetzy.tweety.menu.model.ItemCreator;
 import ca.tweetzy.tweety.plugin.SimplePlugin;
 import ca.tweetzy.tweety.remain.Remain;
+import com.sun.org.apache.bcel.internal.generic.RETURN;
 import lombok.NonNull;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -110,6 +114,10 @@ public final class MenuList extends MenuPagged<Skull> {
 			lore.add(Settings.ListingMenu.Format.FAVOURITED);
 		}
 
+		if (Settings.CHARGE_FOR_HEADS)
+			lore.add(Settings.ListingMenu.Format.EDIT_PRICE);
+
+
 		return ItemCreator.of(item.getItemStack()).name(Settings.ListingMenu.Format.NAME.replace("{skull_name}", item.getName())).lores(lore).build().make();
 	}
 
@@ -153,6 +161,16 @@ public final class MenuList extends MenuPagged<Skull> {
 				this.fromMain = false;
 				new MenuCategoryList(this.skullPlayer, true).displayTo(player);
 				break;
+			case SHIFT_RIGHT:
+				if (Settings.CHARGE_FOR_HEADS && player.isOp() || Valid.checkPermission(player, Permissions.EDIT_PRICE)) {
+					this.fromMain = false;
+					player.closeInventory();
+					SimpleDecimalPrompt.show(player, Localization.ENTER_SKULL_PRICE, value -> {
+						SkullsAPI.updateSkullPrice(item.getId(), value);
+						Common.runLater(() -> this.displayTo(player));
+					});
+				}
+				break;
 		}
 	}
 
@@ -165,6 +183,11 @@ public final class MenuList extends MenuPagged<Skull> {
 
 		if (this.fromMain)
 			new MenuMain(SkullsAPI.getPlayer(player.getUniqueId())).displayTo(player);
+	}
+
+	@Override
+	public boolean allowShiftActions() {
+		return true;
 	}
 
 	@Override

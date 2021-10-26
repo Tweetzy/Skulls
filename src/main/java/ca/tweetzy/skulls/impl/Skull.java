@@ -7,10 +7,7 @@ import ca.tweetzy.tweety.collection.StrictList;
 import ca.tweetzy.tweety.menu.model.ItemCreator;
 import ca.tweetzy.tweety.menu.model.SkullCreator;
 import lombok.AllArgsConstructor;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
-
-import javax.security.auth.login.Configuration;
 
 /**
  * The current file has been created by Kiran Hart
@@ -54,9 +51,12 @@ public final class Skull implements ISkull {
 
 	@Override
 	public double getPrice() {
-		final ConfigurationSection prices = Skulls.getInstance().getDataFile().getConfigField("Prices");
-		if (prices != null && prices.contains(String.valueOf(this.id))) {
-			return prices.getDouble(String.valueOf(this.id));
+		if (Skulls.getInstance().getDataFile().contains("Prices." + this.id)) {
+			final Double knownPrice = Skulls.getInstance().getDataFile().getConfigField("Prices." + this.id);
+			return knownPrice == null ?
+					SkullsDefaultCategory.valueOf(getCategory().replace("&", "and").replace(" ", "_").toUpperCase()).getDefaultPrice()
+					:
+					knownPrice;
 		}
 
 		return SkullsDefaultCategory.valueOf(getCategory().replace("&", "and").replace(" ", "_").toUpperCase()).getDefaultPrice();

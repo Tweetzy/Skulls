@@ -126,7 +126,7 @@ public final class MenuCategoryList extends MenuPagged<SkullCategory> {
 				new MenuList(player, category, SkullsMenuListingType.CUSTOM_CATEGORY).displayTo(player);
 				break;
 			case MIDDLE:
-				if (!this.addingSkull && player.isOp() || Valid.checkPermission(player, Permissions.ADD_NEW_CATEGORY)) {
+				if (!this.addingSkull && player.isOp() || Valid.checkPermission(player, Permissions.DELETE_CATEGORY)) {
 					SkullsAPI.removeCategory(category);
 					newInstance().displayTo(player);
 				}

@@ -3,7 +3,6 @@ package ca.tweetzy.skulls.menus;
 import ca.tweetzy.skulls.api.SkullsAPI;
 import ca.tweetzy.skulls.api.enums.SkullsDefaultCategory;
 import ca.tweetzy.skulls.api.enums.SkullsMenuListingType;
-import ca.tweetzy.skulls.impl.Skull;
 import ca.tweetzy.skulls.impl.SkullPlayer;
 import ca.tweetzy.skulls.model.SkullMaterial;
 import ca.tweetzy.skulls.settings.Localization;
@@ -105,9 +104,9 @@ public final class MenuMain extends Menu {
 		this.humanoidsButton = Button.makeSimple(ItemCreator
 				.of(SkullMaterial.get(Settings.MainMenu.Items.HUMANOIDS_ITEM))
 				.name(Settings.MainMenu.Items.HUMANOIDS_NAME)
-				.lores(Replacer.replaceArray(Settings.MainMenu.Items.HUMANOIDS_LORE, "category_head_count", SkullsAPI.getSkullsByCategory(SkullsDefaultCategory.HUMANOIDS.getId()).size())), player -> {
+				.lores(Replacer.replaceArray(Settings.MainMenu.Items.HUMANOIDS_LORE, "category_head_count", SkullsAPI.getSkullsByCategory(SkullsDefaultCategory.HUMANOID.getId()).size())), player -> {
 
-			new MenuList(player, SkullsAPI.getCategory(SkullsDefaultCategory.HUMANOIDS.getId()), SkullsMenuListingType.CATEGORY).displayTo(player);
+			new MenuList(player, SkullsAPI.getCategory(SkullsDefaultCategory.HUMANOID.getId()), SkullsMenuListingType.CATEGORY).displayTo(player);
 		});
 
 		this.miscellaneousButton = Button.makeSimple(ItemCreator

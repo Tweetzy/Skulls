@@ -20,7 +20,7 @@ public enum SkullsDefaultCategory {
 	DECORATION("decoration", Settings.Categories.Decoration.NAME, Settings.Categories.Decoration.PRICE),
 	FOOD_AND_DRINKS("food & drinks", Settings.Categories.FoodAndDrinks.NAME, Settings.Categories.FoodAndDrinks.PRICE),
 	HUMANS("humans", Settings.Categories.Humans.NAME, Settings.Categories.Humans.PRICE),
-	HUMANOIDS("humanoid", Settings.Categories.Humanoids.NAME, Settings.Categories.Humanoids.PRICE),
+	HUMANOID("humanoid", Settings.Categories.Humanoids.NAME, Settings.Categories.Humanoids.PRICE),
 	MISCELLANEOUS("miscellaneous", Settings.Categories.Miscellaneous.NAME, Settings.Categories.Miscellaneous.PRICE),
 	MONSTERS("monsters", Settings.Categories.Monsters.NAME, Settings.Categories.Monsters.PRICE),
 	PLANTS("plants", Settings.Categories.Plants.NAME, Settings.Categories.Plants.PRICE);

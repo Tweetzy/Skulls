@@ -49,6 +49,7 @@ public final class SkullPlayerManager {
 
 	public void loadPlayer(@NonNull final UUID playerId) {
 		Common.runAsync(() -> {
+			if (!Skulls.getInstance().getDataFile().contains("Players." + playerId.toString())) return;
 			SkullPlayer skullPlayer = SerializeUtil.deserialize(SkullPlayer.class, Skulls.getInstance().getDataFile().getConfigField("Players." + playerId.toString()));
 			if (skullPlayer != null)
 				this.players.get(playerId).favouriteSkulls().addAll(skullPlayer.favouriteSkulls());

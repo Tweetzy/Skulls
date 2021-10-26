@@ -24,6 +24,7 @@ public final class Localization extends SimpleLocalization {
 	public static String ENTER_CATEGORY_ID;
 	public static String CATEGORY_ID_TAKEN;
 	public static String CATEGORY_CREATED;
+	public static String ENTER_SKULL_PRICE;
 
 	private static void init() {
 		pathPrefix(null);
@@ -39,6 +40,7 @@ public final class Localization extends SimpleLocalization {
 		ENTER_CATEGORY_ID = getString("Enter Category Id");
 		CATEGORY_ID_TAKEN = getString("Category Id Taken");
 		CATEGORY_CREATED = getString("Category Created");
+		ENTER_SKULL_PRICE = getString("Enter Skull Price");
 	}
 
 	@Override

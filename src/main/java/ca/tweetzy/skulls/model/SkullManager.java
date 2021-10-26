@@ -91,6 +91,10 @@ public final class SkullManager {
 		return locatedSkulls;
 	}
 
+	public void updateSkullPrice(final int skullId, final double price) {
+		Skulls.getInstance().getDataFile().setField("Prices." + skullId, price);
+	}
+
 	public List<Skull> getSkullsByIds(@NonNull final List<Integer> ids) {
 		final List<Skull> locatedSkulls = new ArrayList<>();
 		for (final int id : ids) {
@@ -131,7 +135,7 @@ public final class SkullManager {
 				case HUMANS:
 					json = getSkullsJson("https://rose.tweetzy.ca/minecraft/skulls?category=humans");
 					break;
-				case HUMANOIDS:
+				case HUMANOID:
 					json = getSkullsJson("https://rose.tweetzy.ca/minecraft/skulls?category=humanoid");
 					break;
 				case MISCELLANEOUS:

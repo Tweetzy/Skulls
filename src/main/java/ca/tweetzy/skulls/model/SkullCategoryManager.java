@@ -69,6 +69,10 @@ public final class SkullCategoryManager {
 
 	public void loadCustomCategories() {
 		Common.runAsync(() -> {
+			if (!Skulls.getInstance().getDataFile().contains("Categories")) {
+				return;
+			}
+
 			final ConfigurationSection section = Skulls.getInstance().getDataFile().getConfigField("Categories");
 			if (section == null && section.getKeys(false).size() == 0) {
 				return;
