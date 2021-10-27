@@ -125,51 +125,16 @@ public final class MenuList extends MenuPagged<Skull> {
 	protected void onPageClick(Player player, Skull item, ClickType click) {
 		switch (click) {
 			case RIGHT:
-				if (!player.isOp() || !Valid.checkPermission(player, Permissions.FAVOURITE)) return;
-				if (!this.skullPlayer.favouriteSkulls().contains(item.getId()))
-					this.skullPlayer.favouriteSkulls().add(item.getId());
-				else
-					this.skullPlayer.favouriteSkulls().remove(Integer.valueOf(item.getId()));
-
-				if (listingType == SkullsMenuListingType.FAVOURITES)
-					new MenuList(this.skullPlayer).displayTo(player);
-				else
-					redraw();
+				handleRightClick(player, item);
 				break;
 			case MIDDLE:
-				if (this.category != null &&this.category.isCustom()) {
-					SkullsAPI.removeSkull(this.category, item.getId());
-					new MenuList(player, this.category, SkullsMenuListingType.CUSTOM_CATEGORY).displayTo(player);
-					break;
-				}
-
-				player.setMetadata("Skulls:Adding", new FixedMetadataValue(SimplePlugin.getInstance(), item.getId()));
-				player.setMetadata("Skulls:ListMenu", new FixedMetadataValue(SimplePlugin.getInstance(), this));
-				this.fromMain = false;
-				new MenuCategoryList(this.skullPlayer, true).displayTo(player);
+				handleMiddleClick(player, item);
 				break;
 			case SHIFT_RIGHT:
-				if (Settings.CHARGE_FOR_HEADS && player.isOp() || Valid.checkPermission(player, Permissions.EDIT_PRICE)) {
-					this.fromMain = false;
-					player.closeInventory();
-					SimpleDecimalPrompt.show(player, Localization.ENTER_SKULL_PRICE, value -> {
-						SkullsAPI.updateSkullPrice(item.getId(), value);
-						Common.runLater(() -> this.displayTo(player));
-					});
-				}
+				handleShiftRightClick(player, item);
 				break;
 			default:
-				if (Settings.CHARGE_FOR_HEADS && !EconomyManager.getInstance().has(player, item.getPrice()) || !Valid.checkPermission(player, Permissions.FREE_SKULLS)) {
-					Common.tell(player, Localization.NO_MONEY);
-					return;
-				}
-
-				if (Settings.CHARGE_FOR_HEADS) {
-					EconomyManager.getInstance().withdraw(player, item.getPrice());
-					Common.tell(player, Localization.WITHDRAW.replace("{value}", String.valueOf(MathUtil.formatTwoDigitsD(item.getPrice()))));
-				}
-
-				PlayerUtil.addItems(player.getInventory(), item.getItemStack());
+				handleOtherClick(player, item);
 				break;
 		}
 	}
@@ -183,6 +148,57 @@ public final class MenuList extends MenuPagged<Skull> {
 
 		if (this.fromMain)
 			new MenuMain(SkullsAPI.getPlayer(player.getUniqueId())).displayTo(player);
+	}
+
+	private void handleRightClick(Player player, Skull item) {
+		if (!player.isOp() || !Valid.checkPermission(player, Permissions.FAVOURITE)) return;
+		if (!this.skullPlayer.favouriteSkulls().contains(item.getId()))
+			this.skullPlayer.favouriteSkulls().add(item.getId());
+		else
+			this.skullPlayer.favouriteSkulls().remove(Integer.valueOf(item.getId()));
+
+		if (listingType == SkullsMenuListingType.FAVOURITES)
+			new MenuList(this.skullPlayer).displayTo(player);
+		else
+			redraw();
+	}
+
+	private void handleMiddleClick(Player player, Skull item) {
+		if (this.category != null &&this.category.isCustom()) {
+			SkullsAPI.removeSkull(this.category, item.getId());
+			new MenuList(player, this.category, SkullsMenuListingType.CUSTOM_CATEGORY).displayTo(player);
+			return;
+		}
+
+		player.setMetadata("Skulls:Adding", new FixedMetadataValue(SimplePlugin.getInstance(), item.getId()));
+		player.setMetadata("Skulls:ListMenu", new FixedMetadataValue(SimplePlugin.getInstance(), this));
+		this.fromMain = false;
+		new MenuCategoryList(this.skullPlayer, true).displayTo(player);
+	}
+
+	private void handleShiftRightClick(Player player, Skull item) {
+		if (Settings.CHARGE_FOR_HEADS && player.isOp() || Valid.checkPermission(player, Permissions.EDIT_PRICE)) {
+			this.fromMain = false;
+			player.closeInventory();
+			SimpleDecimalPrompt.show(player, Localization.ENTER_SKULL_PRICE, value -> {
+				SkullsAPI.updateSkullPrice(item.getId(), value);
+				Common.runLater(() -> this.displayTo(player));
+			});
+		}
+	}
+
+	private void handleOtherClick(Player player, Skull item) {
+		if (Settings.CHARGE_FOR_HEADS && !EconomyManager.getInstance().has(player, item.getPrice()) || !Valid.checkPermission(player, Permissions.FREE_SKULLS)) {
+			Common.tell(player, Localization.NO_MONEY);
+			return;
+		}
+
+		if (Settings.CHARGE_FOR_HEADS) {
+			EconomyManager.getInstance().withdraw(player, item.getPrice());
+			Common.tell(player, Localization.WITHDRAW.replace("{value}", String.valueOf(MathUtil.formatTwoDigitsD(item.getPrice()))));
+		}
+
+		PlayerUtil.addItems(player.getInventory(), item.getItemStack());
 	}
 
 	@Override
