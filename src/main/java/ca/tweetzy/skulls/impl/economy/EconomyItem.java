@@ -1,6 +1,9 @@
 package ca.tweetzy.skulls.impl.economy;
 
+import ca.tweetzy.skulls.api.SkullsAPI;
 import ca.tweetzy.skulls.api.interfaces.IEconomy;
+import ca.tweetzy.skulls.settings.Settings;
+import ca.tweetzy.tweety.PlayerUtil;
 import lombok.NonNull;
 import org.bukkit.entity.Player;
 
@@ -24,16 +27,17 @@ public final class EconomyItem implements IEconomy {
 
 	@Override
 	public boolean has(@NonNull Player player, double amount) {
-		return false;
+		return SkullsAPI.getItemCountInPlayerInventory(player, Settings.ITEM_ECONOMY_MATERIAL.toItem()) >= amount;
 	}
 
 	@Override
 	public void withdraw(@NonNull Player player, double amount) {
-
+		SkullsAPI.removeSpecificItemQuantityFromPlayer(player, Settings.ITEM_ECONOMY_MATERIAL.toItem(), (int) amount);
 	}
 
 	@Override
 	public void deposit(@NonNull Player player, double amount) {
-
+		for (int i = 0; i < amount; i++)
+			PlayerUtil.addItems(player.getInventory(), Settings.ITEM_ECONOMY_MATERIAL.toItem());
 	}
 }

@@ -124,19 +124,6 @@ public final class MenuList extends MenuPagged<Skull> {
 	@Override
 	protected void onPageClick(Player player, Skull item, ClickType click) {
 		switch (click) {
-			case LEFT:
-				if (Settings.CHARGE_FOR_HEADS && !EconomyManager.getInstance().has(player, item.getPrice()) || !Valid.checkPermission(player, Permissions.FREE_SKULLS)) {
-					Common.tell(player, Localization.NO_MONEY);
-					return;
-				}
-
-				if (Settings.CHARGE_FOR_HEADS) {
-					EconomyManager.getInstance().withdraw(player, item.getPrice());
-					Common.tell(player, Localization.WITHDRAW.replace("{value}", String.valueOf(MathUtil.formatTwoDigitsD(item.getPrice()))));
-				}
-
-				PlayerUtil.addItems(player.getInventory(), item.getItemStack());
-				break;
 			case RIGHT:
 				if (!player.isOp() || !Valid.checkPermission(player, Permissions.FAVOURITE)) return;
 				if (!this.skullPlayer.favouriteSkulls().contains(item.getId()))
@@ -170,6 +157,19 @@ public final class MenuList extends MenuPagged<Skull> {
 						Common.runLater(() -> this.displayTo(player));
 					});
 				}
+				break;
+			default:
+				if (Settings.CHARGE_FOR_HEADS && !EconomyManager.getInstance().has(player, item.getPrice()) || !Valid.checkPermission(player, Permissions.FREE_SKULLS)) {
+					Common.tell(player, Localization.NO_MONEY);
+					return;
+				}
+
+				if (Settings.CHARGE_FOR_HEADS) {
+					EconomyManager.getInstance().withdraw(player, item.getPrice());
+					Common.tell(player, Localization.WITHDRAW.replace("{value}", String.valueOf(MathUtil.formatTwoDigitsD(item.getPrice()))));
+				}
+
+				PlayerUtil.addItems(player.getInventory(), item.getItemStack());
 				break;
 		}
 	}

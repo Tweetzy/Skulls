@@ -51,21 +51,6 @@ public final class DataFile {
 	}
 
 	/**
-	 * @param Path  of field
-	 * @param Field value as Object
-	 * @return whether the save was successful
-	 */
-	public boolean setField(String path, Object o) {
-		getConfig().set(path, o);
-		getConfig().contains("");
-		return save();
-	}
-
-	public boolean contains(String path) {
-		return getConfig().contains(path);
-	}
-
-	/**
 	 * @param <T>          -> Tries to cast the field value to the Class T
 	 * @param whenNotFound -> What should get created in the config if field not exist
 	 * @param path         -> path in this config
@@ -86,6 +71,21 @@ public final class DataFile {
 			save();
 		}
 		return whenNotFound;
+	}
+
+	/**
+	 * @param Path  of field
+	 * @param Field value as Object
+	 * @return whether the save was successful
+	 */
+	public boolean setField(String path, Object o) {
+		getConfig().set(path, o);
+		getConfig().contains("");
+		return save();
+	}
+
+	public boolean contains(String path) {
+		return getConfig().contains(path);
 	}
 
 	private FileConfiguration getConfig() {

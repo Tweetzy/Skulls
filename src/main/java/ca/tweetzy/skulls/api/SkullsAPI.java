@@ -38,12 +38,13 @@ public final class SkullsAPI {
 	}
 
 	/**
-	 * Used to remove an existing {@link Skull} from the list
+	 * Add a skull to a custom category
 	 *
-	 * @param skull is the {@link Skull} being removed
+	 * @param category is the {@link SkullCategory}
+	 * @param id       is the id of the {@link Skull}
 	 */
-	public void removeSkull(@NonNull final Skull skull) {
-		SKULL_MANAGER.removeSkull(skull);
+	public void addSkull(@NonNull final SkullCategory category, final int id) {
+		SKULL_CATEGORY_MANAGER.addSkull(category, id);
 	}
 
 	/**
@@ -87,15 +88,6 @@ public final class SkullsAPI {
 	}
 
 	/**
-	 * Used to get all categories that are custom-made
-	 *
-	 * @return a list of custom-made categories
-	 */
-	public List<SkullCategory> getCustomCategories() {
-		return SKULL_CATEGORY_MANAGER.getCustomCategories();
-	}
-
-	/**
 	 * Used to get all the skulls by a particular category
 	 *
 	 * @param category is the {@link SkullCategory}
@@ -106,13 +98,12 @@ public final class SkullsAPI {
 	}
 
 	/**
-	 * Add a skull to a custom category
+	 * Used to get all categories that are custom-made
 	 *
-	 * @param category is the {@link SkullCategory}
-	 * @param id       is the id of the {@link Skull}
+	 * @return a list of custom-made categories
 	 */
-	public void addSkull(@NonNull final SkullCategory category, final int id) {
-		SKULL_CATEGORY_MANAGER.addSkull(category, id);
+	public List<SkullCategory> getCustomCategories() {
+		return SKULL_CATEGORY_MANAGER.getCustomCategories();
 	}
 
 	/**
@@ -123,6 +114,15 @@ public final class SkullsAPI {
 	 */
 	public void removeSkull(@NonNull final SkullCategory category, final int id) {
 		SKULL_CATEGORY_MANAGER.removeSkull(category, id);
+	}
+
+	/**
+	 * Used to remove an existing {@link Skull} from the list
+	 *
+	 * @param skull is the {@link Skull} being removed
+	 */
+	public void removeSkull(@NonNull final Skull skull) {
+		SKULL_MANAGER.removeSkull(skull);
 	}
 
 	/**

@@ -110,27 +110,24 @@ public final class MenuCategoryList extends MenuPagged<SkullCategory> {
 
 	@Override
 	protected void onPageClick(Player player, SkullCategory category, ClickType click) {
-		switch (click) {
-			case LEFT:
-				if (this.addingSkull) {
-					final int skullId = player.getMetadata("Skulls:Adding").get(0).asInt();
-					SkullsAPI.addSkull(category, skullId);
+		if (click == ClickType.MIDDLE) {
+			if (!this.addingSkull && player.isOp() || Valid.checkPermission(player, Permissions.DELETE_CATEGORY)) {
+				SkullsAPI.removeCategory(category);
+				newInstance().displayTo(player);
+			}
+		} else {
+			if (this.addingSkull) {
+				final int skullId = player.getMetadata("Skulls:Adding").get(0).asInt();
+				SkullsAPI.addSkull(category, skullId);
 
-					final Menu menu = (Menu) player.getMetadata("Skulls:ListMenu").get(0).value();
-					if (menu != null)
-						menu.displayTo(player);
+				final Menu menu = (Menu) player.getMetadata("Skulls:ListMenu").get(0).value();
+				if (menu != null)
+					menu.displayTo(player);
 
-					return;
-				}
+				return;
+			}
 
-				new MenuList(player, category, SkullsMenuListingType.CUSTOM_CATEGORY).displayTo(player);
-				break;
-			case MIDDLE:
-				if (!this.addingSkull && player.isOp() || Valid.checkPermission(player, Permissions.DELETE_CATEGORY)) {
-					SkullsAPI.removeCategory(category);
-					newInstance().displayTo(player);
-				}
-				break;
+			new MenuList(player, category, SkullsMenuListingType.CUSTOM_CATEGORY).displayTo(player);
 		}
 	}
 

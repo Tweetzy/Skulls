@@ -121,7 +121,6 @@ public final class SkullManager {
 					break;
 				case ANIMALS:
 					json = getSkullsJson("https://rose.tweetzy.ca/minecraft/skulls?category=animals");
-					;
 					break;
 				case BLOCKS:
 					json = getSkullsJson("https://rose.tweetzy.ca/minecraft/skulls?category=blocks");
@@ -163,7 +162,7 @@ public final class SkullManager {
 	 * For internal use only
 	 */
 	public void downloadHeads(final boolean redownload) {
-		if (redownload) {
+		if (redownload || FileUtil.getFile("config.yml").exists()) {
 			final File directory = FileUtil.getFile("/heads");
 			if (directory.exists()) {
 				for (File file : FileUtil.getFiles("heads", "json")) {
