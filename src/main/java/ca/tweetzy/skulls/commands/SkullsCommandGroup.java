@@ -3,8 +3,11 @@ package ca.tweetzy.skulls.commands;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.SkullsAPI;
 import ca.tweetzy.skulls.menus.MenuMain;
+import ca.tweetzy.skulls.model.Permissions;
 import ca.tweetzy.skulls.settings.Localization;
 import ca.tweetzy.tweety.Common;
+import ca.tweetzy.tweety.Valid;
+import ca.tweetzy.tweety.command.PermsCommand;
 import ca.tweetzy.tweety.command.SimpleCommandGroup;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -40,6 +43,8 @@ public final class SkullsCommandGroup extends SimpleCommandGroup {
 		if (!(commandSender instanceof Player)) return;
 		final Player player = (Player) commandSender;
 
+		if (!Valid.checkPermission(player, Permissions.MAIN_COMMAND)) return;
+
 		new MenuMain(SkullsAPI.getPlayer(player.getUniqueId())).displayTo(player);
 	}
 
@@ -50,6 +55,8 @@ public final class SkullsCommandGroup extends SimpleCommandGroup {
 		registerSubcommand(new CommandGive());
 		registerSubcommand(new CommandInfo());
 		registerSubcommand(new CommandDownload());
+		registerSubcommand(new CommandLatest());
+		registerSubcommand(new PermsCommand(Permissions.class));
 	}
 
 	@Override

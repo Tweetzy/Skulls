@@ -11,6 +11,9 @@ import ca.tweetzy.tweety.constants.TweetyPermissions;
  */
 public final class Permissions extends TweetyPermissions {
 
+	@Permission("Allows the player player to use /skulls")
+	public static final String MAIN_COMMAND = "skulls.command";
+
 	@Permission("Allows the player unlimited access to skulls w.o paying")
 	public static final String FREE_SKULLS = "skulls.freeskulls";
 

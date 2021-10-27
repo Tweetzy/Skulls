@@ -15,7 +15,7 @@
         <jarName>Skulls</jarName>
         <main.class>${project.groupId}.${project.artifactId}.${project.name}</main.class>
         <java.version>1.8</java.version>
-        <tweety.version>1.3.9</tweety.version>
+        <tweety.version>1.3.10</tweety.version>
         <tweety.path>ca.tweetzy</tweety.path>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
