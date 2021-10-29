@@ -17,12 +17,14 @@ public final class Settings extends SimpleSettings {
 	public static String ECONOMY_PROVIDER;
 	public static CompMaterial ITEM_ECONOMY_MATERIAL;
 	public static Boolean CHARGE_FOR_HEADS;
+	public static Boolean ALLOW_NON_PERM_USE;
 
 	private static void init() {
 		PREFIX = getString("Prefix");
 		ECONOMY_PROVIDER = getString("Economy Provider");
 		ITEM_ECONOMY_MATERIAL = getMaterial("Item Economy Material");
 		CHARGE_FOR_HEADS = getBoolean("Charge For Heads");
+		ALLOW_NON_PERM_USE = getBoolean("Allow Non Permission Access");
 	}
 
 	public static final class ListingMenu {

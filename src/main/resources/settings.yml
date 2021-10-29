@@ -1,6 +1,8 @@
 Charge For Heads: false
 Economy Provider: Vault
 Item Economy Material: GOLD_INGOT
+# If true, the user won't need permission to use /skulls to open the menu
+Allow Non Permission Access: true
 
 Gui:
   Category List:
