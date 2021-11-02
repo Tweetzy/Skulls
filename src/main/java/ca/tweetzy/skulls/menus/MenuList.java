@@ -95,14 +95,14 @@ public final class MenuList extends MenuPagged<Skull> {
 		lore.add(Settings.ListingMenu.Format.TAKE);
 
 		if (this.category != null && this.category.isCustom()) {
-			if (Valid.checkPermission(player, Permissions.REMOVE_FROM_CATEGORY) && this.listingType != SkullsMenuListingType.FAVOURITES)
+			if (PlayerUtil.hasPerm(player, Permissions.REMOVE_FROM_CATEGORY) && this.listingType != SkullsMenuListingType.FAVOURITES)
 				lore.add(Settings.ListingMenu.Format.REMOVE_FROM_CATEGORY);
 		} else {
-			if (Valid.checkPermission(player, Permissions.ADD_TO_CATEGORY) && this.listingType != SkullsMenuListingType.FAVOURITES)
+			if (PlayerUtil.hasPerm(player, Permissions.ADD_TO_CATEGORY) && this.listingType != SkullsMenuListingType.FAVOURITES)
 				lore.add(Settings.ListingMenu.Format.ADD_TO_CATEGORY);
 		}
 
-		if (player.isOp() || Valid.checkPermission(player, Permissions.FAVOURITE)) {
+		if (player.isOp() || PlayerUtil.hasPerm(player, Permissions.FAVOURITE)) {
 			if (this.skullPlayer.favouriteSkulls().contains(item.getId()))
 				lore.add(Settings.ListingMenu.Format.UN_FAVOURITE);
 			else
@@ -151,7 +151,7 @@ public final class MenuList extends MenuPagged<Skull> {
 	}
 
 	private void handleRightClick(Player player, Skull item) {
-		if (!player.isOp() || !Valid.checkPermission(player, Permissions.FAVOURITE)) return;
+		if (!player.isOp() || !PlayerUtil.hasPerm(player, Permissions.FAVOURITE)) return;
 		if (!this.skullPlayer.favouriteSkulls().contains(item.getId()))
 			this.skullPlayer.favouriteSkulls().add(item.getId());
 		else
@@ -177,7 +177,7 @@ public final class MenuList extends MenuPagged<Skull> {
 	}
 
 	private void handleShiftRightClick(Player player, Skull item) {
-		if (Settings.CHARGE_FOR_HEADS && player.isOp() || Valid.checkPermission(player, Permissions.EDIT_PRICE)) {
+		if (Settings.CHARGE_FOR_HEADS && player.isOp() || PlayerUtil.hasPerm(player, Permissions.EDIT_PRICE)) {
 			this.fromMain = false;
 			player.closeInventory();
 			SimpleDecimalPrompt.show(player, Localization.ENTER_SKULL_PRICE, value -> {
@@ -188,7 +188,7 @@ public final class MenuList extends MenuPagged<Skull> {
 	}
 
 	private void handleOtherClick(Player player, Skull item) {
-		if (Settings.CHARGE_FOR_HEADS && !EconomyManager.getInstance().has(player, item.getPrice()) || !Valid.checkPermission(player, Permissions.FREE_SKULLS)) {
+		if (Settings.CHARGE_FOR_HEADS && !EconomyManager.getInstance().has(player, item.getPrice()) || !PlayerUtil.hasPerm(player, Permissions.FREE_SKULLS)) {
 			Common.tell(player, Localization.NO_MONEY);
 			return;
 		}

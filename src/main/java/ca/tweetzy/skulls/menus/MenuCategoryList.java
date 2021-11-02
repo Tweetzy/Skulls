@@ -11,6 +11,7 @@ import ca.tweetzy.skulls.model.SkullMaterial;
 import ca.tweetzy.skulls.settings.Localization;
 import ca.tweetzy.skulls.settings.Settings;
 import ca.tweetzy.tweety.Common;
+import ca.tweetzy.tweety.PlayerUtil;
 import ca.tweetzy.tweety.Valid;
 import ca.tweetzy.tweety.collection.StrictList;
 import ca.tweetzy.tweety.conversation.SimplePrompt;
@@ -86,7 +87,7 @@ public final class MenuCategoryList extends MenuPagged<SkullCategory> {
 	@Override
 	public ItemStack getItemAt(int slot) {
 		if (slot == getSize() - 1) {
-			if (this.player.isOp() || Valid.checkPermission(this.player, Permissions.ADD_NEW_CATEGORY))
+			if (this.player.isOp() || PlayerUtil.hasPerm(this.player, Permissions.ADD_NEW_CATEGORY))
 				return newButton.getItem();
 			else
 				return Button.makeDummy(backgroundItem()).getItem();
@@ -98,7 +99,7 @@ public final class MenuCategoryList extends MenuPagged<SkullCategory> {
 	protected ItemStack convertToItemStack(SkullCategory item) {
 		final List<String> lore = new ArrayList<>();
 		lore.add(Settings.CategoryListMenu.Items.CATEGORY_LORE_VIEW);
-		if (this.player.isOp() || Valid.checkPermission(this.player, Permissions.ADD_NEW_CATEGORY))
+		if (this.player.isOp() || PlayerUtil.hasPerm(this.player, Permissions.ADD_NEW_CATEGORY))
 			lore.add(Settings.CategoryListMenu.Items.CATEGORY_LORE_DELETE);
 
 		return ItemCreator
@@ -111,7 +112,7 @@ public final class MenuCategoryList extends MenuPagged<SkullCategory> {
 	@Override
 	protected void onPageClick(Player player, SkullCategory category, ClickType click) {
 		if (click == ClickType.MIDDLE) {
-			if (!this.addingSkull && player.isOp() || Valid.checkPermission(player, Permissions.DELETE_CATEGORY)) {
+			if (!this.addingSkull && player.isOp() || PlayerUtil.hasPerm(player, Permissions.DELETE_CATEGORY)) {
 				SkullsAPI.removeCategory(category);
 				newInstance().displayTo(player);
 			}
