@@ -8,7 +8,7 @@ package ca.tweetzy.skulls.commands;
  */
 public final class CommandLatest extends SkullsSubCommand{
 
-	private final int insertionNumber = 10;
+	private final int insertionNumber = 15;
 
 	public CommandLatest() {
 		super("latest");
