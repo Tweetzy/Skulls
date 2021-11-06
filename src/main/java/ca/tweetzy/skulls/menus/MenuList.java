@@ -14,15 +14,11 @@ import ca.tweetzy.skulls.settings.Settings;
 import ca.tweetzy.tweety.Common;
 import ca.tweetzy.tweety.MathUtil;
 import ca.tweetzy.tweety.PlayerUtil;
-import ca.tweetzy.tweety.Valid;
-import ca.tweetzy.tweety.conversation.SimpleConversation;
 import ca.tweetzy.tweety.conversation.SimpleDecimalPrompt;
-import ca.tweetzy.tweety.conversation.SimplePrompt;
 import ca.tweetzy.tweety.menu.MenuPagged;
 import ca.tweetzy.tweety.menu.model.ItemCreator;
 import ca.tweetzy.tweety.plugin.SimplePlugin;
 import ca.tweetzy.tweety.remain.Remain;
-import com.sun.org.apache.bcel.internal.generic.RETURN;
 import lombok.NonNull;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -164,7 +160,7 @@ public final class MenuList extends MenuPagged<Skull> {
 	}
 
 	private void handleMiddleClick(Player player, Skull item) {
-		if (this.category != null &&this.category.isCustom()) {
+		if (this.category != null && this.category.isCustom()) {
 			SkullsAPI.removeSkull(this.category, item.getId());
 			new MenuList(player, this.category, SkullsMenuListingType.CUSTOM_CATEGORY).displayTo(player);
 			return;
@@ -177,7 +173,11 @@ public final class MenuList extends MenuPagged<Skull> {
 	}
 
 	private void handleShiftRightClick(Player player, Skull item) {
-		if (Settings.CHARGE_FOR_HEADS && player.isOp() || PlayerUtil.hasPerm(player, Permissions.EDIT_PRICE)) {
+		if (!Settings.CHARGE_FOR_HEADS) {
+			return;
+		}
+
+		if (player.isOp() || PlayerUtil.hasPerm(player, Permissions.EDIT_PRICE)) {
 			this.fromMain = false;
 			player.closeInventory();
 			SimpleDecimalPrompt.show(player, Localization.ENTER_SKULL_PRICE, value -> {
@@ -188,17 +188,18 @@ public final class MenuList extends MenuPagged<Skull> {
 	}
 
 	private void handleOtherClick(Player player, Skull item) {
-		if (Settings.CHARGE_FOR_HEADS && !EconomyManager.getInstance().has(player, item.getPrice()) || !PlayerUtil.hasPerm(player, Permissions.FREE_SKULLS)) {
-			Common.tell(player, Localization.NO_MONEY);
-			return;
-		}
-
 		if (Settings.CHARGE_FOR_HEADS) {
-			EconomyManager.getInstance().withdraw(player, item.getPrice());
-			Common.tell(player, Localization.WITHDRAW.replace("{value}", String.valueOf(MathUtil.formatTwoDigitsD(item.getPrice()))));
+			if (!EconomyManager.getInstance().has(player, item.getPrice()) || !PlayerUtil.hasPerm(player, Permissions.FREE_SKULLS)) {
+				Common.tell(player, Localization.NO_MONEY);
+				return;
+			} else {
+				EconomyManager.getInstance().withdraw(player, item.getPrice());
+				Common.tell(player, Localization.WITHDRAW.replace("{value}", String.valueOf(MathUtil.formatTwoDigitsD(item.getPrice()))));
+			}
 		}
 
 		PlayerUtil.addItems(player.getInventory(), item.getItemStack());
+
 	}
 
 	@Override
