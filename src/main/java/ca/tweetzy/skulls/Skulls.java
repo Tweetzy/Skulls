@@ -20,6 +20,7 @@ import ca.tweetzy.tweety.model.SpigotUpdater;
 import ca.tweetzy.tweety.plugin.SimplePlugin;
 import ca.tweetzy.tweety.remain.Remain;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 
 /**
  * The current file has been created by Kiran Hart
@@ -81,6 +82,8 @@ public final class Skulls extends SimplePlugin {
 
 		this.skullCategoryManager.saveCategories();
 		this.skullCategoryManager.getCategories().clear();
+
+		Bukkit.getServer().getScheduler().cancelTasks(this);
 	}
 
 

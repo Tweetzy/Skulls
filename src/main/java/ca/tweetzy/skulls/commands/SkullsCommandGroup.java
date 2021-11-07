@@ -57,6 +57,7 @@ public final class SkullsCommandGroup extends SimpleCommandGroup {
 		registerSubcommand(new CommandInfo());
 		registerSubcommand(new CommandDownload());
 		registerSubcommand(new CommandLatest());
+		registerSubcommand(new CommandReload());
 		registerSubcommand(new PermsCommand(Permissions.class));
 	}
 
