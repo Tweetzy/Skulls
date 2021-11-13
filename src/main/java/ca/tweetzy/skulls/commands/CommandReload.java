@@ -1,6 +1,7 @@
 package ca.tweetzy.skulls.commands;
 
 import ca.tweetzy.skulls.Skulls;
+import ca.tweetzy.skulls.settings.Localization;
 
 /**
  * The current file has been created by Kiran Hart
@@ -12,11 +13,12 @@ public final class CommandReload extends SkullsSubCommand{
 
 	public CommandReload() {
 		super("reload|rl");
+		setDescription(Localization.Commands.RELOAD);
 	}
 
 	@Override
 	protected void onCommand() {
 		Skulls.getInstance().reload();
-		tell("&aSkulls has been reloaded");
+		tell(Localization.RELOAD);
 	}
 }

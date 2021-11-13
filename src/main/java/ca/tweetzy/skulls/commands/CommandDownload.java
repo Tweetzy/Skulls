@@ -1,6 +1,7 @@
 package ca.tweetzy.skulls.commands;
 
 import ca.tweetzy.skulls.Skulls;
+import ca.tweetzy.skulls.settings.Localization;
 import ca.tweetzy.tweety.Common;
 
 /**
@@ -13,6 +14,7 @@ public final class CommandDownload extends SkullsSubCommand{
 
 	public CommandDownload() {
 		super("download|dl|update");
+		setDescription(Localization.Commands.DOWNLOAD);
 	}
 
 	@Override

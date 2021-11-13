@@ -1,5 +1,7 @@
 package ca.tweetzy.skulls.commands;
 
+import ca.tweetzy.skulls.settings.Localization;
+
 /**
  * The current file has been created by Kiran Hart
  * Date Created: October 26 2021
@@ -8,10 +10,11 @@ package ca.tweetzy.skulls.commands;
  */
 public final class CommandLatest extends SkullsSubCommand{
 
-	private final int insertionNumber = 15;
+	private final int insertionNumber = 16;
 
 	public CommandLatest() {
 		super("latest");
+		setDescription(Localization.Commands.LATEST);
 	}
 
 	@Override

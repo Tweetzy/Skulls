@@ -25,6 +25,7 @@ public final class Localization extends SimpleLocalization {
 	public static String CATEGORY_ID_TAKEN;
 	public static String CATEGORY_CREATED;
 	public static String ENTER_SKULL_PRICE;
+	public static String RELOAD;
 
 	private static void init() {
 		pathPrefix(null);
@@ -41,6 +42,29 @@ public final class Localization extends SimpleLocalization {
 		CATEGORY_ID_TAKEN = getString("Category Id Taken");
 		CATEGORY_CREATED = getString("Category Created");
 		ENTER_SKULL_PRICE = getString("Enter Skull Price");
+		RELOAD = getString("Reload");
+	}
+
+	public static final class Commands {
+
+		public static String DOWNLOAD;
+		public static String FAVOURITES;
+		public static String GIVE;
+		public static String INFO;
+		public static String LATEST;
+		public static String RELOAD;
+		public static String SEARCH;
+
+		private static void init() {
+			pathPrefix("Commands");
+			DOWNLOAD = getString("Download");
+			FAVOURITES = getString("Favourites");
+			GIVE = getString("Give");
+			INFO = getString("Info");
+			LATEST = getString("Latest");
+			RELOAD = getString("Reload");
+			SEARCH = getString("Search");
+		}
 	}
 
 	@Override

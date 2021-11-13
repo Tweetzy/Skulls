@@ -190,8 +190,10 @@ public final class MenuMain extends Menu {
 			case (9 * 2) - 1 + 7:
 				return this.plantsButton.getItem();
 			case (9 * 4) - 1 + 3:
+				if (!Settings.SHOW_CUSTOM_CATEGORIES) return Settings.MainMenu.BACKGROUND.toItem();
 				return this.customCategoryButton.getItem();
 			case (9 * 4) - 1 + 5:
+				if (!Settings.SHOW_FAVOURITES) return Settings.MainMenu.BACKGROUND.toItem();
 				return this.favouritesButton.getItem();
 			case (9 * 4) - 1 + 7:
 				return this.searchButton.getItem();

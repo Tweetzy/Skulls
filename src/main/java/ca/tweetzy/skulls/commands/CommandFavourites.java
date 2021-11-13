@@ -17,7 +17,8 @@ public final class CommandFavourites extends SkullsSubCommand{
 
 	public CommandFavourites() {
 		super("favourites|favs");
-		setDescription("View your favourited skulls");
+		setDescription(Localization.Commands.FAVOURITES);
+
 	}
 
 	@Override

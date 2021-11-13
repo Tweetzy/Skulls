@@ -19,7 +19,7 @@ public final class CommandSearch extends SkullsSubCommand {
 		super("search");
 		setMinArguments(1);
 		setUsage("<keywords>");
-		setDescription("Search for skulls");
+		setDescription(Localization.Commands.SEARCH);
 	}
 
 	@Override

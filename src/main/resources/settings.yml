@@ -4,6 +4,9 @@ Item Economy Material: GOLD_INGOT
 # If true, the user won't need permission to use /skulls to open the menu
 Allow Non Permission Access: true
 
+Show Custom Categories: true
+Show Favourites: true
+
 Gui:
   Category List:
     Title: "&eSkulls &f- &7Custom Categories"

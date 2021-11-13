@@ -21,7 +21,7 @@ public final class CommandInfo extends SkullsSubCommand {
 
 	public CommandInfo() {
 		super("info|i");
-		setDescription("Provides information on the held skull");
+		setDescription(Localization.Commands.INFO);
 	}
 
 	@Override

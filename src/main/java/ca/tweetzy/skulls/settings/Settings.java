@@ -18,6 +18,8 @@ public final class Settings extends SimpleSettings {
 	public static CompMaterial ITEM_ECONOMY_MATERIAL;
 	public static Boolean CHARGE_FOR_HEADS;
 	public static Boolean ALLOW_NON_PERM_USE;
+	public static Boolean SHOW_CUSTOM_CATEGORIES;
+	public static Boolean SHOW_FAVOURITES;
 
 	private static void init() {
 		PREFIX = getString("Prefix");
@@ -25,6 +27,8 @@ public final class Settings extends SimpleSettings {
 		ITEM_ECONOMY_MATERIAL = getMaterial("Item Economy Material");
 		CHARGE_FOR_HEADS = getBoolean("Charge For Heads");
 		ALLOW_NON_PERM_USE = getBoolean("Allow Non Permission Access");
+		SHOW_CUSTOM_CATEGORIES = getBoolean("Show Custom Categories");
+		SHOW_FAVOURITES = getBoolean("Show Favourites");
 	}
 
 	public static final class ListingMenu {

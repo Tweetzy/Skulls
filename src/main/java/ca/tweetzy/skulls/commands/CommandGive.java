@@ -19,7 +19,7 @@ public final class CommandGive extends SkullsSubCommand {
 		super("give|g");
 		setMinArguments(1);
 		setUsage("<id/random> [#] [player]");
-		setDescription("Give a skull to a player");
+		setDescription(Localization.Commands.GIVE);
 	}
 
 	@Override
