@@ -31,9 +31,6 @@ import org.bukkit.Bukkit;
 public final class Skulls extends SimplePlugin {
 
 	@Getter
-	private final SimpleCommandGroup mainCommand = SkullsCommandGroup.getInstance();
-
-	@Getter
 	private final DataFile dataFile = new DataFile("data", this);
 
 	private final SkullManager skullManager = new SkullManager();

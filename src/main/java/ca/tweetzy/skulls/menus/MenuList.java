@@ -44,8 +44,9 @@ public final class MenuList extends MenuPagged<Skull> {
 	private final SkullCategory category;
 
 	public MenuList(@NonNull final Player player, @NonNull final SkullCategory category, @NonNull final SkullsMenuListingType listingType) {
-		super(6, listingType == SkullsMenuListingType.CATEGORY ? Skulls.getSkullManager().getSkullsByCategory(category) : SkullsAPI.getSkullsByIds(category.getSkulls().getSource()));
+		super(listingType == SkullsMenuListingType.CATEGORY ? Skulls.getSkullManager().getSkullsByCategory(category) : SkullsAPI.getSkullsByIds(category.getSkulls().getSource()));
 		setTitle(Settings.ListingMenu.CATEGORY_TITLE.replace("{category_name}", category.getName()));
+		setSize(9 * 6);
 		this.fromMain = true;
 		this.player = player;
 		this.skullPlayer = SkullsAPI.getPlayer(player.getUniqueId());
@@ -54,8 +55,9 @@ public final class MenuList extends MenuPagged<Skull> {
 	}
 
 	public MenuList(@NonNull final Player player, @NonNull final List<Skull> skulls, @NonNull final String keywords) {
-		super(RowByContentSize.get(skulls.size()), SkullsAPI.getSkullsByTerm(keywords));
+		super(SkullsAPI.getSkullsByTerm(keywords));
 		setTitle(Settings.ListingMenu.SEARCH_TITLE.replace("{search_term}", keywords.replace("id:", "")));
+		setSize(9 * RowByContentSize.get(skulls.size()));
 		this.fromMain = true;
 		this.player = player;
 		this.skullPlayer = SkullsAPI.getPlayer(player.getUniqueId());
@@ -64,8 +66,9 @@ public final class MenuList extends MenuPagged<Skull> {
 	}
 
 	public MenuList(@NonNull final SkullPlayer player) {
-		super(RowByContentSize.get(player.favouriteSkulls().size()), SkullsAPI.getSkullsByIds(player.favouriteSkulls().getSource()));
+		super( SkullsAPI.getSkullsByIds(player.favouriteSkulls().getSource()));
 		setTitle(Settings.ListingMenu.FAVOURITES_TITLE);
+		setSize(9 * RowByContentSize.get(player.favouriteSkulls().size()));
 		this.fromMain = true;
 		this.player = Remain.getPlayerByUUID(player.getPlayerId());
 		this.skullPlayer = player;
@@ -114,7 +117,7 @@ public final class MenuList extends MenuPagged<Skull> {
 			lore.add(Settings.ListingMenu.Format.EDIT_PRICE);
 
 
-		return ItemCreator.of(item.getItemStack()).name(Settings.ListingMenu.Format.NAME.replace("{skull_name}", item.getName())).lores(lore).build().make();
+		return ItemCreator.of(item.getItemStack()).name(Settings.ListingMenu.Format.NAME.replace("{skull_name}", item.getName())).lore(lore).make();
 	}
 
 	@Override
@@ -156,7 +159,7 @@ public final class MenuList extends MenuPagged<Skull> {
 		if (listingType == SkullsMenuListingType.FAVOURITES)
 			new MenuList(this.skullPlayer).displayTo(player);
 		else
-			redraw();
+			restartMenu();
 	}
 
 	private void handleMiddleClick(Player player, Skull item) {
@@ -189,7 +192,7 @@ public final class MenuList extends MenuPagged<Skull> {
 
 	private void handleOtherClick(Player player, Skull item) {
 		if (Settings.CHARGE_FOR_HEADS) {
-			if (!EconomyManager.getInstance().has(player, item.getPrice()) || !PlayerUtil.hasPerm(player, Permissions.FREE_SKULLS)) {
+			if (!EconomyManager.getInstance().has(player, item.getPrice()) && !PlayerUtil.hasPerm(player, Permissions.FREE_SKULLS)) {
 				Common.tell(player, Localization.NO_MONEY);
 				return;
 			} else {
@@ -200,11 +203,6 @@ public final class MenuList extends MenuPagged<Skull> {
 
 		PlayerUtil.addItems(player.getInventory(), item.getItemStack());
 
-	}
-
-	@Override
-	public boolean allowShiftActions() {
-		return true;
 	}
 
 	@Override

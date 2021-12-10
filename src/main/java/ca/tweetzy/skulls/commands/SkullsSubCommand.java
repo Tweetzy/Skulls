@@ -12,6 +12,6 @@ import ca.tweetzy.tweety.command.SimpleSubCommand;
 public abstract class SkullsSubCommand extends SimpleSubCommand {
 
 	public SkullsSubCommand(String sublabel) {
-		super(Skulls.getInstance().getMainCommand(), sublabel);
+		super(SkullsCommandGroup.getInstance(), sublabel);
 	}
 }

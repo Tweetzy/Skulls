@@ -48,7 +48,7 @@ public final class MenuCategoryList extends MenuPagged<SkullCategory> {
 	private final boolean addingSkull;
 
 	public MenuCategoryList(@NonNull final SkullPlayer skullPlayer, final boolean addingSkull) {
-		super(Math.min(2, Math.max(6, RowByContentSize.get(SkullsAPI.getCustomCategories().size()) + 1)), SkullsAPI.getCustomCategories());
+		super(Math.min(9 * 2, Math.max(9 * 6, 9 * RowByContentSize.get(SkullsAPI.getCustomCategories().size()) + 1)), SkullsAPI.getCustomCategories());
 		setTitle(Settings.CategoryListMenu.TITLE);
 		this.skullPlayer = skullPlayer;
 		this.player = Remain.getPlayerByUUID(this.skullPlayer.getPlayerId());
@@ -67,7 +67,7 @@ public final class MenuCategoryList extends MenuPagged<SkullCategory> {
 
 			@Override
 			protected boolean isInputValid(ConversationContext context, String input) {
-				return !input.isEmpty() && !Skulls.getSkullCategoryManager().getCategories().contains(input.trim());
+				return !input.isEmpty() && !Skulls.getSkullCategoryManager().getCategories().getSource().containsKey(input.trim());
 			}
 
 			@Nullable
@@ -81,7 +81,7 @@ public final class MenuCategoryList extends MenuPagged<SkullCategory> {
 				}
 				return END_OF_CONVERSATION;
 			}
-		}, ItemCreator.of(SkullMaterial.get(Settings.CategoryListMenu.Items.NEW_ITEM)).name(Settings.CategoryListMenu.Items.NEW_NAME).lores(Settings.CategoryListMenu.Items.NEW_LORE));
+		}, ItemCreator.of(SkullMaterial.get(Settings.CategoryListMenu.Items.NEW_ITEM)).name(Settings.CategoryListMenu.Items.NEW_NAME).lore(Settings.CategoryListMenu.Items.NEW_LORE));
 	}
 
 	@Override
@@ -105,8 +105,8 @@ public final class MenuCategoryList extends MenuPagged<SkullCategory> {
 		return ItemCreator
 				.of(SkullMaterial.get(Settings.CategoryListMenu.Items.CATEGORY_ITEM))
 				.name(Settings.CategoryListMenu.Items.CATEGORY_NAME.replace("{category_name}", item.getName()))
-				.lores(this.addingSkull ? Collections.emptyList() : lore)
-				.build().make();
+				.lore(this.addingSkull ? Collections.emptyList() : lore)
+				.make();
 	}
 
 	@Override

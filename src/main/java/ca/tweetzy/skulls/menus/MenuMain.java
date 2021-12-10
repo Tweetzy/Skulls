@@ -55,7 +55,7 @@ public final class MenuMain extends Menu {
 		this.alphabetButton = Button.makeSimple(ItemCreator
 				.of(SkullMaterial.get(Settings.MainMenu.Items.ALPHABET_ITEM))
 				.name(Settings.MainMenu.Items.ALPHABET_NAME)
-				.lores(Replacer.replaceArray(Settings.MainMenu.Items.ALPHABET_LORE, "category_head_count", SkullsAPI.getSkullsByCategory(SkullsDefaultCategory.ALPHABET.getId()).size())), player -> {
+				.lore(Replacer.replaceArray(Settings.MainMenu.Items.ALPHABET_LORE, "category_head_count", SkullsAPI.getSkullsByCategory(SkullsDefaultCategory.ALPHABET.getId()).size())), player -> {
 
 			new MenuList(player, SkullsAPI.getCategory(SkullsDefaultCategory.ALPHABET.getId()), SkullsMenuListingType.CATEGORY).displayTo(player);
 		});
@@ -63,7 +63,7 @@ public final class MenuMain extends Menu {
 		this.animalsButton = Button.makeSimple(ItemCreator
 				.of(SkullMaterial.get(Settings.MainMenu.Items.ANIMALS_ITEM))
 				.name(Settings.MainMenu.Items.ANIMALS_NAME)
-				.lores(Replacer.replaceArray(Settings.MainMenu.Items.ANIMALS_LORE, "category_head_count", SkullsAPI.getSkullsByCategory(SkullsDefaultCategory.ANIMALS.getId()).size())), player -> {
+				.lore(Replacer.replaceArray(Settings.MainMenu.Items.ANIMALS_LORE, "category_head_count", SkullsAPI.getSkullsByCategory(SkullsDefaultCategory.ANIMALS.getId()).size())), player -> {
 
 			new MenuList(player, SkullsAPI.getCategory(SkullsDefaultCategory.ANIMALS.getId()), SkullsMenuListingType.CATEGORY).displayTo(player);
 		});
@@ -71,7 +71,7 @@ public final class MenuMain extends Menu {
 		this.blocksButton = Button.makeSimple(ItemCreator
 				.of(SkullMaterial.get(Settings.MainMenu.Items.BLOCKS_ITEM))
 				.name(Settings.MainMenu.Items.BLOCKS_NAME)
-				.lores(Replacer.replaceArray(Settings.MainMenu.Items.BLOCKS_LORE, "category_head_count", SkullsAPI.getSkullsByCategory(SkullsDefaultCategory.BLOCKS.getId()).size())), player -> {
+				.lore(Replacer.replaceArray(Settings.MainMenu.Items.BLOCKS_LORE, "category_head_count", SkullsAPI.getSkullsByCategory(SkullsDefaultCategory.BLOCKS.getId()).size())), player -> {
 
 			new MenuList(player, SkullsAPI.getCategory(SkullsDefaultCategory.BLOCKS.getId()), SkullsMenuListingType.CATEGORY).displayTo(player);
 		});
@@ -80,7 +80,7 @@ public final class MenuMain extends Menu {
 		this.decorationButton = Button.makeSimple(ItemCreator
 				.of(SkullMaterial.get(Settings.MainMenu.Items.DECORATION_ITEM))
 				.name(Settings.MainMenu.Items.DECORATION_NAME)
-				.lores(Replacer.replaceArray(Settings.MainMenu.Items.DECORATION_LORE, "category_head_count", SkullsAPI.getSkullsByCategory(SkullsDefaultCategory.DECORATION.getId()).size())), player -> {
+				.lore(Replacer.replaceArray(Settings.MainMenu.Items.DECORATION_LORE, "category_head_count", SkullsAPI.getSkullsByCategory(SkullsDefaultCategory.DECORATION.getId()).size())), player -> {
 
 			new MenuList(player, SkullsAPI.getCategory(SkullsDefaultCategory.DECORATION.getId()), SkullsMenuListingType.CATEGORY).displayTo(player);
 		});
@@ -88,7 +88,7 @@ public final class MenuMain extends Menu {
 		this.foodAndDrinksButton = Button.makeSimple(ItemCreator
 				.of(SkullMaterial.get(Settings.MainMenu.Items.FOOD_AND_DRINKS_ITEM))
 				.name(Settings.MainMenu.Items.FOOD_AND_DRINKS_NAME)
-				.lores(Replacer.replaceArray(Settings.MainMenu.Items.FOOD_AND_DRINKS_LORE, "category_head_count", SkullsAPI.getSkullsByCategory(SkullsDefaultCategory.FOOD_AND_DRINKS.getId()).size())), player -> {
+				.lore(Replacer.replaceArray(Settings.MainMenu.Items.FOOD_AND_DRINKS_LORE, "category_head_count", SkullsAPI.getSkullsByCategory(SkullsDefaultCategory.FOOD_AND_DRINKS.getId()).size())), player -> {
 
 			new MenuList(player, SkullsAPI.getCategory(SkullsDefaultCategory.FOOD_AND_DRINKS.getId()), SkullsMenuListingType.CATEGORY).displayTo(player);
 		});
@@ -96,7 +96,7 @@ public final class MenuMain extends Menu {
 		this.humansButton = Button.makeSimple(ItemCreator
 				.of(SkullMaterial.get(Settings.MainMenu.Items.HUMANS_ITEM))
 				.name(Settings.MainMenu.Items.HUMANS_NAME)
-				.lores(Replacer.replaceArray(Settings.MainMenu.Items.HUMANS_LORE, "category_head_count", SkullsAPI.getSkullsByCategory(SkullsDefaultCategory.HUMANS.getId()).size())), player -> {
+				.lore(Replacer.replaceArray(Settings.MainMenu.Items.HUMANS_LORE, "category_head_count", SkullsAPI.getSkullsByCategory(SkullsDefaultCategory.HUMANS.getId()).size())), player -> {
 
 			new MenuList(player, SkullsAPI.getCategory(SkullsDefaultCategory.HUMANS.getId()), SkullsMenuListingType.CATEGORY).displayTo(player);
 		});
@@ -104,7 +104,7 @@ public final class MenuMain extends Menu {
 		this.humanoidsButton = Button.makeSimple(ItemCreator
 				.of(SkullMaterial.get(Settings.MainMenu.Items.HUMANOIDS_ITEM))
 				.name(Settings.MainMenu.Items.HUMANOIDS_NAME)
-				.lores(Replacer.replaceArray(Settings.MainMenu.Items.HUMANOIDS_LORE, "category_head_count", SkullsAPI.getSkullsByCategory(SkullsDefaultCategory.HUMANOID.getId()).size())), player -> {
+				.lore(Replacer.replaceArray(Settings.MainMenu.Items.HUMANOIDS_LORE, "category_head_count", SkullsAPI.getSkullsByCategory(SkullsDefaultCategory.HUMANOID.getId()).size())), player -> {
 
 			new MenuList(player, SkullsAPI.getCategory(SkullsDefaultCategory.HUMANOID.getId()), SkullsMenuListingType.CATEGORY).displayTo(player);
 		});
@@ -112,7 +112,7 @@ public final class MenuMain extends Menu {
 		this.miscellaneousButton = Button.makeSimple(ItemCreator
 				.of(SkullMaterial.get(Settings.MainMenu.Items.MISCELLANEOUS_ITEM))
 				.name(Settings.MainMenu.Items.MISCELLANEOUS_NAME)
-				.lores(Replacer.replaceArray(Settings.MainMenu.Items.MISCELLANEOUS_LORE, "category_head_count", SkullsAPI.getSkullsByCategory(SkullsDefaultCategory.MISCELLANEOUS.getId()).size())), player -> {
+				.lore(Replacer.replaceArray(Settings.MainMenu.Items.MISCELLANEOUS_LORE, "category_head_count", SkullsAPI.getSkullsByCategory(SkullsDefaultCategory.MISCELLANEOUS.getId()).size())), player -> {
 
 			new MenuList(player, SkullsAPI.getCategory(SkullsDefaultCategory.MISCELLANEOUS.getId()), SkullsMenuListingType.CATEGORY).displayTo(player);
 		});
@@ -120,7 +120,7 @@ public final class MenuMain extends Menu {
 		this.monstersButton = Button.makeSimple(ItemCreator
 				.of(SkullMaterial.get(Settings.MainMenu.Items.MONSTERS_ITEM))
 				.name(Settings.MainMenu.Items.MONSTERS_NAME)
-				.lores(Replacer.replaceArray(Settings.MainMenu.Items.MONSTERS_LORE, "category_head_count", SkullsAPI.getSkullsByCategory(SkullsDefaultCategory.MONSTERS.getId()).size())), player -> {
+				.lore(Replacer.replaceArray(Settings.MainMenu.Items.MONSTERS_LORE, "category_head_count", SkullsAPI.getSkullsByCategory(SkullsDefaultCategory.MONSTERS.getId()).size())), player -> {
 
 			new MenuList(player, SkullsAPI.getCategory(SkullsDefaultCategory.MONSTERS.getId()), SkullsMenuListingType.CATEGORY).displayTo(player);
 		});
@@ -128,7 +128,7 @@ public final class MenuMain extends Menu {
 		this.plantsButton = Button.makeSimple(ItemCreator
 				.of(SkullMaterial.get(Settings.MainMenu.Items.PLANTS_ITEM))
 				.name(Settings.MainMenu.Items.PLANTS_NAME)
-				.lores(Replacer.replaceArray(Settings.MainMenu.Items.PLANTS_LORE, "category_head_count", SkullsAPI.getSkullsByCategory(SkullsDefaultCategory.PLANTS.getId()).size())), player -> {
+				.lore(Replacer.replaceArray(Settings.MainMenu.Items.PLANTS_LORE, "category_head_count", SkullsAPI.getSkullsByCategory(SkullsDefaultCategory.PLANTS.getId()).size())), player -> {
 
 			new MenuList(player, SkullsAPI.getCategory(SkullsDefaultCategory.PLANTS.getId()), SkullsMenuListingType.CATEGORY).displayTo(player);
 		});
@@ -136,7 +136,7 @@ public final class MenuMain extends Menu {
 		this.customCategoryButton = Button.makeSimple(ItemCreator
 				.of(SkullMaterial.get(Settings.MainMenu.Items.CUSTOM_CATEGORY_ITEM))
 				.name(Settings.MainMenu.Items.CUSTOM_CATEGORY_NAME)
-				.lores(Settings.MainMenu.Items.CUSTOM_CATEGORY_LORE), player -> {
+				.lore(Settings.MainMenu.Items.CUSTOM_CATEGORY_LORE), player -> {
 
 			new MenuCategoryList(SkullsAPI.getPlayer(player.getUniqueId()), false).displayTo(player);
 
@@ -145,7 +145,7 @@ public final class MenuMain extends Menu {
 		this.favouritesButton = Button.makeSimple(ItemCreator
 				.of(SkullMaterial.get(Settings.MainMenu.Items.FAVOURITES_ITEM))
 				.name(Settings.MainMenu.Items.FAVOURITES_NAME)
-				.lores(Replacer.replaceArray(Settings.MainMenu.Items.FAVOURITES_LORE, "category_head_count", skullPlayer.favouriteSkulls().size())), player -> {
+				.lore(Replacer.replaceArray(Settings.MainMenu.Items.FAVOURITES_LORE, "category_head_count", skullPlayer.favouriteSkulls().size())), player -> {
 
 			new MenuList(SkullsAPI.getPlayer(player.getUniqueId())).displayTo(player);
 		});
@@ -163,7 +163,7 @@ public final class MenuMain extends Menu {
 				return END_OF_CONVERSATION;
 			}
 
-		}, ItemCreator.of(SkullMaterial.get(Settings.MainMenu.Items.SEARCH_ITEM)).name(Settings.MainMenu.Items.SEARCH_NAME).lores(Settings.MainMenu.Items.SEARCH_LORE));
+		}, ItemCreator.of(SkullMaterial.get(Settings.MainMenu.Items.SEARCH_ITEM)).name(Settings.MainMenu.Items.SEARCH_NAME).lore(Settings.MainMenu.Items.SEARCH_LORE));
 	}
 
 	@Override

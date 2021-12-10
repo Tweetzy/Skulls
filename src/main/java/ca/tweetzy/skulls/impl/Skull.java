@@ -69,6 +69,6 @@ public final class Skull implements ISkull {
 				.name(this.name)
 				.tag("Skulls:ID", String.valueOf(this.id))
 				.tag("Skulls:Texture", this.texture)
-				.build().make();
+				.make();
 	}
 }
