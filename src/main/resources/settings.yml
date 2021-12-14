@@ -181,6 +181,17 @@ Categories:
     Price: 1.0
 
 # -------------------------------------------------------------------------------------------------
+# Special options for menu navigation buttons
+# -------------------------------------------------------------------------------------------------
+Menu:
+  Page_Previous: "&8<< &fPage {page}"
+  Page_Next: "Page {page} &8>>"
+  Page_Previous_Lore:
+    - "&7Click to go to page {page}"
+  Page_Next_Lore:
+    - "&7Click to go to page {page}"
+    -
+# -------------------------------------------------------------------------------------------------
 # The format used in the {timestamp} placeholder (google "Java timestamp format" for options).
 # -------------------------------------------------------------------------------------------------
 Timestamp_Format: "MMM/dd/yyyy HH:mm:ss aa"

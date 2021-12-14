@@ -66,7 +66,7 @@ public final class MenuList extends MenuPagged<Skull> {
 	}
 
 	public MenuList(@NonNull final SkullPlayer player) {
-		super( SkullsAPI.getSkullsByIds(player.favouriteSkulls().getSource()));
+		super(SkullsAPI.getSkullsByIds(player.favouriteSkulls().getSource()));
 		setTitle(Settings.ListingMenu.FAVOURITES_TITLE);
 		setSize(9 * RowByContentSize.get(player.favouriteSkulls().size()));
 		this.fromMain = true;
@@ -195,7 +195,9 @@ public final class MenuList extends MenuPagged<Skull> {
 			if (!EconomyManager.getInstance().has(player, item.getPrice()) && !PlayerUtil.hasPerm(player, Permissions.FREE_SKULLS)) {
 				Common.tell(player, Localization.NO_MONEY);
 				return;
-			} else {
+			}
+
+			if (!PlayerUtil.hasPerm(player, Permissions.FREE_SKULLS)) {
 				EconomyManager.getInstance().withdraw(player, item.getPrice());
 				Common.tell(player, Localization.WITHDRAW.replace("{value}", String.valueOf(MathUtil.formatTwoDigitsD(item.getPrice()))));
 			}
