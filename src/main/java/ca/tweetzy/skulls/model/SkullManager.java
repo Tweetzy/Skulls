@@ -16,6 +16,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -46,6 +47,9 @@ public final class SkullManager {
 
 	@Getter
 	private final StrictList<Skull> skulls = new StrictList<>();
+
+	@Getter
+	private final StrictList<Integer> blocked = new StrictList<>();
 
 	public void addSkull(@NonNull final Skull skull) {
 		this.skulls.addIfNotExist(skull);
@@ -95,10 +99,24 @@ public final class SkullManager {
 		Skulls.getInstance().getDataFile().setField("Prices." + skullId, price);
 	}
 
+	public void toggleSkullBlock(final int skullId) {
+		if (Skulls.getInstance().getDataFile().contains("Blocked." + skullId)) {
+			Skulls.getInstance().getDataFile().setField("Blocked." + skullId, null);
+			this.blocked.removeWeak(skullId);
+		} else {
+			Skulls.getInstance().getDataFile().setField("Blocked." + skullId, true);
+			this.blocked.addIfNotExist(skullId);
+		}
+	}
+
+	public boolean isBlocked(final int skullId) {
+		return this.blocked.contains(skullId);
+	}
+
 	public List<Skull> getSkullsByIds(@NonNull final List<Integer> ids) {
 		final List<Skull> locatedSkulls = new ArrayList<>();
 		for (final int id : ids) {
-				locatedSkulls.add(getSkull(id));
+			locatedSkulls.add(getSkull(id));
 		}
 		return locatedSkulls;
 	}
@@ -211,9 +229,22 @@ public final class SkullManager {
 			}
 
 			this.loading = false;
+			// load blocked heads
+			try {
+				final ConfigurationSection section = Skulls.getInstance().getDataFile().getConfigField("Blocked");
+				if (section != null) {
+					for (String id : section.getKeys(false)) {
+						this.blocked.add(Integer.parseInt(id));
+					}
+				}
+
+			} catch (Exception e) {
+				Common.log("&cNo blocked skulls found");
+			}
+
 			Common.tell(Bukkit.getConsoleSender(), "&eLoaded " + this.skulls.size() + " skulls");
 			Remain.getOnlinePlayers().stream().filter(Player::isOp).sequential().forEach(player -> {
-				Common.tell(player, "&aSkulls is ready for usage, loaded " +this.skulls.size() + " skulls.");
+				Common.tell(player, "&aSkulls is ready for usage, loaded " + this.skulls.size() + " skulls.");
 			});
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

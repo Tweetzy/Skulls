@@ -50,6 +50,9 @@ public final class Settings extends SimpleSettings {
 			public static String FAVOURITE;
 			public static String UN_FAVOURITE;
 			public static String FAVOURITED;
+			public static String BLOCK;
+			public static String UNBLOCK;
+			public static String BLOCKED;
 			public static String PRICE;
 
 			private static void init() {
@@ -66,6 +69,9 @@ public final class Settings extends SimpleSettings {
 				FAVOURITE = getString("Favourite");
 				UN_FAVOURITE = getString("Unfavourite");
 				FAVOURITED = getString("Favourited");
+				BLOCK = getString("Block");
+				UNBLOCK = getString("Unblock");
+				BLOCKED = getString("Blocked");
 				PRICE = getString("Price");
 			}
 		}

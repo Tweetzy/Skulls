@@ -87,7 +87,7 @@ public final class MenuList extends MenuPagged<Skull> {
 
 		lore.add(Settings.ListingMenu.Format.TAGS.replace("{skull_tags}", String.join(", ", item.getTags())));
 
-		if (Settings.CHARGE_FOR_HEADS)
+		if (Settings.CHARGE_FOR_HEADS && !SkullsAPI.isBlocked(item.getId()))
 			lore.add(Settings.ListingMenu.Format.PRICE.replace("{skull_price}", item.getPrice() + ""));
 
 		lore.add("");
@@ -99,6 +99,13 @@ public final class MenuList extends MenuPagged<Skull> {
 		} else {
 			if (PlayerUtil.hasPerm(player, Permissions.ADD_TO_CATEGORY) && this.listingType != SkullsMenuListingType.FAVOURITES)
 				lore.add(Settings.ListingMenu.Format.ADD_TO_CATEGORY);
+		}
+
+		if (PlayerUtil.hasPerm(player, Permissions.TOGGLE_BLOCK)) {
+			if (SkullsAPI.isBlocked(item.getId()))
+				lore.add(Settings.ListingMenu.Format.UNBLOCK);
+			else
+				lore.add(Settings.ListingMenu.Format.BLOCK);
 		}
 
 		if (player.isOp() || PlayerUtil.hasPerm(player, Permissions.FAVOURITE)) {
@@ -113,9 +120,12 @@ public final class MenuList extends MenuPagged<Skull> {
 			lore.add(Settings.ListingMenu.Format.FAVOURITED);
 		}
 
-		if (Settings.CHARGE_FOR_HEADS)
+		if (Settings.CHARGE_FOR_HEADS) {
 			lore.add(Settings.ListingMenu.Format.EDIT_PRICE);
+		}
 
+		if (SkullsAPI.isBlocked(item.getId()))
+			lore.add(Settings.ListingMenu.Format.BLOCKED);
 
 		return ItemCreator.of(item.getItemStack()).name(Settings.ListingMenu.Format.NAME.replace("{skull_name}", item.getName())).lore(lore).make();
 	}
@@ -126,14 +136,20 @@ public final class MenuList extends MenuPagged<Skull> {
 			case RIGHT:
 				handleRightClick(player, item);
 				break;
-			case MIDDLE:
-				handleMiddleClick(player, item);
+			case SHIFT_LEFT:
+				handleShiftLeftClick(player, item);
 				break;
 			case SHIFT_RIGHT:
 				handleShiftRightClick(player, item);
 				break;
-			default:
+			case DROP:
+			case CONTROL_DROP:
+				handleDropClick(player, item);
+				break;
+			case LEFT:
 				handleOtherClick(player, item);
+				break;
+			default:
 				break;
 		}
 	}
@@ -149,6 +165,12 @@ public final class MenuList extends MenuPagged<Skull> {
 			new MenuMain(SkullsAPI.getPlayer(player.getUniqueId())).displayTo(player);
 	}
 
+	private void handleDropClick(Player player, Skull item) {
+		if (!player.isOp() || !PlayerUtil.hasPerm(player, Permissions.TOGGLE_BLOCK)) return;
+		SkullsAPI.toggleSkullBlock(item.getId());
+		restartMenu();
+	}
+
 	private void handleRightClick(Player player, Skull item) {
 		if (!player.isOp() || !PlayerUtil.hasPerm(player, Permissions.FAVOURITE)) return;
 		if (!this.skullPlayer.favouriteSkulls().contains(item.getId()))
@@ -162,7 +184,7 @@ public final class MenuList extends MenuPagged<Skull> {
 			restartMenu();
 	}
 
-	private void handleMiddleClick(Player player, Skull item) {
+	private void handleShiftLeftClick(Player player, Skull item) {
 		if (this.category != null && this.category.isCustom()) {
 			SkullsAPI.removeSkull(this.category, item.getId());
 			new MenuList(player, this.category, SkullsMenuListingType.CUSTOM_CATEGORY).displayTo(player);
@@ -191,7 +213,9 @@ public final class MenuList extends MenuPagged<Skull> {
 	}
 
 	private void handleOtherClick(Player player, Skull item) {
+		if (SkullsAPI.isBlocked(item.getId()) && !player.isOp() || !PlayerUtil.hasPerm(player, Permissions.BUY_BLOCKED)) return;
 		if (Settings.CHARGE_FOR_HEADS) {
+
 			if (!EconomyManager.getInstance().has(player, item.getPrice()) && !PlayerUtil.hasPerm(player, Permissions.FREE_SKULLS)) {
 				Common.tell(player, Localization.NO_MONEY);
 				return;

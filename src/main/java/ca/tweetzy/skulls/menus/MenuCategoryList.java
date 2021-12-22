@@ -111,7 +111,7 @@ public final class MenuCategoryList extends MenuPagged<SkullCategory> {
 
 	@Override
 	protected void onPageClick(Player player, SkullCategory category, ClickType click) {
-		if (click == ClickType.MIDDLE) {
+		if (click == ClickType.DROP) {
 			if (!this.addingSkull && player.isOp() || PlayerUtil.hasPerm(player, Permissions.DELETE_CATEGORY)) {
 				SkullsAPI.removeCategory(category);
 				newInstance().displayTo(player);

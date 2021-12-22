@@ -220,6 +220,25 @@ public final class SkullsAPI {
 	}
 
 	/**
+	 * Used to toggle a skull purchase
+	 *
+	 * @param skullId is the id of the skull
+	 */
+	public void toggleSkullBlock(final int skullId) {
+		SKULL_MANAGER.toggleSkullBlock(skullId);
+	}
+
+	/**
+	 * Checks if a skull is blocked from being purchased
+	 *
+	 * @param skullId is the skull id
+	 * @return true if its blocked
+	 */
+	public boolean isBlocked(final int skullId) {
+		return SKULL_MANAGER.isBlocked(skullId);
+	}
+
+	/**
 	 * For internal use
 	 */
 	public String cleanSearch(@NonNull String keywords) {

@@ -21,7 +21,7 @@ Gui:
         Material: NETHER_STAR
         Name: "&e{category_name}"
         Lore Format:
-          Delete: "&eMiddle Click &7to delete category"
+          Delete: "&ePress Drop Key &7to delete category"
           View: "&eLeft Click &7to view heads"
 
   Listing:
@@ -34,12 +34,15 @@ Gui:
       Category: "&7Category: &e{skull_category}"
       Tags: "&7Tags: &e{skull_tags}"
       Take: "&eLeft Click &7to take one"
-      Add To Category: "&eMiddle Click &7to add to category"
-      Remove From Category: "&eMiddle Click &7to remove from category"
+      Add To Category: "&eShift Left Click &7to add to category"
+      Remove From Category: "&eShift Left Click &7to remove from category"
       Edit Price: "&eShift Right Click &7to edit price"
       Favourite: "&eRight Click &7to favourite head"
       Unfavourite: "&eRight Click &7to un-favourite head"
       Favourited: "&e&lFAVOURITED"
+      Blocked: "&c&oPurchase is blocked"
+      Block: "&ePress Drop &7to block skull purchase"
+      Unblock: "&ePress Drop &7to unblock skull purchase"
       Price: "&7Cost: &a${skull_price}"
 
   Main:
@@ -194,7 +197,7 @@ Menu:
 # -------------------------------------------------------------------------------------------------
 # The format used in the {timestamp} placeholder (google "Java timestamp format" for options).
 # -------------------------------------------------------------------------------------------------
-Timestamp_Format: "MMM/dd/yyyy HH:mm:ss aa"
+Timestamp_Format: "dd.MM.yyyy HH:mm:ss"
 
 # -------------------------------------------------------------------------------------------------
 # * THE FIRST ALIAS IS THE MAIN LABEL, PLEASE DO NOT REMOVE IT. *
@@ -216,7 +219,7 @@ Prefix: "&8[&eSkulls&8]"
 # We log a console message if an operation takes over the time below (milliseconds).
 # Set to -1 to disable.
 # -------------------------------------------------------------------------------------------------
-Log_Lag_Over_Milis: 100
+Log_Lag_Over_Milis: 250
 
 # -------------------------------------------------------------------------------------------------
 # Do not change this value, otherwise it will corrupt your plugin installation!

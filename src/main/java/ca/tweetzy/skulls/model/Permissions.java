@@ -34,4 +34,11 @@ public final class Permissions extends TweetyPermissions {
 
 	@Permission("Allows the player to favourite a skull")
 	public static final String FAVOURITE = "skulls.favourite";
+
+	@Permission("Allows the player to toggle the blocks status of a skull")
+	public static final String TOGGLE_BLOCK = "skulls.block";
+
+	@Permission("Allows the player to buy skulls that are blocked")
+	public static final String BUY_BLOCKED = "skulls.buyblocked";
+
 }
