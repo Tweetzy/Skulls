@@ -16,7 +16,7 @@
         <main.class>${project.groupId}.${project.artifactId}.${project.name}</main.class>
         <java.version>1.8</java.version>
         <tweety.version>1.7.2</tweety.version>
-        <tweety.path>ca.tweetzy</tweety.path>
+        <tweety.path>com.github.kiranhart</tweety.path>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -38,7 +38,7 @@
     <dependencies>
         <dependency>
             <groupId>${tweety.path}</groupId>
-            <artifactId>tweety</artifactId>
+            <artifactId>Tweety</artifactId>
             <version>${tweety.version}</version>
         </dependency>
     </dependencies>
