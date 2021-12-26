@@ -3,7 +3,6 @@ package ca.tweetzy.skulls;
 import ca.tweetzy.skulls.api.DataFile;
 import ca.tweetzy.skulls.api.SkullsAPI;
 import ca.tweetzy.skulls.api.enums.SkullsDefaultCategory;
-import ca.tweetzy.skulls.commands.SkullsCommandGroup;
 import ca.tweetzy.skulls.impl.SkullCategory;
 import ca.tweetzy.skulls.impl.SkullPlayer;
 import ca.tweetzy.skulls.listeners.PlayerJoinLeaveListener;
@@ -15,12 +14,15 @@ import ca.tweetzy.tweety.Common;
 import ca.tweetzy.tweety.Messenger;
 import ca.tweetzy.tweety.MinecraftVersion;
 import ca.tweetzy.tweety.collection.StrictList;
-import ca.tweetzy.tweety.command.SimpleCommandGroup;
 import ca.tweetzy.tweety.model.SpigotUpdater;
 import ca.tweetzy.tweety.plugin.SimplePlugin;
 import ca.tweetzy.tweety.remain.Remain;
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * The current file has been created by Kiran Hart
@@ -37,18 +39,31 @@ public final class Skulls extends SimplePlugin {
 	private final SkullCategoryManager skullCategoryManager = new SkullCategoryManager();
 	private final SkullPlayerManager skullPlayerManager = new SkullPlayerManager();
 
+	@Getter
+	private boolean bStats = false;
+
 	@Override
 	protected void onPluginStart() {
-		Common.ADD_TELL_PREFIX = true;
-		Common.ADD_LOG_PREFIX = true;
-		Common.setLogPrefix(Settings.PREFIX + " ");
-		Common.setTellPrefix(Settings.PREFIX);
-		Messenger.setInfoPrefix(Settings.PREFIX + " ");
-		Messenger.setAnnouncePrefix(Settings.PREFIX + " ");
-		Messenger.setErrorPrefix(Settings.PREFIX + " ");
-		Messenger.setQuestionPrefix(Settings.PREFIX + " ");
-		Messenger.setSuccessPrefix(Settings.PREFIX + " ");
-		Messenger.setWarnPrefix(Settings.PREFIX + " ");
+		normalizePrefix();
+
+		if (Settings.AUTO_STATS) {
+			final File file = new File("plugins" + File.separator + "bStats" + File.separator + "config.yml");
+			if (!file.exists()) bStats = true;
+			else {
+				final YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
+				configuration.set("enabled", true);
+				try {
+					configuration.save(file);
+					bStats = true;
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		if (!bStats) {
+			Common.logFramed("&cPlease enable bStats within your plugins folder", "&cit helps me collect data on Skulls.");
+		}
 
 		Common.runAsync(() -> {
 			for (SkullsDefaultCategory value : SkullsDefaultCategory.values()) {
@@ -56,7 +71,6 @@ public final class Skulls extends SimplePlugin {
 			}
 
 			this.skullCategoryManager.loadCustomCategories();
-
 			skullManager.downloadHeads(false);
 		});
 
@@ -83,6 +97,19 @@ public final class Skulls extends SimplePlugin {
 		Bukkit.getServer().getScheduler().cancelTasks(this);
 	}
 
+
+	private void normalizePrefix() {
+		Common.ADD_TELL_PREFIX = true;
+		Common.ADD_LOG_PREFIX = true;
+		Common.setLogPrefix(Settings.PREFIX + " ");
+		Common.setTellPrefix(Settings.PREFIX);
+		Messenger.setInfoPrefix(Settings.PREFIX + " ");
+		Messenger.setAnnouncePrefix(Settings.PREFIX + " ");
+		Messenger.setErrorPrefix(Settings.PREFIX + " ");
+		Messenger.setQuestionPrefix(Settings.PREFIX + " ");
+		Messenger.setSuccessPrefix(Settings.PREFIX + " ");
+		Messenger.setWarnPrefix(Settings.PREFIX + " ");
+	}
 
 	@Override
 	public int getMetricsPluginId() {

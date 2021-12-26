@@ -20,6 +20,8 @@ public final class Settings extends SimpleSettings {
 	public static Boolean ALLOW_NON_PERM_USE;
 	public static Boolean SHOW_CUSTOM_CATEGORIES;
 	public static Boolean SHOW_FAVOURITES;
+	public static Boolean AUTO_STATS;
+	public static Boolean TELL_DISCORD_SERVER;
 
 	private static void init() {
 		PREFIX = getString("Prefix");
@@ -29,6 +31,8 @@ public final class Settings extends SimpleSettings {
 		ALLOW_NON_PERM_USE = getBoolean("Allow Non Permission Access");
 		SHOW_CUSTOM_CATEGORIES = getBoolean("Show Custom Categories");
 		SHOW_FAVOURITES = getBoolean("Show Favourites");
+		AUTO_STATS = getBoolean("Auto bStats");
+		TELL_DISCORD_SERVER = getBoolean("Tell Discord Server");
 	}
 
 	public static final class ListingMenu {

@@ -3,6 +3,7 @@ package ca.tweetzy.skulls.listeners;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.SkullsAPI;
 import ca.tweetzy.skulls.impl.SkullPlayer;
+import ca.tweetzy.skulls.settings.Settings;
 import ca.tweetzy.tweety.Common;
 import ca.tweetzy.tweety.collection.StrictList;
 import org.bukkit.entity.Player;
@@ -22,8 +23,12 @@ public final class PlayerJoinLeaveListener implements Listener {
 	@EventHandler
 	public void onPlayerJoin(final PlayerJoinEvent event) {
 		final Player player = event.getPlayer();
-		if (player.isOp()) {
-			Common.tell(player, "&aIf you need support visit https://discord.gg/WTg4PhBHEg");
+		if (player.isOp() && Settings.TELL_DISCORD_SERVER) {
+			Common.tell(player, "&aIf you need support visit https://discord.tweetzy.ca");
+		}
+
+		if (player.isOp() && !Skulls.getInstance().isBStats()) {
+			Common.tell(player, "&cPlease enable &4bStats&c as it allows be to collect stats on Skulls <3");
 		}
 
 		Common.runAsync(() -> {

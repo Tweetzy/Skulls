@@ -7,6 +7,12 @@ Allow Non Permission Access: true
 Show Custom Categories: true
 Show Favourites: true
 
+# if true, you'll get a link to join the Tweetzy discord on join
+# this will only be shown to ops
+Tell Discord Server: true
+
+Auto bStats: true
+
 Gui:
   Category List:
     Title: "&eSkulls &f- &7Custom Categories"
