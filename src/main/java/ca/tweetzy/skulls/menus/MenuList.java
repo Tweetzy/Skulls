@@ -120,7 +120,7 @@ public final class MenuList extends MenuPagged<Skull> {
 			lore.add(Settings.ListingMenu.Format.FAVOURITED);
 		}
 
-		if (Settings.CHARGE_FOR_HEADS) {
+		if (Settings.CHARGE_FOR_HEADS && PlayerUtil.hasPerm(player, Permissions.EDIT_PRICE)) {
 			lore.add(Settings.ListingMenu.Format.EDIT_PRICE);
 		}
 
@@ -234,5 +234,10 @@ public final class MenuList extends MenuPagged<Skull> {
 	@Override
 	protected boolean addPageNumbers() {
 		return false;
+	}
+
+	@Override
+	protected boolean allowShiftClick() {
+		return true;
 	}
 }
