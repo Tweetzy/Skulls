@@ -12,7 +12,6 @@ import ca.tweetzy.skulls.settings.Localization;
 import ca.tweetzy.skulls.settings.Settings;
 import ca.tweetzy.tweety.Common;
 import ca.tweetzy.tweety.PlayerUtil;
-import ca.tweetzy.tweety.Valid;
 import ca.tweetzy.tweety.collection.StrictList;
 import ca.tweetzy.tweety.conversation.SimplePrompt;
 import ca.tweetzy.tweety.menu.Menu;

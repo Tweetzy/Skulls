@@ -1,6 +1,5 @@
 package ca.tweetzy.skulls.commands;
 
-import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.tweety.command.SimpleSubCommand;
 
 /**

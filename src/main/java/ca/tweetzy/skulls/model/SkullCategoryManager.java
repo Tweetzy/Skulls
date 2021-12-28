@@ -2,9 +2,7 @@ package ca.tweetzy.skulls.model;
 
 
 import ca.tweetzy.skulls.Skulls;
-import ca.tweetzy.skulls.api.SkullsAPI;
 import ca.tweetzy.skulls.impl.SkullCategory;
-import ca.tweetzy.skulls.impl.SkullPlayer;
 import ca.tweetzy.tweety.Common;
 import ca.tweetzy.tweety.SerializeUtil;
 import ca.tweetzy.tweety.collection.StrictMap;
@@ -14,7 +12,6 @@ import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * The current file has been created by Kiran Hart

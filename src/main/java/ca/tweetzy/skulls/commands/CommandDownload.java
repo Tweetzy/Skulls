@@ -10,7 +10,7 @@ import ca.tweetzy.tweety.Common;
  * Time Created: 11:42 p.m.
  * Usage of any code found within this class is prohibited unless given explicit permission otherwise
  */
-public final class CommandDownload extends SkullsSubCommand{
+public final class CommandDownload extends SkullsSubCommand {
 
 	public CommandDownload() {
 		super("download|dl|update");

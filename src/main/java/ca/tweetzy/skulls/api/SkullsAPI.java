@@ -213,7 +213,7 @@ public final class SkullsAPI {
 	 * Used to set the price of a skull quickly
 	 *
 	 * @param skullId is the id of the skull
-	 * @param price the new price
+	 * @param price   the new price
 	 */
 	public void updateSkullPrice(final int skullId, final double price) {
 		SKULL_MANAGER.updateSkullPrice(skullId, price);

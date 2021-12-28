@@ -17,7 +17,7 @@ import ca.tweetzy.tweety.PlayerUtil;
 import ca.tweetzy.tweety.conversation.SimpleDecimalPrompt;
 import ca.tweetzy.tweety.menu.MenuPagged;
 import ca.tweetzy.tweety.menu.model.ItemCreator;
-import ca.tweetzy.tweety.plugin.SimplePlugin;
+import ca.tweetzy.tweety.plugin.TweetyPlugin;
 import ca.tweetzy.tweety.remain.Remain;
 import lombok.NonNull;
 import org.bukkit.entity.Player;
@@ -191,8 +191,8 @@ public final class MenuList extends MenuPagged<Skull> {
 			return;
 		}
 
-		player.setMetadata("Skulls:Adding", new FixedMetadataValue(SimplePlugin.getInstance(), item.getId()));
-		player.setMetadata("Skulls:ListMenu", new FixedMetadataValue(SimplePlugin.getInstance(), this));
+		player.setMetadata("Skulls:Adding", new FixedMetadataValue(TweetyPlugin.getInstance(), item.getId()));
+		player.setMetadata("Skulls:ListMenu", new FixedMetadataValue(TweetyPlugin.getInstance(), this));
 		this.fromMain = false;
 		new MenuCategoryList(this.skullPlayer, true).displayTo(player);
 	}

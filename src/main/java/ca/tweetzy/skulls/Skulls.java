@@ -15,7 +15,7 @@ import ca.tweetzy.tweety.Messenger;
 import ca.tweetzy.tweety.MinecraftVersion;
 import ca.tweetzy.tweety.collection.StrictList;
 import ca.tweetzy.tweety.model.SpigotUpdater;
-import ca.tweetzy.tweety.plugin.SimplePlugin;
+import ca.tweetzy.tweety.plugin.TweetyPlugin;
 import ca.tweetzy.tweety.remain.Remain;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -30,7 +30,7 @@ import java.io.IOException;
  * Time Created: 11:02 p.m.
  * Usage of any code found within this class is prohibited unless given explicit permission otherwise
  */
-public final class Skulls extends SimplePlugin {
+public final class Skulls extends TweetyPlugin {
 
 	@Getter
 	private final DataFile dataFile = new DataFile("data", this);
@@ -132,18 +132,18 @@ public final class Skulls extends SimplePlugin {
 	}
 
 	public static Skulls getInstance() {
-		return (Skulls) SimplePlugin.getInstance();
+		return (Skulls) TweetyPlugin.getInstance();
 	}
 
 	public static SkullManager getSkullManager() {
-		return ((Skulls) SimplePlugin.getInstance()).skullManager;
+		return ((Skulls) TweetyPlugin.getInstance()).skullManager;
 	}
 
 	public static SkullCategoryManager getSkullCategoryManager() {
-		return ((Skulls) SimplePlugin.getInstance()).skullCategoryManager;
+		return ((Skulls) TweetyPlugin.getInstance()).skullCategoryManager;
 	}
 
 	public static SkullPlayerManager getSkullPlayerManager() {
-		return ((Skulls) SimplePlugin.getInstance()).skullPlayerManager;
+		return ((Skulls) TweetyPlugin.getInstance()).skullPlayerManager;
 	}
 }

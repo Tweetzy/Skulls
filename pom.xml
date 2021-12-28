@@ -15,7 +15,7 @@
         <jarName>Skulls</jarName>
         <main.class>${project.groupId}.${project.artifactId}.${project.name}</main.class>
         <java.version>1.8</java.version>
-        <tweety.version>1.7.3</tweety.version>
+        <tweety.version>1.8.0</tweety.version>
         <tweety.path>com.github.kiranhart</tweety.path>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -28,12 +28,12 @@
     </repositories>
 
     <!-- UNCOMMENT ONLY IF YOUR java.version IS SET TO JAVA 16 OR HIGHER. -->
-<!--    <pluginRepositories>-->
-<!--        <pluginRepository>-->
-<!--            <id>maven-snapshots</id>-->
-<!--            <url>https://repository.apache.org/content/repositories/snapshots/</url>-->
-<!--        </pluginRepository>-->
-<!--    </pluginRepositories>-->
+    <!--    <pluginRepositories>-->
+    <!--        <pluginRepository>-->
+    <!--            <id>maven-snapshots</id>-->
+    <!--            <url>https://repository.apache.org/content/repositories/snapshots/</url>-->
+    <!--        </pluginRepository>-->
+    <!--    </pluginRepositories>-->
 
     <dependencies>
         <dependency>

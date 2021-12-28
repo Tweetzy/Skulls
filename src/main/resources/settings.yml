@@ -199,16 +199,15 @@ Menu:
     - "&7Click to go to page {page}"
   Page_Next_Lore:
     - "&7Click to go to page {page}"
-    -
-# -------------------------------------------------------------------------------------------------
-# The format used in the {timestamp} placeholder (google "Java timestamp format" for options).
-# -------------------------------------------------------------------------------------------------
+    - # -------------------------------------------------------------------------------------------------
+      # The format used in the {timestamp} placeholder (google "Java timestamp format" for options).
+    # -------------------------------------------------------------------------------------------------
 Timestamp_Format: "dd.MM.yyyy HH:mm:ss"
 
 # -------------------------------------------------------------------------------------------------
 # * THE FIRST ALIAS IS THE MAIN LABEL, PLEASE DO NOT REMOVE IT. *
 # -------------------------------------------------------------------------------------------------
-Command_Aliases: [skulls, skull]
+Command_Aliases: [ skulls, skull ]
 
 # -------------------------------------------------------------------------------------------------
 # What language should we use for messages? If it exists, the language file will be copied

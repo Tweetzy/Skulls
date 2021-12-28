@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
  * Time Created: 3:07 p.m.
  * Usage of any code found within this class is prohibited unless given explicit permission otherwise
  */
-public final class CommandFavourites extends SkullsSubCommand{
+public final class CommandFavourites extends SkullsSubCommand {
 
 	public CommandFavourites() {
 		super("favourites|favs");
@@ -23,15 +23,15 @@ public final class CommandFavourites extends SkullsSubCommand{
 
 	@Override
 	protected void onCommand() {
-		 checkConsole();
+		checkConsole();
 
-		 final Player player = getPlayer();
+		final Player player = getPlayer();
 
 		if (Skulls.getSkullManager().isLoading()) {
 			Common.tell(player, Localization.LOADING);
 			return;
 		}
 
-		 new MenuList(SkullsAPI.getPlayer(player.getUniqueId())).displayTo(player);
+		new MenuList(SkullsAPI.getPlayer(player.getUniqueId())).displayTo(player);
 	}
 }

@@ -8,7 +8,7 @@ import ca.tweetzy.skulls.settings.Localization;
  * Time Created: 11:49 p.m.
  * Usage of any code found within this class is prohibited unless given explicit permission otherwise
  */
-public final class CommandLatest extends SkullsSubCommand{
+public final class CommandLatest extends SkullsSubCommand {
 
 	private final int insertionNumber = 16;
 

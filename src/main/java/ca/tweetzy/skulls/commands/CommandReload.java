@@ -9,7 +9,7 @@ import ca.tweetzy.skulls.settings.Localization;
  * Time Created: 11:49 a.m.
  * Usage of any code found within this class is prohibited unless given explicit permission otherwise
  */
-public final class CommandReload extends SkullsSubCommand{
+public final class CommandReload extends SkullsSubCommand {
 
 	public CommandReload() {
 		super("reload|rl");
