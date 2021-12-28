@@ -213,7 +213,7 @@ public final class MenuList extends MenuPagged<Skull> {
 	}
 
 	private void handleOtherClick(Player player, Skull item) {
-		if (SkullsAPI.isBlocked(item.getId()) && !player.isOp() || !PlayerUtil.hasPerm(player, Permissions.BUY_BLOCKED)) return;
+		if (SkullsAPI.isBlocked(item.getId()) && !player.isOp() || SkullsAPI.isBlocked(item.getId()) && !PlayerUtil.hasPerm(player, Permissions.BUY_BLOCKED)) return;
 		if (Settings.CHARGE_FOR_HEADS) {
 
 			if (!EconomyManager.getInstance().has(player, item.getPrice()) && !PlayerUtil.hasPerm(player, Permissions.FREE_SKULLS)) {
