@@ -10,7 +10,7 @@ import ca.tweetzy.skulls.settings.Localization;
  */
 public final class CommandLatest extends SkullsSubCommand {
 
-	private final int insertionNumber = 16;
+	private final int insertionNumber = 24;
 
 	public CommandLatest() {
 		super("latest");
