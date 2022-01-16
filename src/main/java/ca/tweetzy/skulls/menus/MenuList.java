@@ -19,6 +19,7 @@ import ca.tweetzy.tweety.menu.MenuPagged;
 import ca.tweetzy.tweety.menu.model.ItemCreator;
 import ca.tweetzy.tweety.plugin.TweetyPlugin;
 import ca.tweetzy.tweety.remain.Remain;
+import com.bekvon.bukkit.residence.commands.set;
 import lombok.NonNull;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -47,6 +48,7 @@ public final class MenuList extends MenuPagged<Skull> {
 		super(listingType == SkullsMenuListingType.CATEGORY ? Skulls.getSkullManager().getSkullsByCategory(category) : SkullsAPI.getSkullsByIds(category.getSkulls().getSource()));
 		setTitle(Settings.ListingMenu.CATEGORY_TITLE.replace("{category_name}", category.getName()));
 		setSize(9 * 6);
+		assignNavTranslation();
 		this.fromMain = true;
 		this.player = player;
 		this.skullPlayer = SkullsAPI.getPlayer(player.getUniqueId());
@@ -58,6 +60,7 @@ public final class MenuList extends MenuPagged<Skull> {
 		super(SkullsAPI.getSkullsByTerm(keywords));
 		setTitle(Settings.ListingMenu.SEARCH_TITLE.replace("{search_term}", keywords.replace("id:", "")));
 		setSize(9 * RowByContentSize.get(skulls.size()));
+		assignNavTranslation();
 		this.fromMain = true;
 		this.player = player;
 		this.skullPlayer = SkullsAPI.getPlayer(player.getUniqueId());
@@ -69,11 +72,19 @@ public final class MenuList extends MenuPagged<Skull> {
 		super(SkullsAPI.getSkullsByIds(player.favouriteSkulls().getSource()));
 		setTitle(Settings.ListingMenu.FAVOURITES_TITLE);
 		setSize(9 * RowByContentSize.get(player.favouriteSkulls().size()));
+		assignNavTranslation();
 		this.fromMain = true;
 		this.player = Remain.getPlayerByUUID(player.getPlayerId());
 		this.skullPlayer = player;
 		this.listingType = SkullsMenuListingType.FAVOURITES;
 		this.category = null;
+	}
+
+	private void assignNavTranslation() {
+		setNextPageButtonName(Settings.Menu.NEXT_PAGE_NAME);
+		setNextPageButtonLore(Settings.Menu.NEXT_PAGE_LORE);
+		setPreviousPageButtonName(Settings.Menu.PREV_PAGE_NAME);
+		setPreviousPageButtonLore(Settings.Menu.PREV_PAGE_LORE);
 	}
 
 	@Override

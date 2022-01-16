@@ -49,6 +49,7 @@ public final class MenuCategoryList extends MenuPagged<SkullCategory> {
 	public MenuCategoryList(@NonNull final SkullPlayer skullPlayer, final boolean addingSkull) {
 		super(Math.min(9 * 2, Math.max(9 * 6, 9 * RowByContentSize.get(SkullsAPI.getCustomCategories().size()) + 1)), SkullsAPI.getCustomCategories());
 		setTitle(Settings.CategoryListMenu.TITLE);
+		assignNavTranslation();
 		this.skullPlayer = skullPlayer;
 		this.player = Remain.getPlayerByUUID(this.skullPlayer.getPlayerId());
 		this.addingSkull = addingSkull;
@@ -81,6 +82,13 @@ public final class MenuCategoryList extends MenuPagged<SkullCategory> {
 				return END_OF_CONVERSATION;
 			}
 		}, ItemCreator.of(SkullMaterial.get(Settings.CategoryListMenu.Items.NEW_ITEM)).name(Settings.CategoryListMenu.Items.NEW_NAME).lore(Settings.CategoryListMenu.Items.NEW_LORE));
+	}
+
+	private void assignNavTranslation() {
+		setNextPageButtonName(Settings.Menu.NEXT_PAGE_NAME);
+		setNextPageButtonLore(Settings.Menu.NEXT_PAGE_LORE);
+		setPreviousPageButtonName(Settings.Menu.PREV_PAGE_NAME);
+		setPreviousPageButtonLore(Settings.Menu.PREV_PAGE_LORE);
 	}
 
 	@Override

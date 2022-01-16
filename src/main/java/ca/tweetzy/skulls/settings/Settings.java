@@ -35,6 +35,26 @@ public final class Settings extends SimpleSettings {
 		TELL_DISCORD_SERVER = getBoolean("Tell Discord Server");
 	}
 
+
+	public static final class Menu {
+
+		public static String PREV_PAGE_NAME;
+		public static List<String> PREV_PAGE_LORE;
+
+		public static String NEXT_PAGE_NAME;
+		public static List<String> NEXT_PAGE_LORE;
+
+		private static void init() {
+			pathPrefix("Menu");
+
+			PREV_PAGE_NAME = getString("Page_Previous");
+			NEXT_PAGE_NAME = getString("Page_Next");
+
+			PREV_PAGE_LORE = getStringList("Page_Previous_Lore");
+			NEXT_PAGE_LORE = getStringList("Page_Next_Lore");
+		}
+	}
+
 	public static final class ListingMenu {
 
 		public static String SEARCH_TITLE;
