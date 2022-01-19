@@ -11,6 +11,11 @@ Show Favourites: true
 # this will only be shown to ops
 Tell Discord Server: true
 
+# Should player heads drop when they die?
+Drop Heads:
+  Enabled: false
+  Drop Chance: 50.0
+
 Auto bStats: true
 
 Gui:

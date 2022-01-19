@@ -22,6 +22,8 @@ public final class Settings extends SimpleSettings {
 	public static Boolean SHOW_FAVOURITES;
 	public static Boolean AUTO_STATS;
 	public static Boolean TELL_DISCORD_SERVER;
+	public static Boolean DROP_HEADS;
+	public static Double DEFAULT_DROP_CHANCE;
 
 	private static void init() {
 		PREFIX = getString("Prefix");
@@ -33,6 +35,8 @@ public final class Settings extends SimpleSettings {
 		SHOW_FAVOURITES = getBoolean("Show Favourites");
 		AUTO_STATS = getBoolean("Auto bStats");
 		TELL_DISCORD_SERVER = getBoolean("Tell Discord Server");
+		DROP_HEADS = getBoolean("Drop Heads.Enabled");
+		DEFAULT_DROP_CHANCE = getDouble("Drop Heads.Drop Chance");
 	}
 
 

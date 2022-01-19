@@ -5,6 +5,7 @@ import ca.tweetzy.skulls.api.SkullsAPI;
 import ca.tweetzy.skulls.api.enums.SkullsDefaultCategory;
 import ca.tweetzy.skulls.impl.SkullCategory;
 import ca.tweetzy.skulls.impl.SkullPlayer;
+import ca.tweetzy.skulls.listeners.PlayerDeathListener;
 import ca.tweetzy.skulls.listeners.PlayerJoinLeaveListener;
 import ca.tweetzy.skulls.model.SkullCategoryManager;
 import ca.tweetzy.skulls.model.SkullManager;
@@ -75,6 +76,7 @@ public final class Skulls extends TweetyPlugin {
 		});
 
 		registerEvents(new PlayerJoinLeaveListener());
+		registerEvents(new PlayerDeathListener());
 	}
 
 	@Override
@@ -99,16 +101,20 @@ public final class Skulls extends TweetyPlugin {
 
 
 	private void normalizePrefix() {
-		Common.ADD_TELL_PREFIX = true;
+		Common.ADD_TELL_PREFIX = Settings.PREFIX.length() != 0;
 		Common.ADD_LOG_PREFIX = true;
+
 		Common.setLogPrefix(Settings.PREFIX + " ");
 		Common.setTellPrefix(Settings.PREFIX);
-		Messenger.setInfoPrefix(Settings.PREFIX + " ");
-		Messenger.setAnnouncePrefix(Settings.PREFIX + " ");
-		Messenger.setErrorPrefix(Settings.PREFIX + " ");
-		Messenger.setQuestionPrefix(Settings.PREFIX + " ");
-		Messenger.setSuccessPrefix(Settings.PREFIX + " ");
-		Messenger.setWarnPrefix(Settings.PREFIX + " ");
+
+		final String prefix = Settings.PREFIX + (Settings.PREFIX.length() != 0 ? " " : "");
+
+		Messenger.setInfoPrefix(prefix);
+		Messenger.setAnnouncePrefix(prefix);
+		Messenger.setErrorPrefix(prefix);
+		Messenger.setQuestionPrefix(prefix);
+		Messenger.setSuccessPrefix(prefix);
+		Messenger.setWarnPrefix(prefix);
 	}
 
 	@Override
