@@ -118,6 +118,23 @@
                             </resources>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>copy-to-ready-jars</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>C:\Users\Kiran\Documents\Development\Minecraft\Ready Jars\</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>C:\Users\Kiran\Documents\Development\Minecraft\Active\${project.name}\target</directory>
+                                    <include>${project.name}.jar</include>
+                                    <filtering>false</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
         </plugins>
