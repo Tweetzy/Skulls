@@ -22,17 +22,20 @@ public final class SkullPlayerManager {
 	private final StrictMap<UUID, SkullPlayer> players = new StrictMap<>();
 
 	public void addPlayer(@NonNull final SkullPlayer skullPlayer) {
-		this.players.put(skullPlayer.getPlayerId(), skullPlayer);
+		if (!this.players.containsKey(skullPlayer.getPlayerId())) {
+			this.players.put(skullPlayer.getPlayerId(), skullPlayer);
+		}
+
 		loadPlayer(skullPlayer.getPlayerId());
 	}
 
 	public void removePlayer(@NonNull final SkullPlayer skullPlayer) {
-		this.players.remove(skullPlayer.getPlayerId());
+		this.players.removeWeak(skullPlayer.getPlayerId());
 		savePlayer(skullPlayer);
 	}
 
 	public void removePlayer(@NonNull final UUID uuid) {
-		this.players.remove(uuid);
+		this.players.removeWeak(uuid);
 	}
 
 	public SkullPlayer getPlayer(@NonNull final UUID uuid) {
@@ -44,7 +47,10 @@ public final class SkullPlayerManager {
 	}
 
 	public void savePlayers() {
-		this.players.forEachIterate((id, player) -> savePlayer(player));
+		this.players.forEachIterate((id, player) -> {
+			if (player != null)
+				savePlayer(player);
+		});
 	}
 
 	public void loadPlayer(@NonNull final UUID playerId) {
