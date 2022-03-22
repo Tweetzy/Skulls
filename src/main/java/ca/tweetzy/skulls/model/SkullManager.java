@@ -2,6 +2,7 @@ package ca.tweetzy.skulls.model;
 
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.enums.SkullsDefaultCategory;
+import ca.tweetzy.skulls.api.event.SkullsReadyEvent;
 import ca.tweetzy.skulls.impl.Skull;
 import ca.tweetzy.skulls.impl.SkullCategory;
 import ca.tweetzy.tweety.Common;
@@ -180,7 +181,7 @@ public final class SkullManager {
 	 * For internal use only
 	 */
 	public void downloadHeads(final boolean redownload) {
-		if (redownload || FileUtil.getFile("config.yml").exists()) {
+		if (redownload) {
 			final File directory = FileUtil.getFile("/heads");
 			if (directory.exists()) {
 				for (File file : FileUtil.getFiles("heads", "json")) {
@@ -229,6 +230,8 @@ public final class SkullManager {
 			}
 
 			this.loading = false;
+			Common.callEvent(new SkullsReadyEvent());
+
 			// load blocked heads
 			try {
 				final ConfigurationSection section = Skulls.getInstance().getDataFile().getConfigField("Blocked");
