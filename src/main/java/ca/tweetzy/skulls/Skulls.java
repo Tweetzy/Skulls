@@ -1,120 +1,78 @@
 package ca.tweetzy.skulls;
 
-import ca.tweetzy.skulls.api.DataFile;
-import ca.tweetzy.skulls.api.SkullsAPI;
-import ca.tweetzy.skulls.api.enums.SkullsDefaultCategory;
-import ca.tweetzy.skulls.impl.SkullCategory;
-import ca.tweetzy.skulls.impl.SkullPlayer;
-import ca.tweetzy.skulls.listeners.PlayerDeathListener;
-import ca.tweetzy.skulls.listeners.PlayerJoinLeaveListener;
-import ca.tweetzy.skulls.model.SkullCategoryManager;
-import ca.tweetzy.skulls.model.SkullManager;
-import ca.tweetzy.skulls.model.SkullPlayerManager;
+import ca.tweetzy.skulls.commands.SkullsCommandHandler;
+import ca.tweetzy.skulls.database.DataManager;
+import ca.tweetzy.skulls.database.migrations._1_InitialMigration;
+import ca.tweetzy.skulls.manager.SkullManager;
+import ca.tweetzy.skulls.settings.Locale;
 import ca.tweetzy.skulls.settings.Settings;
-import ca.tweetzy.tweety.Common;
-import ca.tweetzy.tweety.Messenger;
-import ca.tweetzy.tweety.MinecraftVersion;
-import ca.tweetzy.tweety.collection.StrictList;
-import ca.tweetzy.tweety.model.SpigotUpdater;
-import ca.tweetzy.tweety.plugin.TweetyPlugin;
-import ca.tweetzy.tweety.remain.Remain;
+import ca.tweetzy.tweety.TweetyPlugin;
+import ca.tweetzy.tweety.configuration.Config;
+import ca.tweetzy.tweety.database.DataMigrationManager;
+import ca.tweetzy.tweety.database.DatabaseConnector;
+import ca.tweetzy.tweety.database.SQLiteConnector;
+import ca.tweetzy.tweety.model.Common;
+import ca.tweetzy.tweety.util.MinecraftVersion;
 import lombok.Getter;
-import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.YamlConfiguration;
-
-import java.io.File;
-import java.io.IOException;
 
 /**
- * The current file has been created by Kiran Hart
- * Date Created: August 22 2021
- * Time Created: 11:02 p.m.
- * Usage of any code found within this class is prohibited unless given explicit permission otherwise
+ * Date Created: April 04 2022
+ * Time Created: 9:46 a.m.
+ *
+ * @author Kiran Hart
  */
 public final class Skulls extends TweetyPlugin {
 
 	@Getter
-	private final DataFile dataFile = new DataFile("data", this);
-
-	private final SkullManager skullManager = new SkullManager();
-	private final SkullCategoryManager skullCategoryManager = new SkullCategoryManager();
-	private final SkullPlayerManager skullPlayerManager = new SkullPlayerManager();
+	private final Config coreConfig = new Config(this);
 
 	@Getter
-	private boolean bStats = false;
+	private Config lang;
+
+	@Getter
+	private DataManager dataManager;
+
+	private DatabaseConnector databaseConnector;
+
+	@Getter
+	private SkullManager skullManager;
 
 	@Override
-	protected void onPluginStart() {
-		normalizePrefix();
-
-		if (Settings.AUTO_STATS) {
-			final File file = new File("plugins" + File.separator + "bStats" + File.separator + "config.yml");
-			if (!file.exists()) bStats = true;
-			else {
-				final YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
-				configuration.set("enabled", true);
-				try {
-					configuration.save(file);
-					bStats = true;
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-
-		if (!bStats) {
-			Common.logFramed("&cPlease enable bStats within your plugins folder", "&cit helps me collect data on Skulls.");
-		}
-
-		Common.runAsync(() -> {
-			for (SkullsDefaultCategory value : SkullsDefaultCategory.values()) {
-				SkullsAPI.addCategory(new SkullCategory(value.getId(), value.getName(), false, null));
-			}
-
-			this.skullCategoryManager.loadCustomCategories();
-			skullManager.downloadHeads(false);
-		});
-
-		registerEvents(new PlayerJoinLeaveListener());
-		registerEvents(new PlayerDeathListener());
+	protected void onWake() {
+		if (!this.getDataFolder().exists())
+			this.getDataFolder().mkdir();
 	}
 
 	@Override
-	protected void onReloadablesStart() {
-		this.skullPlayerManager.getPlayers().clear();
-		Remain.getOnlinePlayers().forEach(player -> this.skullPlayerManager.addPlayer(new SkullPlayer(
-				player.getUniqueId(),
-				new StrictList<>()
-		)));
-	}
+	protected void onFlight() {
+		Settings.setup();
 
-	@Override
-	protected void onPluginStop() {
-		this.skullPlayerManager.savePlayers();
-		this.skullPlayerManager.getPlayers().clear();
-
-		this.skullCategoryManager.saveCategories();
-		this.skullCategoryManager.getCategories().clear();
-
-		Bukkit.getServer().getScheduler().cancelTasks(this);
-	}
-
-
-	private void normalizePrefix() {
-		Common.ADD_TELL_PREFIX = Settings.PREFIX.length() != 0;
 		Common.ADD_LOG_PREFIX = true;
+		Common.ADD_TELL_PREFIX = true;
 
-		Common.setLogPrefix(Settings.PREFIX + " ");
-		Common.setTellPrefix(Settings.PREFIX);
+		Common.setLogPrefix(Settings.PREFIX.getString());
+		Common.setTellPrefix(Settings.PREFIX.getString());
 
-		final String prefix = Settings.PREFIX + (Settings.PREFIX.length() != 0 ? " " : "");
+		this.lang = new Config(this, "/locale/", Settings.LANG.getString() + ".yml");
+		Locale.setup();
 
-		Messenger.setInfoPrefix(prefix);
-		Messenger.setAnnouncePrefix(prefix);
-		Messenger.setErrorPrefix(prefix);
-		Messenger.setQuestionPrefix(prefix);
-		Messenger.setSuccessPrefix(prefix);
-		Messenger.setWarnPrefix(prefix);
+		this.databaseConnector = new SQLiteConnector(this);
+		this.dataManager = new DataManager(this.databaseConnector, this);
+
+		final DataMigrationManager dataMigrationManager = new DataMigrationManager(this.databaseConnector, this.dataManager,
+				new _1_InitialMigration()
+		);
+
+		dataMigrationManager.runMigrations();
+
+		this.skullManager = new SkullManager();
+		this.skullManager.load();
+
+		SkullsCommandHandler.getInstance().register();
+	}
+
+	public static Skulls getInstance() {
+		return (Skulls) TweetyPlugin.getInstance();
 	}
 
 	@Override
@@ -128,28 +86,7 @@ public final class Skulls extends TweetyPlugin {
 	}
 
 	@Override
-	public int getFoundedYear() {
-		return 2021;
-	}
-
-	@Override
-	public SpigotUpdater getUpdateCheck() {
-		return new SpigotUpdater(90098);
-	}
-
-	public static Skulls getInstance() {
-		return (Skulls) TweetyPlugin.getInstance();
-	}
-
-	public static SkullManager getSkullManager() {
-		return ((Skulls) TweetyPlugin.getInstance()).skullManager;
-	}
-
-	public static SkullCategoryManager getSkullCategoryManager() {
-		return ((Skulls) TweetyPlugin.getInstance()).skullCategoryManager;
-	}
-
-	public static SkullPlayerManager getSkullPlayerManager() {
-		return ((Skulls) TweetyPlugin.getInstance()).skullPlayerManager;
+	public MinecraftVersion.V getMaximumVersion() {
+		return MinecraftVersion.V.v1_18;
 	}
 }
