@@ -10,7 +10,7 @@ import ca.tweetzy.skulls.settings.Localization;
  */
 public final class CommandLatest extends SkullsSubCommand {
 
-	private final int insertionNumber = 24;
+	private final int insertionNumber = 37;
 
 	public CommandLatest() {
 		super("latest");
@@ -19,6 +19,6 @@ public final class CommandLatest extends SkullsSubCommand {
 
 	@Override
 	protected void onCommand() {
-		tell("https://rose.tweetzy.ca/minecraft/skulls/imagegrid/" + insertionNumber + "/0");
+		tell("https://rose.tweetzy.ca/minecraft/skulls/imagegrid/" + insertionNumber + "");
 	}
 }
