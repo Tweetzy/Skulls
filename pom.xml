@@ -18,6 +18,8 @@
         <tweety.version>1.16.0</tweety.version>
         <tweety.path>com.github.kiranhart</tweety.path>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <sonar.organization>tweetzy</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
     <repositories>
@@ -92,23 +94,23 @@
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>3.0.2</version>
                 <executions>
-                    <execution>
-                        <id>copy-files-on-build</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>C:\Dev\Minecraft\latest\plugins</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>C:\Users\Kiran\Documents\Development\Minecraft\Active\${project.name}\target</directory>
-                                    <include>${project.name}.jar</include>
-                                    <filtering>false</filtering>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
+<!--                    <execution>-->
+<!--                        <id>copy-files-on-build</id>-->
+<!--                        <phase>package</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>copy-resources</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <outputDirectory>C:\Dev\Minecraft\latest\plugins</outputDirectory>-->
+<!--                            <resources>-->
+<!--                                <resource>-->
+<!--                                    <directory>C:\Users\Kiran\Documents\Development\Minecraft\Active\${project.name}\target</directory>-->
+<!--                                    <include>${project.name}.jar</include>-->
+<!--                                    <filtering>false</filtering>-->
+<!--                                </resource>-->
+<!--                            </resources>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
                     <execution>
                         <id>copy-to-ready-jars</id>
                         <phase>package</phase>
