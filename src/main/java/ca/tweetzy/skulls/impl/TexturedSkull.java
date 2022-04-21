@@ -67,6 +67,6 @@ public final class TexturedSkull implements Skull {
 
 	@Override
 	public ItemStack getItemStack() {
-		return QuickItem.of(NBTEditor.getHead(this.texture)).make();
+		return QuickItem.of(NBTEditor.getHead(this.texture)).name(this.name).make();
 	}
 }

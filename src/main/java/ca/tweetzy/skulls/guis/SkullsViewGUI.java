@@ -10,6 +10,7 @@ import ca.tweetzy.skulls.api.interfaces.Skull;
 import ca.tweetzy.skulls.impl.SkullPlayer;
 import ca.tweetzy.skulls.settings.Settings;
 import ca.tweetzy.skulls.settings.Translation;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -54,7 +55,15 @@ public final class SkullsViewGUI extends PagedGUI<Skull> {
 	}
 
 	@Override
-	protected void onClick(Skull skull, GuiClickEvent guiClickEvent) {
+	protected void onClick(Skull skull, GuiClickEvent event) {
+		if (event.clickType == ClickType.LEFT) {
+			if (!Settings.CHARGE_FOR_HEADS.getBoolean()) {
+				event.player.getInventory().addItem(skull.getItemStack());
+			}
 
+			//
+			event.player.getInventory().addItem(skull.getItemStack());
+
+		}
 	}
 }
