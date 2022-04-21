@@ -15,6 +15,7 @@ import com.google.gson.JsonParser;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.BufferedReader;
@@ -72,6 +73,16 @@ public final class SkullManager implements Manager {
 
 	public List<Skull> getSkullsBySearch(String phrase) {
 		synchronized (this.skulls) {
+			int id = -1;
+			if (phrase.startsWith("id:")) {
+				if (NumberUtils.isNumber(phrase.split(":")[1])) {
+					id = Integer.parseInt(phrase.split(":")[1]);
+				}
+			}
+
+			if (id != -1)
+				return Collections.singletonList(getSkull(id));
+
 			return this.skulls.stream().filter(skull -> Common.match(phrase, skull.getName()) || Common.match(phrase, skull.getCategory()) || skull.getTags().stream().anyMatch(tag -> Common.match(phrase, tag))).collect(Collectors.toList());
 		}
 	}
