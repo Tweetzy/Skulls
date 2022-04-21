@@ -1,5 +1,7 @@
 package ca.tweetzy.skulls.impl;
 
+import ca.tweetzy.rose.comp.NBTEditor;
+import ca.tweetzy.rose.utils.QuickItem;
 import ca.tweetzy.skulls.api.interfaces.Skull;
 import lombok.AllArgsConstructor;
 import org.bukkit.inventory.ItemStack;
@@ -65,6 +67,6 @@ public final class TexturedSkull implements Skull {
 
 	@Override
 	public ItemStack getItemStack() {
-		return null;
+		return QuickItem.of(NBTEditor.getHead(this.texture)).make();
 	}
 }
