@@ -3,6 +3,8 @@ package ca.tweetzy.skulls.commands;
 import ca.tweetzy.rose.command.AllowedExecutor;
 import ca.tweetzy.rose.command.Command;
 import ca.tweetzy.rose.command.ReturnType;
+import ca.tweetzy.skulls.Skulls;
+import ca.tweetzy.skulls.guis.MainGUI;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -25,7 +27,7 @@ public final class SkullsCommand extends Command {
 		if (commandSender instanceof Player) {
 			final Player player = (Player) commandSender;
 
-
+			Skulls.getGuiManager().showGUI(player, new MainGUI());
 		}
 
 		return ReturnType.SUCCESS;
@@ -38,7 +40,7 @@ public final class SkullsCommand extends Command {
 
 	@Override
 	public String getPermissionNode() {
-		return "skulls.command";
+		return null;
 	}
 
 	@Override
@@ -50,4 +52,5 @@ public final class SkullsCommand extends Command {
 	public String getDescription() {
 		return "The main command for the plugin";
 	}
+
 }
