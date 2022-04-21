@@ -10,6 +10,7 @@ import ca.tweetzy.skulls.impl.TexturedSkull;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.sun.javafx.embed.HostDragStartListener;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -168,22 +169,27 @@ public final class SkullManager implements Manager {
 					this.histories.addAll(dlHistory);
 				});
 			} else {
-				// check for new inserts
-				final List<History> dlHistory = downloadHistories();
-				if (dlHistory.size() != this.histories.size()) {
-					final Iterator<History> historyIterator = dlHistory.iterator();
-					while (historyIterator.hasNext()) {
-						final History history = historyIterator.next();
-						if (!this.histories.contains(history)) continue;
-						historyIterator.remove();
+
+				Common.runAsync(() -> {
+					// check for new inserts
+					final List<History> dlHistory = downloadHistories();
+
+					if (dlHistory.size() != this.histories.size()) {
+						List<History> toInsert = new ArrayList<>();
+						dlHistory.forEach(downloadedHistory -> {
+							if (this.histories.stream().noneMatch(history -> history.getID() == downloadedHistory.getID())) {
+								toInsert.add(downloadedHistory);
+							}
+						});
+
+
+						Skulls.getDataManager().insertHistories(toInsert);
+						Common.log("&aInserts were found, saving the following: &e" + toInsert.stream().map(h -> String.valueOf(h.getID())).collect(Collectors.joining(", ")));
+						return;
 					}
 
-					Skulls.getDataManager().insertHistories(dlHistory);
-					Common.log("&aInserts were found, saving the following: &e" + dlHistory.stream().map(h -> String.valueOf(h.getID())).collect(Collectors.joining(", ")));
-					return;
-				}
-
-				Common.log("&aLoaded &e" + this.histories.size() + "&a history inserts");
+					Common.log("&aLoaded &e" + this.histories.size() + "&a history inserts");
+				});
 			}
 		});
 	}
