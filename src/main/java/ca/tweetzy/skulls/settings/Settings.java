@@ -17,10 +17,22 @@ public final class Settings {
 
 	public static final ConfigSetting LANG = new ConfigSetting(config, "language", "english", "Default language file");
 	public static final ConfigSetting PREFIX = new ConfigSetting(config, "prefix", "<GRADIENT:DD5E89>&lSkulls</GRADIENT:fbc7d4>", "Prefix to be used in chat");
+	public static final ConfigSetting CHARGE_FOR_HEADS = new ConfigSetting(config, "charge for heads", true, "Should skulls charge users without permission for heads?");
 
 	/*
 	==================== GUI END ====================
 	 */
+	public static final ConfigSetting GUI_MAIN_ITEMS_ALPHABET_SLOT = new ConfigSetting(config, "gui.main.items.alphabet.slot", 11);
+	public static final ConfigSetting GUI_MAIN_ITEMS_ANIMALS_SLOT = new ConfigSetting(config, "gui.main.items.animals.slot", 12);
+	public static final ConfigSetting GUI_MAIN_ITEMS_BLOCKS_SLOT = new ConfigSetting(config, "gui.main.items.blocks.slot", 13);
+	public static final ConfigSetting GUI_MAIN_ITEMS_DECORATION_SLOT = new ConfigSetting(config, "gui.main.items.decoration.slot", 14);
+	public static final ConfigSetting GUI_MAIN_ITEMS_FOOD_AND_DRINKS_SLOT = new ConfigSetting(config, "gui.main.items.food and drinks.slot", 15);
+	public static final ConfigSetting GUI_MAIN_ITEMS_HUMANS_SLOT = new ConfigSetting(config, "gui.main.items.humans.slot", 20);
+	public static final ConfigSetting GUI_MAIN_ITEMS_HUMANOID_SLOT = new ConfigSetting(config, "gui.main.items.humanoids.slot", 21);
+	public static final ConfigSetting GUI_MAIN_ITEMS_MISC_SLOT = new ConfigSetting(config, "gui.main.items.misc.slot", 22);
+	public static final ConfigSetting GUI_MAIN_ITEMS_MONSTERS_SLOT = new ConfigSetting(config, "gui.main.items.monsters.slot", 23);
+	public static final ConfigSetting GUI_MAIN_ITEMS_PLANTS_SLOT = new ConfigSetting(config, "gui.main.items.plants.slot", 24);
+	
 
 	public static final ConfigSetting DEFAULT_PRICES_ALPHABET = new ConfigSetting(config, "default prices.alphabet", 1.0);
 	public static final ConfigSetting DEFAULT_PRICES_ANIMALS = new ConfigSetting(config, "default prices.animals", 1.0);
