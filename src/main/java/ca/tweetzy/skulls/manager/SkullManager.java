@@ -1,6 +1,8 @@
 package ca.tweetzy.skulls.manager;
 
+import ca.tweetzy.rose.comp.enums.CompMaterial;
 import ca.tweetzy.rose.utils.Common;
+import ca.tweetzy.rose.utils.QuickItem;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.enums.BaseCategory;
 import ca.tweetzy.skulls.api.interfaces.History;
@@ -10,10 +12,10 @@ import ca.tweetzy.skulls.impl.TexturedSkull;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.sun.javafx.embed.HostDragStartListener;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import org.bukkit.inventory.ItemStack;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -22,7 +24,10 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -47,6 +52,53 @@ public final class SkullManager implements Manager {
 	@Getter
 	private final List<History> histories = Collections.synchronizedList(new ArrayList<>());
 
+	public Skull getSkull(final int id) {
+		synchronized (this.skulls) {
+			return this.skulls.stream().filter(skull -> skull.getId() == id).findFirst().orElse(null);
+		}
+	}
+
+	public List<Skull> getSkulls(BaseCategory category) {
+		synchronized (this.skulls) {
+			return this.skulls.stream().filter(skull -> skull.getCategory().equalsIgnoreCase(category.getId())).collect(Collectors.toList());
+		}
+	}
+
+	public List<Skull> getSkulls(String category) {
+		synchronized (this.skulls) {
+			return this.skulls.stream().filter(skull -> skull.getCategory().equalsIgnoreCase(category)).collect(Collectors.toList());
+		}
+	}
+
+	public List<Skull> getSkullsBySearch(String phrase) {
+		synchronized (this.skulls) {
+			return this.skulls.stream().filter(skull -> Common.match(phrase, skull.getName()) || Common.match(phrase, skull.getCategory()) || skull.getTags().stream().anyMatch(tag -> Common.match(phrase, tag))).collect(Collectors.toList());
+		}
+	}
+
+	public List<Skull> getSkulls(List<Integer> ids) {
+		synchronized (this.skulls) {
+			return this.skulls.stream().filter(skull -> ids.contains(skull.getId())).collect(Collectors.toList());
+		}
+	}
+
+	public long getSkullCount(String category) {
+		synchronized (this.skulls) {
+			return this.skulls.stream().filter(skull -> skull.getCategory().equalsIgnoreCase(category)).count();
+		}
+	}
+
+	public ItemStack getSkullItem(final int id) {
+		synchronized (this.skulls) {
+			final Skull skull = getSkull(id);
+			return skull == null ? QuickItem.of(CompMaterial.PLAYER_HEAD).make() : skull.getItemStack();
+		}
+	}
+
+	/**
+	 * For internal use only
+	 */
+
 	public void downloadHeads() {
 		setDownloading(true);
 		Common.runAsync(() -> {
@@ -62,10 +114,6 @@ public final class SkullManager implements Manager {
 			Skulls.getDataManager().insertSkulls(heads);
 		});
 	}
-
-	/**
-	 * For internal use only
-	 */
 
 	public List<History> downloadHistories() {
 		final List<History> histories = new ArrayList<>();
