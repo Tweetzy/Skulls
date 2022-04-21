@@ -9,6 +9,8 @@ import ca.tweetzy.rose.database.DatabaseConnector;
 import ca.tweetzy.rose.database.SQLiteConnector;
 import ca.tweetzy.rose.gui.GuiManager;
 import ca.tweetzy.rose.utils.Common;
+import ca.tweetzy.skulls.commands.SearchCommand;
+import ca.tweetzy.skulls.commands.SkullsCommand;
 import ca.tweetzy.skulls.database.DataManager;
 import ca.tweetzy.skulls.database.migrations._1_InitialMigration;
 import ca.tweetzy.skulls.manager.SkullManager;
@@ -27,11 +29,12 @@ public final class Skulls extends RosePlugin {
 	private final GuiManager guiManager = new GuiManager(this);
 	private final CommandManager commandManager = new CommandManager(this);
 
+	private final SkullManager skullManager = new SkullManager();
+
+
 	private DatabaseConnector databaseConnector;
 	private DataManager dataManager;
 
-	@Getter
-	private SkullManager skullManager;
 
 	@Override
 	protected void onWake() {
@@ -57,9 +60,11 @@ public final class Skulls extends RosePlugin {
 
 		Common.setPrefix(Settings.PREFIX.getString());
 
-
-		this.skullManager = new SkullManager();
 		this.skullManager.load();
+		this.guiManager.init();
+
+		// command
+		this.commandManager.registerCommandDynamically(new SkullsCommand()).addSubCommands(new SearchCommand());
 	}
 
 	public static Skulls getInstance() {
@@ -71,8 +76,14 @@ public final class Skulls extends RosePlugin {
 		return getInstance().guiManager;
 	}
 
+	// data manager
 	public static DataManager getDataManager() {
 		return getInstance().dataManager;
+	}
+
+	// skull manager
+	public static SkullManager getSkullManager() {
+		return getInstance().skullManager;
 	}
 
 	@Override
