@@ -1,13 +1,12 @@
 package ca.tweetzy.skulls.manager;
 
+import ca.tweetzy.rose.utils.Common;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.enums.BaseCategory;
 import ca.tweetzy.skulls.api.interfaces.History;
 import ca.tweetzy.skulls.api.interfaces.Skull;
 import ca.tweetzy.skulls.impl.InsertHistory;
 import ca.tweetzy.skulls.impl.TexturedSkull;
-import ca.tweetzy.tweety.collection.StrictList;
-import ca.tweetzy.tweety.model.Common;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -81,7 +80,7 @@ public final class SkullManager implements Manager {
 				histories.add(new InsertHistory(
 						Integer.parseInt(replace(jsonObject.get("id").toString())),
 						Instant.parse(replace(jsonObject.get("date").toString())).toEpochMilli(),
-						new StrictList<>(Arrays.stream(replace(jsonObject.get("heads").toString()).split(",")).map(Integer::parseInt).collect(Collectors.toList()))
+						Arrays.stream(replace(jsonObject.get("heads").toString()).split(",")).map(Integer::parseInt).collect(Collectors.toList())
 				));
 			});
 
@@ -103,7 +102,7 @@ public final class SkullManager implements Manager {
 						Integer.parseInt(replace(jsonObject.get("id").toString())),
 						replace(jsonObject.get("name").toString()),
 						replace(jsonObject.get("category").toString()),
-						new StrictList<>(replace(jsonObject.get("tags").toString()).split(",")),
+						Arrays.asList(replace(jsonObject.get("tags").toString()).split(",")),
 						replace(jsonObject.get("texture").toString()),
 						category.getDefaultPrice(),
 						false
@@ -147,7 +146,7 @@ public final class SkullManager implements Manager {
 		setLoading(true);
 		long start = System.currentTimeMillis();
 
-		Skulls.getInstance().getDataManager().getSkulls((error, all) -> {
+		Skulls.getDataManager().getSkulls((error, all) -> {
 			if (error != null) {
 				error.printStackTrace();
 				return;
@@ -164,7 +163,7 @@ public final class SkullManager implements Manager {
 			}
 		});
 
-		Skulls.getInstance().getDataManager().getHistories((error, all) -> {
+		Skulls.getDataManager().getHistories((error, all) -> {
 			if (error != null) {
 				error.printStackTrace();
 				return;
@@ -176,7 +175,7 @@ public final class SkullManager implements Manager {
 				Common.log("&cCould not find any inserts, attempting to redownload them!");
 				Common.runAsync(() -> {
 					final List<History> dlHistory = downloadHistories();
-					Skulls.getInstance().getDataManager().insertHistories(dlHistory);
+					Skulls.getDataManager().insertHistories(dlHistory);
 					this.histories.addAll(dlHistory);
 				});
 			} else {

@@ -15,8 +15,8 @@
         <jarName>Skulls</jarName>
         <main.class>${project.groupId}.${project.artifactId}.${project.name}</main.class>
         <java.version>1.8</java.version>
-        <tweety.version>3.0.1</tweety.version>
-        <tweety.path>ca.tweetzy</tweety.path>
+        <rose.version>1.2.3-dev</rose.version>
+        <rose.path>ca.tweetzy</rose.path>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -28,9 +28,9 @@
     </repositories>
     <dependencies>
         <dependency>
-            <groupId>${tweety.path}</groupId>
-            <artifactId>tweety</artifactId>
-            <version>${tweety.version}</version>
+            <groupId>${rose.path}</groupId>
+            <artifactId>rose</artifactId>
+            <version>${rose.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.Revxrsal.Lamp</groupId>
@@ -76,9 +76,7 @@
                     <createDependencyReducedPom>false</createDependencyReducedPom>
                     <artifactSet>
                         <includes>
-                            <include>${tweety.path}:tweety*</include>
-                            <include>com.github.Revxrsal.Lamp:bukkit</include>
-                            <include>com.github.Revxrsal.Lamp:common</include>
+                            <include>${rose.path}:rose*</include>
                         </includes>
                     </artifactSet>
                     <filters>
@@ -96,10 +94,6 @@
                         <relocation>
                             <pattern>ca.tweetzy.tweety</pattern>
                             <shadedPattern>${project.groupId}.${project.artifactId}.core</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>revxrsal.commands</pattern>
-                            <shadedPattern>${project.groupId}.${project.artifactId}.lib.lamp</shadedPattern> <!-- Replace this -->
                         </relocation>
                     </relocations>
                 </configuration>

@@ -1,7 +1,8 @@
 package ca.tweetzy.skulls.api.interfaces;
 
-import ca.tweetzy.tweety.collection.StrictList;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.List;
 
 /**
  * Date Created: April 04 2022
@@ -40,7 +41,7 @@ public interface Skull {
 	 *
 	 * @return a list of unique tags for this head
 	 */
-	StrictList<String> getTags();
+	List<String> getTags();
 
 	/**
 	 * The actual texture that head uses

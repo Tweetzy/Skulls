@@ -1,9 +1,9 @@
 package ca.tweetzy.skulls.impl;
 
 import ca.tweetzy.skulls.api.interfaces.SkullUser;
-import ca.tweetzy.tweety.collection.StrictList;
 import lombok.AllArgsConstructor;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -16,7 +16,7 @@ import java.util.UUID;
 public final class SkullPlayer implements SkullUser {
 
 	private final UUID uuid;
-	private final StrictList<Integer> favourites;
+	private final List<Integer> favourites;
 
 	@Override
 	public UUID getUUID() {
@@ -24,7 +24,7 @@ public final class SkullPlayer implements SkullUser {
 	}
 
 	@Override
-	public StrictList<Integer> getFavourites() {
+	public List<Integer> getFavourites() {
 		return this.favourites;
 	}
 }

@@ -1,8 +1,9 @@
 package ca.tweetzy.skulls.settings;
 
+import ca.tweetzy.rose.files.ConfigSetting;
+import ca.tweetzy.rose.files.file.YamlFile;
 import ca.tweetzy.skulls.Skulls;
-import ca.tweetzy.tweety.configuration.Config;
-import ca.tweetzy.tweety.configuration.ConfigSetting;
+import lombok.SneakyThrows;
 
 /**
  * Date Created: April 04 2022
@@ -12,9 +13,9 @@ import ca.tweetzy.tweety.configuration.ConfigSetting;
  */
 public final class Settings {
 
-	static final Config config = Skulls.getInstance().getCoreConfig();
+	static final YamlFile config = Skulls.getInstance().getCoreConfig();
 
-	public static final ConfigSetting LANG = new ConfigSetting(config, "lang", "en_US", "Default language file");
+	public static final ConfigSetting LANG = new ConfigSetting(config, "language", "english", "Default language file");
 	public static final ConfigSetting PREFIX = new ConfigSetting(config, "prefix", "<GRADIENT:DD5E89>&lSkulls</GRADIENT:fbc7d4>", "Prefix to be used in chat");
 
 	public static final ConfigSetting DEFAULT_PRICES_ALPHABET = new ConfigSetting(config, "default prices.alphabet", 1.0);
@@ -28,9 +29,9 @@ public final class Settings {
 	public static final ConfigSetting DEFAULT_PRICES_MONSTERS = new ConfigSetting(config, "default prices.monsters", 1.0);
 	public static final ConfigSetting DEFAULT_PRICES_PLANTS = new ConfigSetting(config, "default prices.plants", 1.0);
 
+	@SneakyThrows
 	public static void setup() {
-		config.load();
-		config.setAutoremove(false).setAutosave(true);
-		config.saveChanges();
+		config.applySettings();
+		config.save();
 	}
 }

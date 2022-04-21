@@ -1,9 +1,10 @@
 package ca.tweetzy.skulls.impl;
 
 import ca.tweetzy.skulls.api.interfaces.Skull;
-import ca.tweetzy.tweety.collection.StrictList;
 import lombok.AllArgsConstructor;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.List;
 
 /**
  * Date Created: April 05 2022
@@ -17,7 +18,7 @@ public final class TexturedSkull implements Skull {
 	private final int id;
 	private final String name;
 	private final String category;
-	private final StrictList<String> tags;
+	private final List<String> tags;
 	private final String texture;
 	private double price;
 	private boolean blocked;
@@ -38,7 +39,7 @@ public final class TexturedSkull implements Skull {
 	}
 
 	@Override
-	public StrictList<String> getTags() {
+	public List<String> getTags() {
 		return this.tags;
 	}
 

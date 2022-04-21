@@ -1,6 +1,5 @@
 package ca.tweetzy.skulls.api.interfaces;
 
-import ca.tweetzy.tweety.collection.StrictList;
 
 import java.util.List;
 import java.util.UUID;
@@ -15,5 +14,5 @@ public interface SkullUser {
 
 	UUID getUUID();
 
-	StrictList<Integer> getFavourites();
+	List<Integer> getFavourites();
 }

@@ -1,21 +1,19 @@
 package ca.tweetzy.skulls.database;
 
+import ca.tweetzy.rose.database.Callback;
+import ca.tweetzy.rose.database.DataManagerAbstract;
+import ca.tweetzy.rose.database.DatabaseConnector;
+import ca.tweetzy.rose.database.UpdateCallback;
+import ca.tweetzy.rose.utils.Common;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.interfaces.History;
 import ca.tweetzy.skulls.api.interfaces.Skull;
 import ca.tweetzy.skulls.impl.InsertHistory;
 import ca.tweetzy.skulls.impl.TexturedSkull;
-import ca.tweetzy.tweety.collection.StrictList;
-import ca.tweetzy.tweety.database.Callback;
-import ca.tweetzy.tweety.database.DataManagerAbstract;
-import ca.tweetzy.tweety.database.DatabaseConnector;
-import ca.tweetzy.tweety.database.UpdateCallback;
-import ca.tweetzy.tweety.model.Common;
 import lombok.NonNull;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.sqlite.SQLiteConfig;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -47,7 +45,7 @@ public final class DataManager extends DataManagerAbstract {
 				statement.setString(2, skull.getName());
 				statement.setString(3, skull.getCategory());
 				statement.setString(4, skull.getTexture());
-				statement.setString(5, String.join(",", skull.getTags().getSource()));
+				statement.setString(5, String.join(",", skull.getTags()));
 				statement.setDouble(6, skull.getPrice());
 				statement.setBoolean(7, skull.isBlocked());
 				statement.addBatch();
@@ -65,7 +63,7 @@ public final class DataManager extends DataManagerAbstract {
 			for (History history : histories) {
 				statement.setInt(1, history.getID());
 				statement.setLong(2, history.getTime());
-				statement.setString(3, history.getSkulls().getSource().stream().map(String::valueOf).collect(Collectors.joining(",")));
+				statement.setString(3, history.getSkulls().stream().map(String::valueOf).collect(Collectors.joining(",")));
 				statement.addBatch();
 			}
 
@@ -81,7 +79,7 @@ public final class DataManager extends DataManagerAbstract {
 				fetch.setInt(1, history.getID());
 				statement.setInt(1, history.getID());
 				statement.setLong(2, history.getTime());
-				statement.setString(3, history.getSkulls().getSource().stream().map(String::valueOf).collect(Collectors.joining(",")));
+				statement.setString(3, history.getSkulls().stream().map(String::valueOf).collect(Collectors.joining(",")));
 				statement.executeUpdate();
 
 				if (callback != null) {
@@ -134,7 +132,7 @@ public final class DataManager extends DataManagerAbstract {
 				resultSet.getInt("id"),
 				resultSet.getString("name"),
 				resultSet.getString("category"),
-				new StrictList<>(Arrays.asList(resultSet.getString("tags").split(","))),
+				Arrays.asList(resultSet.getString("tags").split(",")),
 				resultSet.getString("texture"),
 				resultSet.getDouble("price"),
 				resultSet.getBoolean("blocked")
@@ -145,7 +143,7 @@ public final class DataManager extends DataManagerAbstract {
 		return new InsertHistory(
 				resultSet.getInt("id"),
 				resultSet.getLong("time"),
-				new StrictList<>(Arrays.stream(resultSet.getString("skulls").split(",")).map((Integer::parseInt)).collect(Collectors.toList()))
+				Arrays.stream(resultSet.getString("skulls").split(",")).map((Integer::parseInt)).collect(Collectors.toList())
 		);
 	}
 

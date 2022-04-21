@@ -1,7 +1,8 @@
 package ca.tweetzy.skulls.database.migrations;
 
 
-import ca.tweetzy.tweety.database.DataMigration;
+
+import ca.tweetzy.rose.database.DataMigration;
 
 import java.sql.Connection;
 import java.sql.SQLException;

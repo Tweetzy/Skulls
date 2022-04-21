@@ -1,6 +1,6 @@
 package ca.tweetzy.skulls.api.interfaces;
 
-import ca.tweetzy.tweety.collection.StrictList;
+import java.util.List;
 
 /**
  * Date Created: April 04 2022
@@ -38,5 +38,5 @@ public interface Category {
 	 *
 	 * @return a list of ids
 	 */
-	StrictList<Integer> getSkulls();
+	List<Integer> getSkulls();
 }

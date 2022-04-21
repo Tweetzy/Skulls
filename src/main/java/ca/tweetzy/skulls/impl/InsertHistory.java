@@ -1,8 +1,9 @@
 package ca.tweetzy.skulls.impl;
 
 import ca.tweetzy.skulls.api.interfaces.History;
-import ca.tweetzy.tweety.collection.StrictList;
 import lombok.AllArgsConstructor;
+
+import java.util.List;
 
 /**
  * Date Created: April 05 2022
@@ -15,7 +16,7 @@ public final class InsertHistory implements History {
 
 	private final int id;
 	private final long time;
-	private final StrictList<Integer> skulls;
+	private final List<Integer> skulls;
 
 	@Override
 	public int getID() {
@@ -28,7 +29,7 @@ public final class InsertHistory implements History {
 	}
 
 	@Override
-	public StrictList<Integer> getSkulls() {
+	public List<Integer> getSkulls() {
 		return this.skulls;
 	}
 }
