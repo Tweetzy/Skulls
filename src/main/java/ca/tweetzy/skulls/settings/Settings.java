@@ -18,6 +18,10 @@ public final class Settings {
 	public static final ConfigSetting LANG = new ConfigSetting(config, "language", "english", "Default language file");
 	public static final ConfigSetting PREFIX = new ConfigSetting(config, "prefix", "<GRADIENT:DD5E89>&lSkulls</GRADIENT:fbc7d4>", "Prefix to be used in chat");
 
+	/*
+	==================== GUI END ====================
+	 */
+
 	public static final ConfigSetting DEFAULT_PRICES_ALPHABET = new ConfigSetting(config, "default prices.alphabet", 1.0);
 	public static final ConfigSetting DEFAULT_PRICES_ANIMALS = new ConfigSetting(config, "default prices.animals", 1.0);
 	public static final ConfigSetting DEFAULT_PRICES_BLOCKS = new ConfigSetting(config, "default prices.blocks", 1.0);

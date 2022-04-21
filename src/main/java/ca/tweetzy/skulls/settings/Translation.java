@@ -35,6 +35,7 @@ public enum Translation {
 	MONSTERS("categories.monsters", "Monsters"),
 	PLANTS("categories.plants", "Plants"),
 
+	GUI_MAIN_TITLE("gui.main.title", "&eSkulls"),
 
 	;
 

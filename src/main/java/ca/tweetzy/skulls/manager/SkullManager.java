@@ -25,8 +25,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -63,7 +61,7 @@ public final class SkullManager implements Manager {
 			}
 
 			this.skulls.addAll(heads);
-			Skulls.getInstance().getDataManager().insertSkulls(heads);
+			Skulls.getDataManager().insertSkulls(heads);
 		});
 	}
 
@@ -129,12 +127,6 @@ public final class SkullManager implements Manager {
 
 		final JsonParser parser = new JsonParser();
 		return (JsonArray) parser.parse(builder.toString());
-	}
-
-	private boolean match(String pattern, String sentence) {
-		final Pattern patt = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
-		final Matcher matcher = patt.matcher(sentence);
-		return matcher.find();
 	}
 
 	private String replace(String in) {

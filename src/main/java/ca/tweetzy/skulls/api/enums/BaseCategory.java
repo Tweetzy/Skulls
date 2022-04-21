@@ -15,18 +15,19 @@ import lombok.Getter;
 @Getter
 public enum BaseCategory {
 
-	ALPHABET("alphabet", Translation.ALPHABET.getString(), Settings.DEFAULT_PRICES_ALPHABET.getDouble()),
-	ANIMALS("animals", Translation.ANIMALS.getString(), Settings.DEFAULT_PRICES_ANIMALS.getDouble()),
-	BLOCKS("blocks", Translation.BLOCKS.getString(), Settings.DEFAULT_PRICES_BLOCKS.getDouble()),
-	DECORATION("decoration", Translation.DECORATION.getString(), Settings.DEFAULT_PRICES_DECORATION.getDouble()),
-	FOOD_AND_DRINKS("food & drinks", Translation.FOOD_AND_DRINKS.getString(), Settings.DEFAULT_PRICES_FOOD_AND_DRINKS.getDouble()),
-	HUMANS("humans", Translation.HUMANS.getString(), Settings.DEFAULT_PRICES_HUMANS.getDouble()),
-	HUMANOID("humanoid", Translation.HUMANOID.getString(), Settings.DEFAULT_PRICES_HUMANOID.getDouble()),
-	MISCELLANEOUS("miscellaneous", Translation.MISC.getString(), Settings.DEFAULT_PRICES_MISC.getDouble()),
-	MONSTERS("monsters", Translation.MONSTERS.getString(), Settings.DEFAULT_PRICES_MONSTERS.getDouble()),
-	PLANTS("plants", Translation.PLANTS.getString(), Settings.DEFAULT_PRICES_PLANTS.getDouble());
+	ALPHABET("alphabet", Translation.ALPHABET.getString(), Settings.DEFAULT_PRICES_ALPHABET.getDouble(), 164),
+	ANIMALS("animals", Translation.ANIMALS.getString(), Settings.DEFAULT_PRICES_ANIMALS.getDouble(), 26960),
+	BLOCKS("blocks", Translation.BLOCKS.getString(), Settings.DEFAULT_PRICES_BLOCKS.getDouble(),24064),
+	DECORATION("decoration", Translation.DECORATION.getString(), Settings.DEFAULT_PRICES_DECORATION.getDouble(),46908),
+	FOOD_AND_DRINKS("food & drinks", Translation.FOOD_AND_DRINKS.getString(), Settings.DEFAULT_PRICES_FOOD_AND_DRINKS.getDouble(),2686),
+	HUMANS("humans", Translation.HUMANS.getString(), Settings.DEFAULT_PRICES_HUMANS.getDouble(),47833),
+	HUMANOID("humanoid", Translation.HUMANOID.getString(), Settings.DEFAULT_PRICES_HUMANOID.getDouble(),46664),
+	MISCELLANEOUS("miscellaneous", Translation.MISC.getString(), Settings.DEFAULT_PRICES_MISC.getDouble(),45534),
+	MONSTERS("monsters", Translation.MONSTERS.getString(), Settings.DEFAULT_PRICES_MONSTERS.getDouble(),47778),
+	PLANTS("plants", Translation.PLANTS.getString(), Settings.DEFAULT_PRICES_PLANTS.getDouble(),44334);
 
 	private final String id;
 	private final String name;
 	private final double defaultPrice;
+	private final int texture;
 }

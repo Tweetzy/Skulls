@@ -32,16 +32,6 @@
             <artifactId>rose</artifactId>
             <version>${rose.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.github.Revxrsal.Lamp</groupId>
-            <artifactId>common</artifactId>
-            <version>2.6</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.Revxrsal.Lamp</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>2.6</version>
-        </dependency>
     </dependencies>
     <build>
         <finalName>${jarName}</finalName>
