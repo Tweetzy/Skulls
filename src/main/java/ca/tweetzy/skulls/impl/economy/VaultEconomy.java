@@ -49,6 +49,5 @@ public final class VaultEconomy implements Economy {
 
 	@Override
 	public void deposit(@NonNull Player player, double amount) {
-		this.economy.depositPlayer(player, amount);
 	}
 }

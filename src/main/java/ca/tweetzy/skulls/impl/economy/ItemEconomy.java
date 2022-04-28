@@ -1,6 +1,8 @@
 package ca.tweetzy.skulls.impl.economy;
 
+import ca.tweetzy.skulls.PlayerInventoryHelper;
 import ca.tweetzy.skulls.api.interfaces.Economy;
+import ca.tweetzy.skulls.settings.Settings;
 import lombok.NonNull;
 import org.bukkit.entity.Player;
 
@@ -24,16 +26,15 @@ public final class ItemEconomy implements Economy {
 
 	@Override
 	public boolean has(@NonNull Player player, double amount) {
-		return false;
+		return PlayerInventoryHelper.getItemCountInPlayerInventory(player, Settings.ITEM_ECONOMY_ITEM.getMaterial().parseItem()) >= (int) amount;
 	}
 
 	@Override
 	public void withdraw(@NonNull Player player, double amount) {
-
+		PlayerInventoryHelper.removeSpecificItemQuantityFromPlayer(player, Settings.ITEM_ECONOMY_ITEM.getMaterial().parseItem(), (int) amount);
 	}
 
 	@Override
 	public void deposit(@NonNull Player player, double amount) {
-
 	}
 }
