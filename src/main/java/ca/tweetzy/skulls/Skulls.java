@@ -13,6 +13,7 @@ import ca.tweetzy.skulls.commands.SearchCommand;
 import ca.tweetzy.skulls.commands.SkullsCommand;
 import ca.tweetzy.skulls.database.DataManager;
 import ca.tweetzy.skulls.database.migrations._1_InitialMigration;
+import ca.tweetzy.skulls.manager.EconomyManager;
 import ca.tweetzy.skulls.manager.SkullManager;
 import ca.tweetzy.skulls.settings.Locale;
 import ca.tweetzy.skulls.settings.Settings;
@@ -30,7 +31,7 @@ public final class Skulls extends RosePlugin {
 	private final CommandManager commandManager = new CommandManager(this);
 
 	private final SkullManager skullManager = new SkullManager();
-
+	private EconomyManager economyManager;
 
 	private DatabaseConnector databaseConnector;
 	private DataManager dataManager;
@@ -61,6 +62,9 @@ public final class Skulls extends RosePlugin {
 		Common.setPrefix(Settings.PREFIX.getString());
 
 		this.skullManager.load();
+		this.economyManager = new EconomyManager();
+		this.economyManager.init();
+
 		this.guiManager.init();
 
 		// command
@@ -85,6 +89,12 @@ public final class Skulls extends RosePlugin {
 	public static SkullManager getSkullManager() {
 		return getInstance().skullManager;
 	}
+
+	// economy manager
+	public static EconomyManager getEconomyManager() {
+		return getInstance().economyManager;
+	}
+
 
 	@Override
 	protected int getBStatsId() {

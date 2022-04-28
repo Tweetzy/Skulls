@@ -16,8 +16,10 @@ public final class Settings {
 	static final YamlFile config = Skulls.getInstance().getCoreConfig();
 
 	public static final ConfigSetting LANG = new ConfigSetting(config, "language", "english", "Default language file");
-	public static final ConfigSetting PREFIX = new ConfigSetting(config, "prefix", "<GRADIENT:DD5E89>&lSkulls</GRADIENT:fbc7d4>", "Prefix to be used in chat");
+	public static final ConfigSetting PREFIX = new ConfigSetting(config, "prefix", "<GRADIENT:DD5E89>&lSkulls</GRADIENT:fbc7d4>&r", "Prefix to be used in chat");
 	public static final ConfigSetting CHARGE_FOR_HEADS = new ConfigSetting(config, "charge for heads", true, "Should skulls charge users without permission for heads?");
+	public static final ConfigSetting ECONOMY = new ConfigSetting(config, "economy", "Vault", "You can use Vault or Item");
+
 
 	/*
 	==================== GUI END ====================

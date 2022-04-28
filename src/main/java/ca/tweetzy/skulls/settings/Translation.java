@@ -24,6 +24,7 @@ public enum Translation {
 	MISC_IS_FALSE("misc.is false", "&cFalse"),
 	MISC_IS_ALLOWED("misc.is allowed", "&aAllowed"),
 	MISC_IS_DISALLOWED("misc.is disallowed", "&cDisallowed"),
+	NOT_ENOUGH_MONEY("misc.not enough money", "&cYou do not have enough money!"),
 
 	ALPHABET("categories.alphabet", "Alphabet"),
 	ANIMALS("categories.animals", "Animals"),
@@ -47,10 +48,10 @@ public enum Translation {
 			"&e&lClick &8» &7To view category"
 	)),
 
-	GUI_SKULLS_LIST_TITLE_CATEGORY("gui.skulls list.title.category", "&eSkulls &8> &7%category_name%"),
-	GUI_SKULLS_LIST_TITLE_FAVOURITES("gui.skulls list.title.favourites", "&eSkulls &8> &7Favourites"),
-	GUI_SKULLS_LIST_TITLE_SEARCH("gui.skulls list.title.search", "&eSkulls &8> &7%search_phrase%"),
-	GUI_SKULLS_LIST_TITLE_ALL("gui.skulls list.title.all", "&eSkulls &8> &7All"),
+	GUI_SKULLS_LIST_TITLE_CATEGORY("gui.skulls list.title.category", "&eSkulls &8> &7%category_name% &8> &7%current_page%"),
+	GUI_SKULLS_LIST_TITLE_FAVOURITES("gui.skulls list.title.favourites", "&eSkulls &8> &7Favourites &8> &7%current_page%"),
+	GUI_SKULLS_LIST_TITLE_SEARCH("gui.skulls list.title.search", "&eSkulls &8> &7%search_phrase% &8> &7%current_page%"),
+	GUI_SKULLS_LIST_TITLE_ALL("gui.skulls list.title.all", "&eSkulls &8> &7All &8> &7%current_page%"),
 
 	GUI_SKULLS_LIST_ITEMS_SKULL_NAME("gui.skulls list.items.skull.name", "&e%skull_name%"),
 

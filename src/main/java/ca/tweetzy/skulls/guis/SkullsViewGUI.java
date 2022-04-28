@@ -3,13 +3,17 @@ package ca.tweetzy.skulls.guis;
 import ca.tweetzy.rose.gui.Gui;
 import ca.tweetzy.rose.gui.events.GuiClickEvent;
 import ca.tweetzy.rose.gui.template.PagedGUI;
+import ca.tweetzy.rose.utils.Common;
 import ca.tweetzy.rose.utils.QuickItem;
+import ca.tweetzy.rose.utils.Replacer;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.enums.ViewMode;
 import ca.tweetzy.skulls.api.interfaces.Skull;
 import ca.tweetzy.skulls.impl.SkullPlayer;
+import ca.tweetzy.skulls.settings.Locale;
 import ca.tweetzy.skulls.settings.Settings;
 import ca.tweetzy.skulls.settings.Translation;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
@@ -23,6 +27,7 @@ public final class SkullsViewGUI extends PagedGUI<Skull> {
 
 	private SkullPlayer skullPlayer;
 	private final ViewMode viewMode;
+	private final String category;
 
 	public SkullsViewGUI(Gui parent, SkullPlayer skullPlayer, String category, ViewMode viewMode) {
 		super(
@@ -32,6 +37,7 @@ public final class SkullsViewGUI extends PagedGUI<Skull> {
 				viewMode == ViewMode.SEARCH ? Skulls.getSkullManager().getSkullsBySearch(category) : Skulls.getSkullManager().getSkulls(category)
 		);
 
+		this.category = category;
 		this.viewMode = viewMode;
 		this.skullPlayer = skullPlayer;
 		draw();
@@ -56,14 +62,37 @@ public final class SkullsViewGUI extends PagedGUI<Skull> {
 
 	@Override
 	protected void onClick(Skull skull, GuiClickEvent event) {
+		final Player player = event.player;
+
 		if (event.clickType == ClickType.LEFT) {
 			if (!Settings.CHARGE_FOR_HEADS.getBoolean()) {
-				event.player.getInventory().addItem(skull.getItemStack());
+				player.getInventory().addItem(skull.getItemStack());
+				return;
 			}
 
-			//
-			event.player.getInventory().addItem(skull.getItemStack());
+			final double price = player.hasPermission("skulls.freeskulls") ? 0 : skull.getPrice();
 
+			if (price <= 0) {
+				player.getInventory().addItem(skull.getItemStack());
+				return;
+			}
+
+			if (!Skulls.getEconomyManager().has(player, price)) {
+				Locale.tell(player, Translation.NOT_ENOUGH_MONEY.getKey());
+				return;
+			}
+
+			Skulls.getEconomyManager().withdraw(player, price);
+			player.getInventory().addItem(skull.getItemStack());
 		}
+	}
+
+	@Override
+	protected void handleTitle() {
+		setTitle(Replacer.replaceVariables(getTitle(this.viewMode, this.category), "current_page", this.page, "total_pages", this.pages));
+	}
+
+	private String getTitle(ViewMode viewMode, String category) {
+		return viewMode == ViewMode.SEARCH ? Translation.GUI_SKULLS_LIST_TITLE_SEARCH.getString("search_phrase", category) : Translation.GUI_SKULLS_LIST_TITLE_CATEGORY.getString("category_name", category);
 	}
 }
