@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author Kiran Hart
  */
-public interface Skull {
+public interface Skull extends DataSync {
 
 	/**
 	 * The id of the skull, this is a unique number that can
@@ -58,9 +58,14 @@ public interface Skull {
 	 */
 	double getPrice();
 
-	void setBlocked(boolean blocked);
 
 	boolean isBlocked();
+
+	void setName(String name);
+
+	void setPrice(double price);
+
+	void setBlocked(boolean blocked);
 
 	/**
 	 * Get the actual {@link ItemStack} of this skull

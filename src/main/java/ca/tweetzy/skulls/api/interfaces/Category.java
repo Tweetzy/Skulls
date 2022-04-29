@@ -8,7 +8,7 @@ import java.util.List;
  *
  * @author Kiran Hart
  */
-public interface Category {
+public interface Category extends DataSync {
 
 	/**
 	 * The id of this particular category
