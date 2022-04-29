@@ -32,7 +32,7 @@ public final class SearchCommand extends Command {
 		final StringBuilder builder = new StringBuilder();
 		for (String arg : args) builder.append(" ").append(arg);
 
-		Skulls.getGuiManager().showGUI(player, new SkullsViewGUI(null, null, builder.toString().trim(), ViewMode.SEARCH));
+		Skulls.getGuiManager().showGUI(player, new SkullsViewGUI(null, Skulls.getPlayerManager().findPlayer(player), builder.toString().trim(), ViewMode.SEARCH));
 
 		return ReturnType.SUCCESS;
 	}
