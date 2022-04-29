@@ -25,6 +25,7 @@ public enum Translation {
 	MISC_IS_ALLOWED("misc.is allowed", "&aAllowed"),
 	MISC_IS_DISALLOWED("misc.is disallowed", "&cDisallowed"),
 	NOT_ENOUGH_MONEY("misc.not enough money", "&cYou do not have enough money!"),
+	NOT_A_NUMBER("misc.not a number", "&cThat is not a valid number"),
 
 	ALPHABET("categories.alphabet", "Alphabet"),
 	ANIMALS("categories.animals", "Animals"),
@@ -37,7 +38,24 @@ public enum Translation {
 	MONSTERS("categories.monsters", "Monsters"),
 	PLANTS("categories.plants", "Plants"),
 
+	INPUT_SKULL_EDIT_TITLE("input.skull edit.title", "&eEditing Skull"),
+	INPUT_SKULL_EDIT_NAME("input.skull edit.name", "&FEnter the new name skull name"),
+	INPUT_SKULL_EDIT_PRICE("input.skull edit.price", "&fEnter the new skull price"),
+
+
 	// GUIS
+	GUI_EDIT_TITLE("gui.edit.title", "&eSkulls &8> &7Edit &8> &7%skull_id%"),
+	GUI_EDIT_ITEMS_NAME_NAME("gui.edit.items.name.name", "<GRADIENT:DD5E89>&lSkull Name</GRADIENT:fbc7d4>"),
+	GUI_EDIT_ITEMS_NAME_LORE("gui.edit.items.name.lore", Arrays.asList("", "&e&lClick &8» &7To change skull name")),
+
+	GUI_EDIT_ITEMS_PRICE_NAME("gui.edit.items.price.name", "<GRADIENT:DD5E89>&lSkull Price</GRADIENT:fbc7d4>"),
+	GUI_EDIT_ITEMS_PRICE_LORE("gui.edit.items.price.lore", Arrays.asList("", "&e&lClick &8» &7To edit skull price")),
+
+	GUI_EDIT_ITEMS_ADD_CATEGORY_NAME("gui.edit.items.add category.name", "<GRADIENT:DD5E89>&lAdd To Category</GRADIENT:fbc7d4>"),
+	GUI_EDIT_ITEMS_ADD_CATEGORY_LORE("gui.edit.items.add category.lore", Arrays.asList("", "&e&lClick &8» &7To add to another category")),
+
+	GUI_EDIT_ITEMS_BLOCKED_NAME("gui.edit.items.blocked.name", "<GRADIENT:DD5E89>&lSkull Blocked</GRADIENT:fbc7d4>"),
+	GUI_EDIT_ITEMS_BLOCKED_LORE("gui.edit.items.blocked.lore", Arrays.asList("", "&7Blocked&f: %is_true%", "", "&e&lClick &8» &7To toggle block status")),
 
 	GUI_MAIN_TITLE("gui.main.title", "&eSkulls"),
 	GUI_MAIN_ITEMS_CATEGORY_NAME("gui.main.items.category.name", "&e%category_name%"),
@@ -61,6 +79,8 @@ public enum Translation {
 	GUI_SKULLS_LIST_ITEMS_SKULL_LORE_TAKE("gui.skulls list.items.skull.lore.take", "&e&lLeft Click &8» &7To take one"),
 	GUI_SKULLS_LIST_ITEMS_SKULL_LORE_FAVOURITE("gui.skulls list.items.skull.lore.favourite", "&e&lRight Click &8» &7To favourite head"),
 	GUI_SKULLS_LIST_ITEMS_SKULL_LORE_UN_FAVOURITE("gui.skulls list.items.skull.lore.un favourite", "&e&lRight Click &8» &7To unfavourite head"),
+	GUI_SKULLS_LIST_ITEMS_SKULL_LORE_EDIT("gui.skulls list.items.skull.lore.edit", "&b&lPress 1 &8» &7To edit this skull"),
+
 
 	GUI_SKULLS_LIST_ITEMS_SKULL_LORE_FAVOURITED("gui.skulls list.items.skull.lore.favourited", "&e&lFAVOURITED"),
 	GUI_SKULLS_LIST_ITEMS_SKULL_LORE_BLOCKED("gui.skulls list.items.skull.lore.blocked", "&c&oPurchase is blocked"),
