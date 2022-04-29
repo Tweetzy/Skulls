@@ -28,7 +28,7 @@ public final class MainGUI extends BaseGUI {
 					.of(Skulls.getSkullManager().getSkullItem(baseCategory.getTexture()))
 					.name(Translation.GUI_MAIN_ITEMS_CATEGORY_NAME.getString("category_name", baseCategory.getName()))
 					.lore(Translation.GUI_MAIN_ITEMS_CATEGORY_LORE.getList("category_size", Skulls.getSkullManager().getSkullCount(baseCategory.getId())))
-					.make(), click -> click.manager.showGUI(click.player, new SkullsViewGUI(this, null, baseCategory.getId(), ViewMode.LIST)));
+					.make(), click -> click.manager.showGUI(click.player, new SkullsViewGUI(this, Skulls.getPlayerManager().findPlayer(click.player), baseCategory.getId(), ViewMode.LIST)));
 		}
 	}
 }
