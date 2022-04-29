@@ -10,9 +10,11 @@ import java.util.UUID;
  *
  * @author Kiran Hart
  */
-public interface SkullUser {
+public interface SkullUser extends DataSync{
 
 	UUID getUUID();
 
 	List<Integer> getFavourites();
+
+	void toggleFavourite(int skullId);
 }

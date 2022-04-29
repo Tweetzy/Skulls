@@ -1,5 +1,6 @@
 package ca.tweetzy.skulls.impl;
 
+import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.interfaces.SkullUser;
 import lombok.AllArgsConstructor;
 
@@ -26,5 +27,18 @@ public final class SkullPlayer implements SkullUser {
 	@Override
 	public List<Integer> getFavourites() {
 		return this.favourites;
+	}
+
+	@Override
+	public void toggleFavourite(int skullId) {
+		if (this.favourites.contains(skullId))
+			this.favourites.remove(Integer.valueOf(skullId));
+		else
+			this.favourites.add(skullId);
+	}
+
+	@Override
+	public void sync() {
+		Skulls.getDataManager().updatePlayer(this, null);
 	}
 }
