@@ -8,7 +8,9 @@ import ca.tweetzy.rose.utils.Common;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.interfaces.History;
 import ca.tweetzy.skulls.api.interfaces.Skull;
+import ca.tweetzy.skulls.api.interfaces.SkullUser;
 import ca.tweetzy.skulls.impl.InsertHistory;
+import ca.tweetzy.skulls.impl.SkullPlayer;
 import ca.tweetzy.skulls.impl.TexturedSkull;
 import lombok.NonNull;
 import org.bukkit.plugin.Plugin;
@@ -22,6 +24,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -127,6 +130,84 @@ public final class DataManager extends DataManagerAbstract {
 		}));
 	}
 
+	public void getPlayers(Callback<ArrayList<SkullUser>> callback) {
+		ArrayList<SkullUser> skulls = new ArrayList<>();
+		this.runAsync(() -> this.databaseConnector.connect(connection -> {
+			try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + this.getTablePrefix() + "players")) {
+				ResultSet resultSet = statement.executeQuery();
+				while (resultSet.next()) {
+					Common.log(resultSet.getString("uuid"));
+					skulls.add(extractSkullPlayer(resultSet));
+				}
+
+				this.sync(() -> callback.accept(null, skulls));
+			} catch (Exception e) {
+				resolveCallback(callback, e);
+			}
+		}));
+	}
+
+	public void insertPlayer(@NonNull final SkullUser user, Callback<SkullUser> callback) {
+		this.runAsync(() -> this.databaseConnector.connect(connection -> {
+			try (PreparedStatement statement = connection.prepareStatement("INSERT INTO " + this.getTablePrefix() + "players (uuid, favourites) VALUES(?, ?)")) {
+				PreparedStatement fetch = connection.prepareStatement("SELECT * FROM " + this.getTablePrefix() + "players WHERE uuid = ?");
+
+				fetch.setString(1, user.getUUID().toString());
+				statement.setString(1, user.getUUID().toString());
+				statement.setString(2, user.getFavourites().stream().map(String::valueOf).collect(Collectors.joining(",")));
+				statement.executeUpdate();
+
+				if (callback != null) {
+					ResultSet res = fetch.executeQuery();
+					res.next();
+					callback.accept(null, extractSkullPlayer(res));
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				resolveCallback(callback, e);
+			}
+		}));
+	}
+
+	public void updateSkull(@NonNull final Skull skull, Callback<Boolean> callback) {
+		this.runAsync(() -> this.databaseConnector.connect(connection -> {
+			try (PreparedStatement statement = connection.prepareStatement("UPDATE " + this.getTablePrefix() + "skull SET name = ?, price = ?, blocked = ? WHERE id = ?")) {
+
+				statement.setString(1, skull.getName());
+				statement.setDouble(2, skull.getPrice());
+				statement.setBoolean(3, skull.isBlocked());
+				statement.setInt(4, skull.getId());
+
+				int result = statement.executeUpdate();
+
+				if (callback != null)
+					callback.accept(null, result > 0);
+
+			} catch (Exception e) {
+				resolveCallback(callback, e);
+			}
+		}));
+	}
+
+	public void updatePlayer(@NonNull final SkullUser user, Callback<Boolean> callback) {
+		this.runAsync(() -> this.databaseConnector.connect(connection -> {
+			try (PreparedStatement statement = connection.prepareStatement("UPDATE " + this.getTablePrefix() + "players SET favourites = ? WHERE uuid = ?")) {
+
+				statement.setString(1, user.getFavourites().stream().map(String::valueOf).collect(Collectors.joining(",")));
+				statement.setString(2, user.getUUID().toString());
+
+				int result = statement.executeUpdate();
+
+				if (callback != null)
+					callback.accept(null, result > 0);
+
+			} catch (Exception e) {
+				resolveCallback(callback, e);
+			}
+		}));
+	}
+
 	public Skull extractSkull(@NonNull final ResultSet resultSet) throws SQLException {
 		return new TexturedSkull(
 				resultSet.getInt("id"),
@@ -144,6 +225,16 @@ public final class DataManager extends DataManagerAbstract {
 				resultSet.getInt("id"),
 				resultSet.getLong("time"),
 				Arrays.stream(resultSet.getString("skulls").split(",")).map((Integer::parseInt)).collect(Collectors.toList())
+		);
+	}
+
+	public SkullUser extractSkullPlayer(@NonNull final ResultSet resultSet) throws SQLException {
+		final String favs = resultSet.getString("favourites");
+		final String[] split = favs.split(",");
+
+		return new SkullPlayer(
+				UUID.fromString(resultSet.getString("uuid")),
+				favs.length() == 0 || split.length == 0 ? new ArrayList<>() : Arrays.stream(split).map(Integer::parseInt).collect(Collectors.toList())
 		);
 	}
 
