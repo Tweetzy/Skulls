@@ -38,4 +38,9 @@ public final class SkullCategory implements Category {
 	public List<Integer> getSkulls() {
 		return this.skulls;
 	}
+
+	@Override
+	public void sync() {
+
+	}
 }
