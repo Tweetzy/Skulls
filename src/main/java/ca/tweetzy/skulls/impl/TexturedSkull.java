@@ -2,6 +2,7 @@ package ca.tweetzy.skulls.impl;
 
 import ca.tweetzy.rose.comp.NBTEditor;
 import ca.tweetzy.rose.utils.QuickItem;
+import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.interfaces.Skull;
 import lombok.AllArgsConstructor;
 import org.bukkit.inventory.ItemStack;
@@ -18,7 +19,7 @@ import java.util.List;
 public final class TexturedSkull implements Skull {
 
 	private final int id;
-	private final String name;
+	private String name;
 	private final String category;
 	private final List<String> tags;
 	private final String texture;
@@ -66,7 +67,22 @@ public final class TexturedSkull implements Skull {
 	}
 
 	@Override
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
+	@Override
 	public ItemStack getItemStack() {
 		return QuickItem.of(NBTEditor.getHead(this.texture)).name(this.name).make();
+	}
+
+	@Override
+	public void sync() {
+		Skulls.getDataManager().updateSkull(this, null);
 	}
 }
