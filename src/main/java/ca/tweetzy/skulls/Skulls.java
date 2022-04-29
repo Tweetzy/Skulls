@@ -13,7 +13,9 @@ import ca.tweetzy.skulls.commands.SearchCommand;
 import ca.tweetzy.skulls.commands.SkullsCommand;
 import ca.tweetzy.skulls.database.DataManager;
 import ca.tweetzy.skulls.database.migrations._1_InitialMigration;
+import ca.tweetzy.skulls.listeners.PlayerJoinQuitListener;
 import ca.tweetzy.skulls.manager.EconomyManager;
+import ca.tweetzy.skulls.manager.PlayerManager;
 import ca.tweetzy.skulls.manager.SkullManager;
 import ca.tweetzy.skulls.settings.Locale;
 import ca.tweetzy.skulls.settings.Settings;
@@ -31,6 +33,7 @@ public final class Skulls extends RosePlugin {
 	private final CommandManager commandManager = new CommandManager(this);
 
 	private final SkullManager skullManager = new SkullManager();
+	private final PlayerManager playerManager = new PlayerManager();
 	private EconomyManager economyManager;
 
 	private DatabaseConnector databaseConnector;
@@ -62,13 +65,17 @@ public final class Skulls extends RosePlugin {
 		Common.setPrefix(Settings.PREFIX.getString());
 
 		this.skullManager.load();
+		this.playerManager.load();
+
 		this.economyManager = new EconomyManager();
 		this.economyManager.init();
-
 		this.guiManager.init();
 
 		// command
 		this.commandManager.registerCommandDynamically(new SkullsCommand()).addSubCommands(new SearchCommand());
+
+		// events
+		getServer().getPluginManager().registerEvents(new PlayerJoinQuitListener(), this);
 	}
 
 	public static Skulls getInstance() {
@@ -88,6 +95,11 @@ public final class Skulls extends RosePlugin {
 	// skull manager
 	public static SkullManager getSkullManager() {
 		return getInstance().skullManager;
+	}
+
+	// player manager
+	public static PlayerManager getPlayerManager() {
+		return getInstance().playerManager;
 	}
 
 	// economy manager
