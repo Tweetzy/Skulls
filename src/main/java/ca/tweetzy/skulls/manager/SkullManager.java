@@ -83,7 +83,7 @@ public final class SkullManager implements Manager {
 			if (id != -1)
 				return Collections.singletonList(getSkull(id));
 
-			return this.skulls.stream().filter(skull -> Common.match(phrase, skull.getName()) || Common.match(phrase, skull.getCategory()) || skull.getTags().stream().anyMatch(tag -> Common.match(phrase, tag))).collect(Collectors.toList());
+			return this.skulls.stream().filter(skull -> BaseCategory.getById(skull.getCategory()).isEnabled() && (Common.match(phrase, skull.getName()) || Common.match(phrase, skull.getCategory()) || skull.getTags().stream().anyMatch(tag -> Common.match(phrase, tag)))).collect(Collectors.toList());
 		}
 	}
 

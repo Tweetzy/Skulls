@@ -33,9 +33,9 @@ public final class SkullsViewGUI extends PagedGUI<Skull> {
 	public SkullsViewGUI(final Gui parent, final SkullUser skullPlayer, final String category, final ViewMode viewMode) {
 		super(
 				parent,
-				viewMode == ViewMode.SEARCH ? Translation.GUI_SKULLS_LIST_TITLE_SEARCH.getString("search_phrase", category) : Translation.GUI_SKULLS_LIST_TITLE_CATEGORY.getString("category_name", category),
+				viewMode == ViewMode.SEARCH ? Translation.GUI_SKULLS_LIST_TITLE_SEARCH.getString("search_phrase", category) : viewMode == ViewMode.FAVOURITE ? Translation.GUI_SKULLS_LIST_TITLE_FAVOURITES.getString() : Translation.GUI_SKULLS_LIST_TITLE_CATEGORY.getString("category_name", category),
 				6,
-				viewMode == ViewMode.SEARCH ? Skulls.getSkullManager().getSkullsBySearch(category) : Skulls.getSkullManager().getSkulls(category)
+				viewMode == ViewMode.SEARCH ? Skulls.getSkullManager().getSkullsBySearch(category) : viewMode == ViewMode.FAVOURITE ? Skulls.getSkullManager().getSkulls(skullPlayer.getFavourites()) : Skulls.getSkullManager().getSkulls(category)
 		);
 
 		this.category = category;
@@ -109,7 +109,11 @@ public final class SkullsViewGUI extends PagedGUI<Skull> {
 		if (event.clickType == ClickType.RIGHT && player.hasPermission("skulls.favourite")) {
 			this.skullPlayer.toggleFavourite(skull.getId());
 			this.skullPlayer.sync();
-			draw();
+
+			if (this.viewMode == ViewMode.FAVOURITE)
+				event.manager.showGUI(event.player, new SkullsViewGUI(this.parent, this.skullPlayer, "", ViewMode.FAVOURITE));
+			else
+				draw();
 		}
 
 		if (event.clickType == ClickType.NUMBER_KEY && player.hasPermission("skulls.admin")) {
@@ -123,6 +127,9 @@ public final class SkullsViewGUI extends PagedGUI<Skull> {
 	}
 
 	private String getTitle(ViewMode viewMode, String category) {
-		return viewMode == ViewMode.SEARCH ? Translation.GUI_SKULLS_LIST_TITLE_SEARCH.getString("search_phrase", category) : Translation.GUI_SKULLS_LIST_TITLE_CATEGORY.getString("category_name", category);
+		return viewMode == ViewMode.SEARCH ?
+				Translation.GUI_SKULLS_LIST_TITLE_SEARCH.getString("search_phrase", category)
+				: viewMode == ViewMode.FAVOURITE ? Translation.GUI_SKULLS_LIST_TITLE_FAVOURITES.getString()
+				: Translation.GUI_SKULLS_LIST_TITLE_CATEGORY.getString("category_name", category);
 	}
 }

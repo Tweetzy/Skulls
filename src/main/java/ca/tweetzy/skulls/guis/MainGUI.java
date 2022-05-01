@@ -3,6 +3,7 @@ package ca.tweetzy.skulls.guis;
 import ca.tweetzy.rose.gui.template.BaseGUI;
 import ca.tweetzy.rose.utils.Common;
 import ca.tweetzy.rose.utils.QuickItem;
+import ca.tweetzy.skulls.SkullItem;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.enums.BaseCategory;
 import ca.tweetzy.skulls.api.enums.ViewMode;
@@ -40,5 +41,17 @@ public final class MainGUI extends BaseGUI {
 				click.manager.showGUI(click.player, new SkullsViewGUI(this, Skulls.getPlayerManager().findPlayer(click.player), baseCategory.getId(), ViewMode.LIST));
 			});
 		}
+
+		setButton(4, 4, QuickItem.of(SkullItem.get("skulls:5650"))
+				.name(Translation.GUI_MAIN_ITEMS_SEARCH_NAME.getString())
+				.lore(Translation.GUI_MAIN_ITEMS_SEARCH_LORE.getList())
+				.make(), click -> {
+
+		});
+
+		setButton(4, 6, QuickItem.of(SkullItem.get("skulls:39696"))
+				.name(Translation.GUI_MAIN_ITEMS_FAVOURITES_NAME.getString())
+				.lore(Translation.GUI_MAIN_ITEMS_FAVOURITES_LORE.getList())
+				.make(), click -> click.manager.showGUI(click.player, new SkullsViewGUI(this, Skulls.getPlayerManager().findPlayer(click.player), "", ViewMode.FAVOURITE)));
 	}
 }

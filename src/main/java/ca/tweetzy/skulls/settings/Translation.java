@@ -58,6 +58,20 @@ public enum Translation {
 	GUI_EDIT_ITEMS_BLOCKED_NAME("gui.edit.items.blocked.name", "<GRADIENT:DD5E89>&lSkull Blocked</GRADIENT:fbc7d4>"),
 	GUI_EDIT_ITEMS_BLOCKED_LORE("gui.edit.items.blocked.lore", Arrays.asList("", "&7Blocked&f: %is_true%", "", "&e&lClick &8» &7To toggle block status")),
 
+	GUI_MAIN_ITEMS_FAVOURITES_NAME("gui.main.items.favourites.name", "<GRADIENT:DD5E89>&lFavourites</GRADIENT:fbc7d4>"),
+	GUI_MAIN_ITEMS_FAVOURITES_LORE("gui.main.items.favourites.lore", Arrays.asList(
+			"&7A collection of every single head",
+			"&7that you have favourited.",
+			"",
+			"&e&lClick &8» &7To view your favourites"
+	)),
+
+	GUI_MAIN_ITEMS_SEARCH_NAME("gui.main.items.search.name", "<GRADIENT:DD5E89>&lSearch</GRADIENT:fbc7d4>"),
+	GUI_MAIN_ITEMS_SEARCH_LORE("gui.main.items.search.lore", Arrays.asList(
+			"",
+			"&e&lClick &8» &7To search for heads"
+	)),
+
 	GUI_MAIN_TITLE("gui.main.title", "&eSkulls"),
 	GUI_MAIN_ITEMS_CATEGORY_NAME("gui.main.items.category.name", "&e%category_name%"),
 	GUI_MAIN_ITEMS_CATEGORY_LORE("gui.main.items.category.lore", Arrays.asList(
