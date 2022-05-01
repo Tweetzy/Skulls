@@ -3,6 +3,7 @@ package ca.tweetzy.skulls.guis;
 import ca.tweetzy.rose.gui.template.BaseGUI;
 import ca.tweetzy.rose.utils.Common;
 import ca.tweetzy.rose.utils.QuickItem;
+import ca.tweetzy.rose.utils.input.TitleInput;
 import ca.tweetzy.skulls.SkullItem;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.enums.BaseCategory;
@@ -45,8 +46,14 @@ public final class MainGUI extends BaseGUI {
 		setButton(4, 4, QuickItem.of(SkullItem.get("skulls:5650"))
 				.name(Translation.GUI_MAIN_ITEMS_SEARCH_NAME.getString())
 				.lore(Translation.GUI_MAIN_ITEMS_SEARCH_LORE.getList())
-				.make(), click -> {
+				.make(), click -> new TitleInput(click.player, Translation.INPUT_SKULL_SEARCH_TITLE.getString(), Translation.INPUT_SKULL_SEARCH_SUBTITLE.getString()) {
 
+			@Override
+			public boolean onResult(String string) {
+				if (string.matches("[\\\\^$.|?*+(){}]")) return false;
+				Skulls.getGuiManager().showGUI(click.player, new SkullsViewGUI(MainGUI.this, Skulls.getPlayerManager().findPlayer(click.player), string.trim(), ViewMode.SEARCH));
+				return true;
+			}
 		});
 
 		setButton(4, 6, QuickItem.of(SkullItem.get("skulls:39696"))

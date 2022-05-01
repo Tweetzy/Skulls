@@ -43,6 +43,9 @@ public enum Translation {
 	INPUT_SKULL_EDIT_NAME("input.skull edit.name", "&FEnter the new name skull name"),
 	INPUT_SKULL_EDIT_PRICE("input.skull edit.price", "&fEnter the new skull price"),
 
+	INPUT_SKULL_SEARCH_TITLE("input.skull search.title", "&eSkull Search"),
+	INPUT_SKULL_SEARCH_SUBTITLE("input.skull search.subtitle", "&fEnter search terms into chat"),
+
 
 	// GUIS
 	GUI_EDIT_TITLE("gui.edit.title", "&eSkulls &8> &7Edit &8> &7%skull_id%"),
