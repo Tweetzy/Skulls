@@ -22,6 +22,16 @@ public final class Settings {
 	public static final ConfigSetting ECONOMY = new ConfigSetting(config, "economy", "Vault", "You can use Vault or Item");
 	public static final ConfigSetting ITEM_ECONOMY_ITEM = new ConfigSetting(config, "item economy item", CompMaterial.GOLD_INGOT.name());
 
+	public static final ConfigSetting CATEGORIES_ALPHABET_ENABLED = new ConfigSetting(config, "enabled categories.alphabet", true);
+	public static final ConfigSetting CATEGORIES_ANIMALS_ENABLED = new ConfigSetting(config, "enabled categories.animals", true);
+	public static final ConfigSetting CATEGORIES_BLOCKS_ENABLED = new ConfigSetting(config, "enabled categories.blocks", true);
+	public static final ConfigSetting CATEGORIES_DECORATION_ENABLED = new ConfigSetting(config, "enabled categories.decoration", true);
+	public static final ConfigSetting CATEGORIES_FOOD_AND_DRINKS_ENABLED = new ConfigSetting(config, "enabled categories.food and drinks", true);
+	public static final ConfigSetting CATEGORIES_HUMANS_ENABLED = new ConfigSetting(config, "enabled categories.humans", true);
+	public static final ConfigSetting CATEGORIES_HUMANOID_ENABLED = new ConfigSetting(config, "enabled categories.humanoids", true);
+	public static final ConfigSetting CATEGORIES_MISC_ENABLED = new ConfigSetting(config, "enabled categories.misc", true);
+	public static final ConfigSetting CATEGORIES_MONSTERS_ENABLED = new ConfigSetting(config, "enabled categories.monsters", true);
+	public static final ConfigSetting CATEGORIES_PLANTS_ENABLED = new ConfigSetting(config, "enabled categories.plants", true);
 
 	/*
 	==================== GUI END ====================

@@ -1,6 +1,7 @@
 package ca.tweetzy.skulls.guis;
 
 import ca.tweetzy.rose.gui.template.BaseGUI;
+import ca.tweetzy.rose.utils.Common;
 import ca.tweetzy.rose.utils.QuickItem;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.enums.BaseCategory;
@@ -24,11 +25,20 @@ public final class MainGUI extends BaseGUI {
 	protected void draw() {
 
 		for (BaseCategory baseCategory : BaseCategory.values()) {
+			if (!baseCategory.isEnabled()) continue;
 			setButton(baseCategory.getSlot(), QuickItem
 					.of(Skulls.getSkullManager().getSkullItem(baseCategory.getTexture()))
 					.name(Translation.GUI_MAIN_ITEMS_CATEGORY_NAME.getString("category_name", baseCategory.getName()))
 					.lore(Translation.GUI_MAIN_ITEMS_CATEGORY_LORE.getList("category_size", Skulls.getSkullManager().getSkullCount(baseCategory.getId())))
-					.make(), click -> click.manager.showGUI(click.player, new SkullsViewGUI(this, Skulls.getPlayerManager().findPlayer(click.player), baseCategory.getId(), ViewMode.LIST)));
+					.make(), click -> {
+
+				if (!click.player.hasPermission("skulls.category." + baseCategory.getId().toLowerCase())) {
+					Common.tell(click.player, Translation.CATEGORY_PERMISSION.getKey());
+					return;
+				}
+
+				click.manager.showGUI(click.player, new SkullsViewGUI(this, Skulls.getPlayerManager().findPlayer(click.player), baseCategory.getId(), ViewMode.LIST));
+			});
 		}
 	}
 }
