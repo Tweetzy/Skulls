@@ -27,6 +27,7 @@ public enum Translation {
 	NOT_ENOUGH_MONEY("misc.not enough money", "&cYou do not have enough money!"),
 	NOT_A_NUMBER("misc.not a number", "&cThat is not a valid number"),
 	CATEGORY_PERMISSION("misc.category permission", "&cYou do not have permission to access that category!"),
+	PLAYER_OFFLINE("misc.player not found", "&cThe player &4%player% &cis not online!"),
 
 	ALPHABET("categories.alphabet", "Alphabet"),
 	ANIMALS("categories.animals", "Animals"),

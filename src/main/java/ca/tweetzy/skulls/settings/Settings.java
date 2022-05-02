@@ -33,6 +33,8 @@ public final class Settings {
 	public static final ConfigSetting CATEGORIES_MONSTERS_ENABLED = new ConfigSetting(config, "enabled categories.monsters", true);
 	public static final ConfigSetting CATEGORIES_PLANTS_ENABLED = new ConfigSetting(config, "enabled categories.plants", true);
 
+	public static final ConfigSetting PLAYER_HEAD_NAME = new ConfigSetting(config, "player head name", "&e%player_name%");
+
 	/*
 	==================== GUI END ====================
 	 */

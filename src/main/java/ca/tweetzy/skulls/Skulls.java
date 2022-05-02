@@ -9,6 +9,7 @@ import ca.tweetzy.rose.database.DatabaseConnector;
 import ca.tweetzy.rose.database.SQLiteConnector;
 import ca.tweetzy.rose.gui.GuiManager;
 import ca.tweetzy.rose.utils.Common;
+import ca.tweetzy.skulls.commands.PlayerHeadCommand;
 import ca.tweetzy.skulls.commands.SearchCommand;
 import ca.tweetzy.skulls.commands.SkullsCommand;
 import ca.tweetzy.skulls.database.DataManager;
@@ -72,7 +73,7 @@ public final class Skulls extends RosePlugin {
 		this.guiManager.init();
 
 		// command
-		this.commandManager.registerCommandDynamically(new SkullsCommand()).addSubCommands(new SearchCommand());
+		this.commandManager.registerCommandDynamically(new SkullsCommand()).addSubCommands(new SearchCommand(), new PlayerHeadCommand());
 
 		// events
 		getServer().getPluginManager().registerEvents(new PlayerJoinQuitListener(), this);
