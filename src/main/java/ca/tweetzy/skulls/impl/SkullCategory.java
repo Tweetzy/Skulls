@@ -1,5 +1,6 @@
 package ca.tweetzy.skulls.impl;
 
+import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.interfaces.Category;
 import lombok.AllArgsConstructor;
 
@@ -41,6 +42,6 @@ public final class SkullCategory implements Category {
 
 	@Override
 	public void sync() {
-
+		Skulls.getDataManager().updateCategory(this, null);
 	}
 }

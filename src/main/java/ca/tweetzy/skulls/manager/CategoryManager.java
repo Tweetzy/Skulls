@@ -1,13 +1,17 @@
 package ca.tweetzy.skulls.manager;
 
+import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.enums.BaseCategory;
 import ca.tweetzy.skulls.api.interfaces.Category;
 import ca.tweetzy.skulls.impl.SkullCategory;
 import lombok.NonNull;
+import org.bukkit.entity.Cat;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * Date Created: April 04 2022
@@ -31,6 +35,10 @@ public final class CategoryManager implements Manager {
 		return this.categories.getOrDefault(id, null);
 	}
 
+	public List<Category> getCustomCategories() {
+		return this.categories.values().stream().filter(Category::isCustom).collect(Collectors.toList());
+	}
+
 	@Override
 	public void load() {
 		this.categories.clear();
@@ -40,5 +48,9 @@ public final class CategoryManager implements Manager {
 			this.categories.put(value.getId(), new SkullCategory(value.getId(), value.getName(), false, Collections.emptyList()));
 		}
 
+		Skulls.getDataManager().getCategories((ex, result) -> {
+			if (ex == null)
+				result.forEach(this::addCategory);
+		});
 	}
 }

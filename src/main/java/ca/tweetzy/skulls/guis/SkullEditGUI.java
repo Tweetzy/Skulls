@@ -72,7 +72,15 @@ public final class SkullEditGUI extends BaseGUI {
 		setButton(3, 5, QuickItem.of(CompMaterial.BOOKSHELF)
 				.name(Translation.GUI_EDIT_ITEMS_ADD_CATEGORY_NAME.getString())
 				.lore(Translation.GUI_EDIT_ITEMS_ADD_CATEGORY_LORE.getList())
-				.make(), click -> {});
+				.make(), click -> click.manager.showGUI(click.player, new CategorySelectorGUI(selected -> {
+
+					if (!selected.getSkulls().contains(skull.getId())) {
+						selected.getSkulls().add(skull.getId());
+						selected.sync();
+					}
+
+					click.manager.showGUI(click.player, this);
+		})));
 
 		setButton(3, 7, QuickItem.of(this.skull.isBlocked() ? CompMaterial.RED_STAINED_GLASS_PANE : CompMaterial.LIME_STAINED_GLASS_PANE)
 				.name(Translation.GUI_EDIT_ITEMS_BLOCKED_NAME.getString())

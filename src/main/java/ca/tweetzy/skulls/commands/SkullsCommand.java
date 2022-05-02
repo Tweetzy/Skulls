@@ -27,7 +27,7 @@ public final class SkullsCommand extends Command {
 		if (commandSender instanceof Player) {
 			final Player player = (Player) commandSender;
 
-			Skulls.getGuiManager().showGUI(player, new MainGUI());
+			Skulls.getGuiManager().showGUI(player, new MainGUI(player));
 		}
 
 		return ReturnType.SUCCESS;

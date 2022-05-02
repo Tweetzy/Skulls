@@ -6,10 +6,12 @@ import ca.tweetzy.rose.database.DatabaseConnector;
 import ca.tweetzy.rose.database.UpdateCallback;
 import ca.tweetzy.rose.utils.Common;
 import ca.tweetzy.skulls.Skulls;
+import ca.tweetzy.skulls.api.interfaces.Category;
 import ca.tweetzy.skulls.api.interfaces.History;
 import ca.tweetzy.skulls.api.interfaces.Skull;
 import ca.tweetzy.skulls.api.interfaces.SkullUser;
 import ca.tweetzy.skulls.impl.InsertHistory;
+import ca.tweetzy.skulls.impl.SkullCategory;
 import ca.tweetzy.skulls.impl.SkullPlayer;
 import ca.tweetzy.skulls.impl.TexturedSkull;
 import lombok.NonNull;
@@ -130,6 +132,22 @@ public final class DataManager extends DataManagerAbstract {
 		}));
 	}
 
+	public void getCategories(Callback<ArrayList<Category>> callback) {
+		ArrayList<Category> categories = new ArrayList<>();
+		this.runAsync(() -> this.databaseConnector.connect(connection -> {
+			try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + this.getTablePrefix() + "categories")) {
+				ResultSet resultSet = statement.executeQuery();
+				while (resultSet.next()) {
+					categories.add(extractCategory(resultSet));
+				}
+
+				callback.accept(null, categories);
+			} catch (Exception e) {
+				resolveCallback(callback, e);
+			}
+		}));
+	}
+
 	public void getPlayers(Callback<ArrayList<SkullUser>> callback) {
 		ArrayList<SkullUser> skulls = new ArrayList<>();
 		this.runAsync(() -> this.databaseConnector.connect(connection -> {
@@ -165,6 +183,49 @@ public final class DataManager extends DataManagerAbstract {
 
 			} catch (Exception e) {
 				e.printStackTrace();
+				resolveCallback(callback, e);
+			}
+		}));
+	}
+
+	public void insertCategory(@NonNull final Category category, Callback<Category> callback) {
+		this.runAsync(() -> this.databaseConnector.connect(connection -> {
+			try (PreparedStatement statement = connection.prepareStatement("INSERT INTO " + this.getTablePrefix() + "categories (id, name, skulls) VALUES(?, ?, ?)")) {
+				PreparedStatement fetch = connection.prepareStatement("SELECT * FROM " + this.getTablePrefix() + "categories WHERE id = ?");
+
+				fetch.setString(1, category.getId());
+				statement.setString(1, category.getId());
+				statement.setString(2, category.getName());
+				statement.setString(3, category.getSkulls().stream().map(String::valueOf).collect(Collectors.joining(",")));
+				statement.executeUpdate();
+
+				if (callback != null) {
+					ResultSet res = fetch.executeQuery();
+					res.next();
+					callback.accept(null, extractCategory(res));
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				resolveCallback(callback, e);
+			}
+		}));
+	}
+
+	public void updateCategory(@NonNull final Category category, Callback<Boolean> callback) {
+		this.runAsync(() -> this.databaseConnector.connect(connection -> {
+			try (PreparedStatement statement = connection.prepareStatement("UPDATE " + this.getTablePrefix() + "categories SET name = ?, skulls = ? WHERE id = ?")) {
+
+				statement.setString(1, category.getName());
+				statement.setString(2, category.getSkulls().stream().map(String::valueOf).collect(Collectors.joining(",")));
+				statement.setString(3, category.getId());
+
+				int result = statement.executeUpdate();
+
+				if (callback != null)
+					callback.accept(null, result > 0);
+
+			} catch (Exception e) {
 				resolveCallback(callback, e);
 			}
 		}));
@@ -217,6 +278,18 @@ public final class DataManager extends DataManagerAbstract {
 				resultSet.getString("texture"),
 				resultSet.getDouble("price"),
 				resultSet.getBoolean("blocked")
+		);
+	}
+
+	public Category extractCategory(@NonNull final ResultSet resultSet) throws SQLException {
+		final String skulls = resultSet.getString("skulls");
+		final String[] split = skulls.split(",");
+
+		return new SkullCategory(
+				resultSet.getString("id"),
+				resultSet.getString("name"),
+				true,
+				skulls.length() == 0 || split.length == 0 ? new ArrayList<>() : Arrays.stream(split).map(Integer::parseInt).collect(Collectors.toList())
 		);
 	}
 

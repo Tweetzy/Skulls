@@ -15,6 +15,7 @@ import ca.tweetzy.skulls.commands.SkullsCommand;
 import ca.tweetzy.skulls.database.DataManager;
 import ca.tweetzy.skulls.database.migrations._1_InitialMigration;
 import ca.tweetzy.skulls.listeners.PlayerJoinQuitListener;
+import ca.tweetzy.skulls.manager.CategoryManager;
 import ca.tweetzy.skulls.manager.EconomyManager;
 import ca.tweetzy.skulls.manager.PlayerManager;
 import ca.tweetzy.skulls.manager.SkullManager;
@@ -34,6 +35,7 @@ public final class Skulls extends RosePlugin {
 	private final CommandManager commandManager = new CommandManager(this);
 
 	private final SkullManager skullManager = new SkullManager();
+	private final CategoryManager categoryManager = new CategoryManager();
 	private final PlayerManager playerManager = new PlayerManager();
 	private EconomyManager economyManager;
 
@@ -67,6 +69,7 @@ public final class Skulls extends RosePlugin {
 
 		this.skullManager.load();
 		this.playerManager.load();
+		this.categoryManager.load();
 
 		this.economyManager = new EconomyManager();
 		this.economyManager.init();
@@ -96,6 +99,11 @@ public final class Skulls extends RosePlugin {
 	// skull manager
 	public static SkullManager getSkullManager() {
 		return getInstance().skullManager;
+	}
+
+	// category manager
+	public static CategoryManager getCategoryManager() {
+		return getInstance().categoryManager;
 	}
 
 	// player manager

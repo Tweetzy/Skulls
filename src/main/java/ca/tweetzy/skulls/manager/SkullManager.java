@@ -67,7 +67,11 @@ public final class SkullManager implements Manager {
 
 	public List<Skull> getSkulls(String category) {
 		synchronized (this.skulls) {
-			return this.skulls.stream().filter(skull -> skull.getCategory().equalsIgnoreCase(category)).collect(Collectors.toList());
+			if (BaseCategory.getById(category) != null)
+
+				return this.skulls.stream().filter(skull -> skull.getCategory().equalsIgnoreCase(category)).collect(Collectors.toList());
+
+			return this.skulls.stream().filter(skull -> Skulls.getCategoryManager().findCategory(category).getSkulls().contains(skull.getId())).collect(Collectors.toList());
 		}
 	}
 
