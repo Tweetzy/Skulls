@@ -55,6 +55,17 @@ public enum Translation {
 
 
 	// GUIS
+	GUI_HISTORIES_TITLE("gui.histories.title", "&eSkulls &8> &7Histories"),
+	GUI_HISTORIES_ITEMS_HISTORY_NAME("gui.histories.items.history.name", "&e%history_id%"),
+	GUI_HISTORIES_ITEMS_HISTORY_LORE("gui.histories.items.history.lore", Arrays.asList(
+			"",
+			"&7Total Heads&f: &a%history_size%",
+			"&7Downloaded&f: %is_true%",
+			"&7Time&f: &a%history_time%",
+			"",
+			"&e&lClick &8» &7To download heads"
+	)),
+
 	GUI_CUSTOM_CATEGORY_SELECTOR_TITLE("gui.custom category selector.title", "&eSkulls &8> &7Select Category"),
 	GUI_CUSTOM_CATEGORY_SELECTOR_ITEMS_CATEGORY_NAME("gui.custom category selector.items.category.name", "%category_name%"),
 	GUI_CUSTOM_CATEGORY_SELECTOR_ITEMS_CATEGORY_LORE("gui.custom category selector.items.category.lore", Collections.singletonList(

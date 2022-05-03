@@ -84,9 +84,7 @@ public final class MainGUI extends BaseGUI {
 							"",
 							"&e&lClick &8» &7To view settings"
 					)
-					.make(), click -> {
-
-			});
+					.make(), click -> click.manager.showGUI(click.player, new HistoryViewGUI(this)));
 
 			setButton(5, 8, QuickItem.of(CompMaterial.DIAMOND)
 					.name("&e&lPatreon")

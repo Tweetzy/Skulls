@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -52,6 +53,9 @@ public final class SkullManager implements Manager {
 
 	@Getter
 	private final List<History> histories = Collections.synchronizedList(new ArrayList<>());
+
+	@Getter
+	private final List<Integer> idList = Collections.synchronizedList(new ArrayList<>());
 
 	public Skull getSkull(final int id) {
 		synchronized (this.skulls) {
@@ -126,6 +130,7 @@ public final class SkullManager implements Manager {
 			}
 
 			this.skulls.addAll(heads);
+			this.idList.addAll(heads.stream().map(Skull::getId).collect(Collectors.toList()));
 			Skulls.getDataManager().insertSkulls(heads);
 		});
 	}
@@ -157,7 +162,7 @@ public final class SkullManager implements Manager {
 			final JsonArray json = getJsonFromUrl(String.format("https://rose.tweetzy.ca/minecraft/skulls?category=%s", category.name().replace("AND", "&").toUpperCase().replace("_", "%20")));
 			json.forEach(jsonElement -> {
 				final JsonObject jsonObject = jsonElement.getAsJsonObject();
-				heads.add(new TexturedSkull(
+				final Skull head = new TexturedSkull(
 						Integer.parseInt(replace(jsonObject.get("id").toString())),
 						replace(jsonObject.get("name").toString()),
 						replace(jsonObject.get("category").toString()),
@@ -165,7 +170,11 @@ public final class SkullManager implements Manager {
 						replace(jsonObject.get("texture").toString()),
 						category.getDefaultPrice(),
 						false
-				));
+				);
+
+				heads.add(head);
+				this.idList.add(head.getId());
+
 			});
 
 			Common.broadcast("&aDownloaded &e" + heads.size() + " &askulls for category &e" + category.getName() + "&a in &f" + (System.currentTimeMillis() / start) / 1000 + "&ems");
@@ -174,6 +183,36 @@ public final class SkullManager implements Manager {
 		}
 
 		return heads;
+	}
+
+	public void downloadHistorySkulls(@NonNull final History history, Consumer<List<Skull>> finished) {
+		final List<Skull> heads = new ArrayList<>();
+		try {
+			final JsonArray json = getJsonFromUrl(String.format("https://rose.tweetzy.ca/minecraft/skulls/select?ids=%s", history.getSkulls().stream().map(String::valueOf).collect(Collectors.joining(","))));
+			json.forEach(jsonElement -> {
+				final JsonObject jsonObject = jsonElement.getAsJsonObject();
+				final Skull head = new TexturedSkull(
+						Integer.parseInt(replace(jsonObject.get("id").toString())),
+						replace(jsonObject.get("name").toString()),
+						replace(jsonObject.get("category").toString()),
+						Arrays.asList(replace(jsonObject.get("tags").toString()).split(",")),
+						replace(jsonObject.get("texture").toString()),
+						BaseCategory.getById(replace(jsonObject.get("category").toString())).getDefaultPrice(),
+						false
+				);
+
+				if (!this.idList.contains(head.getId())) {
+					heads.add(head);
+					this.idList.add(head.getId());
+				}
+
+				Skulls.getDataManager().insertSkulls(heads);
+				finished.accept(heads);
+			});
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private JsonArray getJsonFromUrl(final String url) throws IOException {
@@ -206,6 +245,7 @@ public final class SkullManager implements Manager {
 			}
 
 			this.skulls.addAll(all);
+			this.idList.addAll(all.stream().map(Skull::getId).collect(Collectors.toList()));
 
 			if (this.skulls.isEmpty()) {
 				Common.log("&cCould not find any skulls, attempting to redownload them!");
