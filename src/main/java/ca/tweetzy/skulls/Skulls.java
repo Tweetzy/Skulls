@@ -39,7 +39,6 @@ import ca.tweetzy.skulls.manager.PlayerManager;
 import ca.tweetzy.skulls.manager.SkullManager;
 import ca.tweetzy.skulls.settings.Locale;
 import ca.tweetzy.skulls.settings.Settings;
-import lombok.Getter;
 
 /**
  * Date Created: April 04 2022

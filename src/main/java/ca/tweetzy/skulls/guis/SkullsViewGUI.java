@@ -141,7 +141,7 @@ public final class SkullsViewGUI extends PagedGUI<Skull> {
 
 	@Override
 	protected void handleTitle() {
-		setTitle(Replacer.replaceVariables(getTitle(this.viewMode, this.category), "current_page", this.page, "total_pages", this.pages));
+//		setTitle(Replacer.replaceVariables(getTitle(this.viewMode, this.category), "current_page", this.page, "total_pages", this.pages));
 	}
 
 	private String getTitle(ViewMode viewMode, String category) {
