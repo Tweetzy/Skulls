@@ -22,6 +22,7 @@ import ca.tweetzy.rose.comp.NBTEditor;
 import ca.tweetzy.rose.utils.QuickItem;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.interfaces.Skull;
+import ca.tweetzy.skulls.settings.Translation;
 import lombok.AllArgsConstructor;
 import org.bukkit.inventory.ItemStack;
 
@@ -96,7 +97,7 @@ public final class TexturedSkull implements Skull {
 
 	@Override
 	public ItemStack getItemStack() {
-		return QuickItem.of(NBTEditor.getHead(this.texture)).name(this.name).make();
+		return QuickItem.of(NBTEditor.getHead(this.texture)).name(Translation.SKULL_TITLE.getString("skull_name", this.name)).tag("Skulls:ID", String.valueOf(this.id)).make();
 	}
 
 	@Override
