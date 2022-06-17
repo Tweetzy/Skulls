@@ -23,7 +23,6 @@ import ca.tweetzy.skulls.api.enums.BaseCategory;
 import ca.tweetzy.skulls.api.interfaces.Category;
 import ca.tweetzy.skulls.impl.SkullCategory;
 import lombok.NonNull;
-import org.bukkit.entity.Cat;
 
 import java.util.Collections;
 import java.util.List;

@@ -27,12 +27,12 @@ import ca.tweetzy.rose.database.DatabaseConnector;
 import ca.tweetzy.rose.database.SQLiteConnector;
 import ca.tweetzy.rose.gui.GuiManager;
 import ca.tweetzy.rose.utils.Common;
-import ca.tweetzy.skulls.commands.PlayerHeadCommand;
-import ca.tweetzy.skulls.commands.SearchCommand;
-import ca.tweetzy.skulls.commands.SkullsCommand;
+import ca.tweetzy.skulls.commands.*;
 import ca.tweetzy.skulls.database.DataManager;
 import ca.tweetzy.skulls.database.migrations._1_InitialMigration;
+import ca.tweetzy.skulls.database.migrations._2_PlacedSkullsMigration;
 import ca.tweetzy.skulls.listeners.PlayerJoinQuitListener;
+import ca.tweetzy.skulls.listeners.SkullBlockListener;
 import ca.tweetzy.skulls.manager.CategoryManager;
 import ca.tweetzy.skulls.manager.EconomyManager;
 import ca.tweetzy.skulls.manager.PlayerManager;
@@ -59,7 +59,6 @@ public final class Skulls extends RosePlugin {
 	private DatabaseConnector databaseConnector;
 	private DataManager dataManager;
 
-
 	@Override
 	protected void onWake() {
 		// setup sqlite
@@ -67,7 +66,8 @@ public final class Skulls extends RosePlugin {
 		this.dataManager = new DataManager(this.databaseConnector, this);
 
 		final DataMigrationManager dataMigrationManager = new DataMigrationManager(this.databaseConnector, this.dataManager,
-				new _1_InitialMigration()
+				new _1_InitialMigration(),
+				new _2_PlacedSkullsMigration()
 		);
 
 		// run table migrations
@@ -93,10 +93,11 @@ public final class Skulls extends RosePlugin {
 		this.guiManager.init();
 
 		// command
-		this.commandManager.registerCommandDynamically(new SkullsCommand()).addSubCommands(new SearchCommand(), new PlayerHeadCommand());
+		this.commandManager.registerCommandDynamically(new SkullsCommand()).addSubCommands(new SearchCommand(), new PlayerHeadCommand(), new GiveCommand(), new InspectCommand());
 
 		// events
 		getServer().getPluginManager().registerEvents(new PlayerJoinQuitListener(), this);
+		getServer().getPluginManager().registerEvents(new SkullBlockListener(), this);
 	}
 
 	public static Skulls getInstance() {

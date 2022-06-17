@@ -22,7 +22,6 @@ import ca.tweetzy.rose.gui.Gui;
 import ca.tweetzy.rose.gui.events.GuiClickEvent;
 import ca.tweetzy.rose.gui.template.PagedGUI;
 import ca.tweetzy.rose.utils.QuickItem;
-import ca.tweetzy.rose.utils.Replacer;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.enums.ViewMode;
 import ca.tweetzy.skulls.api.interfaces.Skull;

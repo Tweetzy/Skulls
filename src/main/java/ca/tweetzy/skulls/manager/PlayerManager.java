@@ -53,7 +53,7 @@ public final class PlayerManager {
 		return this.players.getOrDefault(uuid, null);
 	}
 
-	public void load(){
+	public void load() {
 		this.players.clear();
 		Skulls.getDataManager().getPlayers((error, loaded) -> {
 			if (error == null)

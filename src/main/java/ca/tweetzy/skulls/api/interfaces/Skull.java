@@ -76,7 +76,6 @@ public interface Skull extends DataSync {
 	 */
 	double getPrice();
 
-
 	boolean isBlocked();
 
 	void setName(String name);

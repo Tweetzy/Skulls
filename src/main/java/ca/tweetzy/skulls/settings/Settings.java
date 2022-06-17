@@ -66,7 +66,7 @@ public final class Settings {
 	public static final ConfigSetting GUI_MAIN_ITEMS_MISC_SLOT = new ConfigSetting(config, "gui.main.items.misc.slot", 22);
 	public static final ConfigSetting GUI_MAIN_ITEMS_MONSTERS_SLOT = new ConfigSetting(config, "gui.main.items.monsters.slot", 23);
 	public static final ConfigSetting GUI_MAIN_ITEMS_PLANTS_SLOT = new ConfigSetting(config, "gui.main.items.plants.slot", 24);
-	
+
 
 	public static final ConfigSetting DEFAULT_PRICES_ALPHABET = new ConfigSetting(config, "default prices.alphabet", 1.0);
 	public static final ConfigSetting DEFAULT_PRICES_ANIMALS = new ConfigSetting(config, "default prices.animals", 1.0);

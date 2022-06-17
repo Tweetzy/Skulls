@@ -42,7 +42,7 @@ public final class CategorySelectorGUI extends PagedGUI<Category> {
 	public CategorySelectorGUI(Consumer<Category> selected) {
 		super(null, Translation.GUI_CUSTOM_CATEGORY_SELECTOR_TITLE.getString(), 6, Skulls.getCategoryManager().getCustomCategories());
 		this.selected = selected;
-	draw();
+		draw();
 	}
 
 	@Override

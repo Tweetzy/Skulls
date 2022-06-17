@@ -19,7 +19,6 @@
 package ca.tweetzy.skulls.database.migrations;
 
 
-
 import ca.tweetzy.rose.database.DataMigration;
 
 import java.sql.Connection;

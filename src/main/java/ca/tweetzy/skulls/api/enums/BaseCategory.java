@@ -61,7 +61,7 @@ public enum BaseCategory {
 			category = value;
 			break;
 		}
-		
+
 		return category;
 	}
 }

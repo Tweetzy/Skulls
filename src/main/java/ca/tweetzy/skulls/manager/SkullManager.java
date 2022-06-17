@@ -24,6 +24,7 @@ import ca.tweetzy.rose.utils.QuickItem;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.enums.BaseCategory;
 import ca.tweetzy.skulls.api.interfaces.History;
+import ca.tweetzy.skulls.api.interfaces.PlacedSkull;
 import ca.tweetzy.skulls.api.interfaces.Skull;
 import ca.tweetzy.skulls.impl.InsertHistory;
 import ca.tweetzy.skulls.impl.TexturedSkull;
@@ -34,6 +35,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import org.apache.commons.lang.math.NumberUtils;
+import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.BufferedReader;
@@ -43,10 +45,8 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -74,6 +74,9 @@ public final class SkullManager implements Manager {
 
 	@Getter
 	private final List<Integer> idList = Collections.synchronizedList(new ArrayList<>());
+
+	@Getter
+	private final Map<Location, PlacedSkull> placedSkulls = new ConcurrentHashMap<>();
 
 	public Skull getSkull(final int id) {
 		synchronized (this.skulls) {
@@ -132,6 +135,20 @@ public final class SkullManager implements Manager {
 		}
 	}
 
+	public void addPlacedSkull(@NonNull final PlacedSkull placedSkull) {
+		Skulls.getDataManager().insertPlacedSkull(placedSkull, (error, inserted) -> {
+			if (error == null)
+				this.placedSkulls.put(inserted.getLocation(), inserted);
+		});
+	}
+
+	public void removePlacedSkull(@NonNull final PlacedSkull placedSkull) {
+		Skulls.getDataManager().deletePlacedSkull(placedSkull.getId(), (error, deleted) -> {
+			if (error == null)
+				this.placedSkulls.remove(placedSkull.getLocation());
+		});
+	}
+
 	/**
 	 * For internal use only
 	 */
@@ -141,7 +158,7 @@ public final class SkullManager implements Manager {
 		Common.runAsync(() -> {
 			final List<Skull> heads = new ArrayList<>();
 
-			Common.broadcast("&r&aBeginning initial download, it may take some time to insert all the skulls into the data file!");
+			Common.log("&r&aBeginning initial download, it may take some time to insert all the skulls into the data file!");
 
 			for (BaseCategory value : BaseCategory.values()) {
 				heads.addAll(downloadHeadCategory(value));
@@ -167,7 +184,7 @@ public final class SkullManager implements Manager {
 			});
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			Common.log("&cTweetzy.ca's api is currently unavailable, you can try again shortly.");
 		}
 
 		return histories;
@@ -176,7 +193,7 @@ public final class SkullManager implements Manager {
 	private List<Skull> downloadHeadCategory(@NonNull final BaseCategory category) {
 		final List<Skull> heads = new ArrayList<>();
 		try {
-			long start = System.currentTimeMillis();
+			long start = System.nanoTime();
 			final JsonArray json = getJsonFromUrl(String.format("https://rose.tweetzy.ca/minecraft/skulls?category=%s", category.name().replace("AND", "&").toUpperCase().replace("_", "%20")));
 			json.forEach(jsonElement -> {
 				final JsonObject jsonObject = jsonElement.getAsJsonObject();
@@ -195,9 +212,9 @@ public final class SkullManager implements Manager {
 
 			});
 
-			Common.broadcast("&aDownloaded &e" + heads.size() + " &askulls for category &e" + category.getName() + "&a in &f" + (System.currentTimeMillis() / start) / 1000 + "&ems");
+			Common.log("&aDownloaded &e" + heads.size() + " &askulls for category &e" + category.getName() + "&a in &f" + String.format("%,.3f", (System.nanoTime() - start) / 1e+6) + "&ems");
 		} catch (Exception e) {
-			e.printStackTrace();
+			Common.log("&cTweetzy.ca's api is currently unavailable, you can try again shortly.");
 		}
 
 		return heads;
@@ -229,7 +246,7 @@ public final class SkullManager implements Manager {
 			});
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			Common.log("&cTweetzy.ca's api is currently unavailable, you can try again shortly.");
 		}
 	}
 
@@ -254,7 +271,7 @@ public final class SkullManager implements Manager {
 	@Override
 	public void load() {
 		setLoading(true);
-		long start = System.currentTimeMillis();
+		long start = System.nanoTime();
 
 		Skulls.getDataManager().getSkulls((error, all) -> {
 			if (error != null) {
@@ -269,9 +286,18 @@ public final class SkullManager implements Manager {
 				Common.log("&cCould not find any skulls, attempting to redownload them!");
 				downloadHeads();
 			} else {
-				long ms = (System.currentTimeMillis() - start) / 1000;
-				Common.log("&aLoaded &e" + this.skulls.size() + " &askulls in &f" + ms + "&ams");
+				Common.log("&aLoaded &e" + this.skulls.size() + " &askulls in &f" + String.format("%,.3f", (System.nanoTime() - start) / 1e+6) + "&ams");
+
 			}
+		});
+
+		Skulls.getDataManager().getPlacedSkulls((error, all) -> {
+			if (error != null) {
+				error.printStackTrace();
+				return;
+			}
+
+			all.forEach(placedSkull -> this.placedSkulls.put(placedSkull.getLocation(), placedSkull));
 		});
 
 		Skulls.getDataManager().getHistories((error, all) -> {

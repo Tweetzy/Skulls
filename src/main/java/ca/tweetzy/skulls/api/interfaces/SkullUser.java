@@ -28,7 +28,7 @@ import java.util.UUID;
  *
  * @author Kiran Hart
  */
-public interface SkullUser extends DataSync{
+public interface SkullUser extends DataSync {
 
 	UUID getUUID();
 
