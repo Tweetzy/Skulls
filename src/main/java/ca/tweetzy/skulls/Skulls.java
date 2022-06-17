@@ -27,10 +27,12 @@ import ca.tweetzy.rose.database.DatabaseConnector;
 import ca.tweetzy.rose.database.SQLiteConnector;
 import ca.tweetzy.rose.gui.GuiManager;
 import ca.tweetzy.rose.utils.Common;
+import ca.tweetzy.skulls.api.SkullsAPI;
 import ca.tweetzy.skulls.commands.*;
 import ca.tweetzy.skulls.database.DataManager;
 import ca.tweetzy.skulls.database.migrations._1_InitialMigration;
 import ca.tweetzy.skulls.database.migrations._2_PlacedSkullsMigration;
+import ca.tweetzy.skulls.impl.SkullsAPIImplementation;
 import ca.tweetzy.skulls.listeners.PlayerJoinQuitListener;
 import ca.tweetzy.skulls.listeners.SkullBlockListener;
 import ca.tweetzy.skulls.manager.CategoryManager;
@@ -55,6 +57,8 @@ public final class Skulls extends RosePlugin {
 	private final CategoryManager categoryManager = new CategoryManager();
 	private final PlayerManager playerManager = new PlayerManager();
 	private EconomyManager economyManager;
+
+	private final SkullsAPI api = new SkullsAPIImplementation();
 
 	private DatabaseConnector databaseConnector;
 	private DataManager dataManager;
@@ -132,6 +136,11 @@ public final class Skulls extends RosePlugin {
 	// economy manager
 	public static EconomyManager getEconomyManager() {
 		return getInstance().economyManager;
+	}
+
+	// api
+	public static SkullsAPI getAPI() {
+		return getInstance().api;
 	}
 
 	@Override
