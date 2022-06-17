@@ -44,8 +44,11 @@ import java.util.Collections;
  */
 public final class CustomCategoryListGUI extends PagedGUI<Category> {
 
-	public CustomCategoryListGUI(Gui parent) {
+	private final Player viewer;
+
+	public CustomCategoryListGUI(Player viewer, Gui parent) {
 		super(parent, Translation.GUI_CUSTOM_CATEGORY_LIST_TITLE.getString(), 6, Skulls.getCategoryManager().getCustomCategories());
+		this.viewer = viewer;
 		draw();
 	}
 
@@ -60,37 +63,38 @@ public final class CustomCategoryListGUI extends PagedGUI<Category> {
 
 	@Override
 	protected void drawAdditional() {
-		setButton(5, 4, QuickItem.of(CompMaterial.SLIME_BALL)
-				.name(Translation.GUI_CUSTOM_CATEGORY_LIST_ITEMS_NEW_NAME.getString())
-				.lore(Translation.GUI_CUSTOM_CATEGORY_LIST_ITEMS_NEW_LORE.getList())
-				.make(), click -> new TitleInput(click.player, Translation.INPUT_CATEGORY_CREATE_TITLE.getString(), Translation.INPUT_CATEGORY_CREATE_SUBTITLE.getString()) {
+		if (this.viewer.hasPermission("skulls.admin"))
+			setButton(5, 4, QuickItem.of(CompMaterial.SLIME_BALL)
+					.name(Translation.GUI_CUSTOM_CATEGORY_LIST_ITEMS_NEW_NAME.getString())
+					.lore(Translation.GUI_CUSTOM_CATEGORY_LIST_ITEMS_NEW_LORE.getList())
+					.make(), click -> new TitleInput(click.player, Translation.INPUT_CATEGORY_CREATE_TITLE.getString(), Translation.INPUT_CATEGORY_CREATE_SUBTITLE.getString()) {
 
-			@Override
-			public void onExit(Player player) {
-				click.manager.showGUI(player, CustomCategoryListGUI.this);
-			}
-
-			@Override
-			public boolean onResult(String string) {
-				string = ChatColor.stripColor(string.trim());
-
-				if (Skulls.getCategoryManager().findCategory(string) != null)  {
-					Common.tell(click.player, Translation.ID_TAKEN.getString());
-					return false;
+				@Override
+				public void onExit(Player player) {
+					click.manager.showGUI(player, CustomCategoryListGUI.this);
 				}
 
-				final Category toCreate = new SkullCategory(string.toLowerCase(), string, true, Collections.emptyList());
+				@Override
+				public boolean onResult(String string) {
+					string = ChatColor.stripColor(string.trim());
 
-				Skulls.getDataManager().insertCategory(toCreate, (error, created) -> {
-					if (error != null) return;
-					Skulls.getCategoryManager().addCategory(created);
+					if (Skulls.getCategoryManager().findCategory(string) != null) {
+						Common.tell(click.player, Translation.ID_TAKEN.getString());
+						return false;
+					}
 
-					click.manager.showGUI(click.player, new CustomCategoryListGUI(new MainGUI(click.player)));
-				});
+					final Category toCreate = new SkullCategory(string.toLowerCase(), string, true, Collections.emptyList());
 
-				return true;
-			}
-		});
+					Skulls.getDataManager().insertCategory(toCreate, (error, created) -> {
+						if (error != null) return;
+						Skulls.getCategoryManager().addCategory(created);
+
+						click.manager.showGUI(click.player, new CustomCategoryListGUI(click.player, new MainGUI(click.player)));
+					});
+
+					return true;
+				}
+			});
 	}
 
 	@Override
