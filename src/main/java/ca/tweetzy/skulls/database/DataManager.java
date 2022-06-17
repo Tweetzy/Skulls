@@ -23,15 +23,10 @@ import ca.tweetzy.rose.database.DataManagerAbstract;
 import ca.tweetzy.rose.database.DatabaseConnector;
 import ca.tweetzy.rose.database.UpdateCallback;
 import ca.tweetzy.rose.utils.Common;
+import ca.tweetzy.skulls.Serialize;
 import ca.tweetzy.skulls.Skulls;
-import ca.tweetzy.skulls.api.interfaces.Category;
-import ca.tweetzy.skulls.api.interfaces.History;
-import ca.tweetzy.skulls.api.interfaces.Skull;
-import ca.tweetzy.skulls.api.interfaces.SkullUser;
-import ca.tweetzy.skulls.impl.InsertHistory;
-import ca.tweetzy.skulls.impl.SkullCategory;
-import ca.tweetzy.skulls.impl.SkullPlayer;
-import ca.tweetzy.skulls.impl.TexturedSkull;
+import ca.tweetzy.skulls.api.interfaces.*;
+import ca.tweetzy.skulls.impl.*;
 import lombok.NonNull;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
@@ -113,6 +108,60 @@ public final class DataManager extends DataManagerAbstract {
 
 			} catch (Exception e) {
 				e.printStackTrace();
+				resolveCallback(callback, e);
+			}
+		}));
+	}
+
+	public void insertPlacedSkull(@NonNull final PlacedSkull placedSkull, Callback<PlacedSkull> callback) {
+		this.runAsync(() -> this.databaseConnector.connect(connection -> {
+			try (PreparedStatement statement = connection.prepareStatement("INSERT INTO " + this.getTablePrefix() + "placed_skull (id, skull_id, location) VALUES(?, ?, ?)")) {
+				PreparedStatement fetch = connection.prepareStatement("SELECT * FROM " + this.getTablePrefix() + "placed_skull WHERE id = ?");
+
+				fetch.setString(1, placedSkull.getId().toString());
+				statement.setString(1, placedSkull.getId().toString());
+				statement.setInt(2, placedSkull.getSkullId());
+				statement.setString(3, Serialize.serializeLocation(placedSkull.getLocation()));
+				statement.executeUpdate();
+
+				if (callback != null) {
+					ResultSet res = fetch.executeQuery();
+					res.next();
+					callback.accept(null, extractPlacedSkull(res));
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				resolveCallback(callback, e);
+			}
+		}));
+	}
+
+	public void getPlacedSkulls(Callback<ArrayList<PlacedSkull>> callback) {
+		ArrayList<PlacedSkull> placedSkulls = new ArrayList<>();
+		this.runAsync(() -> this.databaseConnector.connect(connection -> {
+			try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + this.getTablePrefix() + "placed_skull")) {
+				ResultSet resultSet = statement.executeQuery();
+				while (resultSet.next()) {
+					placedSkulls.add(extractPlacedSkull(resultSet));
+				}
+
+				callback.accept(null, placedSkulls);
+			} catch (Exception e) {
+				resolveCallback(callback, e);
+			}
+		}));
+	}
+
+	public void deletePlacedSkull(final UUID id, Callback<Boolean> callback) {
+		this.runAsync(() -> this.databaseConnector.connect(connection -> {
+			try (PreparedStatement statement = connection.prepareStatement("DELETE FROM " + this.getTablePrefix() + "placed_skull WHERE id = ?")) {
+				statement.setString(1, id.toString());
+
+				int result = statement.executeUpdate();
+				callback.accept(null, result > 0);
+
+			} catch (Exception e) {
 				resolveCallback(callback, e);
 			}
 		}));
@@ -318,6 +367,15 @@ public final class DataManager extends DataManagerAbstract {
 				Arrays.stream(resultSet.getString("skulls").split(",")).map((Integer::parseInt)).collect(Collectors.toList())
 		);
 	}
+
+	public PlacedSkull extractPlacedSkull(@NonNull final ResultSet resultSet) throws SQLException {
+		return new PlacedSkullLocation(
+				UUID.fromString(resultSet.getString("id")),
+				resultSet.getInt("skull_id"),
+				Serialize.deserializeLocation(resultSet.getString("location"))
+		);
+	}
+
 
 	public SkullUser extractSkullPlayer(@NonNull final ResultSet resultSet) throws SQLException {
 		final String favs = resultSet.getString("favourites");
