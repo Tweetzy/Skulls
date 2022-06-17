@@ -90,7 +90,7 @@ public final class Locale {
 
 		yamlFile.path("file language")
 				.set(name)
-				.comment("This is the default language for Funds to use another language" +
+				.comment("This is the default language for Skulls to use another language" +
 						"\nchange the default language in the config.yml" +
 						"\nif the file does not exists, it will generate using the default english" +
 						"\ntranslations, you can then make edits from there.");

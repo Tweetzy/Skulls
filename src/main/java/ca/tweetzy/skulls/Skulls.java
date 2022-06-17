@@ -33,6 +33,7 @@ import ca.tweetzy.skulls.database.DataManager;
 import ca.tweetzy.skulls.database.migrations._1_InitialMigration;
 import ca.tweetzy.skulls.database.migrations._2_PlacedSkullsMigration;
 import ca.tweetzy.skulls.impl.SkullsAPIImplementation;
+import ca.tweetzy.skulls.listeners.PlayerDeathListener;
 import ca.tweetzy.skulls.listeners.PlayerJoinQuitListener;
 import ca.tweetzy.skulls.listeners.SkullBlockListener;
 import ca.tweetzy.skulls.manager.CategoryManager;
@@ -101,6 +102,7 @@ public final class Skulls extends RosePlugin {
 
 		// events
 		getServer().getPluginManager().registerEvents(new PlayerJoinQuitListener(), this);
+		getServer().getPluginManager().registerEvents(new PlayerDeathListener(), this);
 		getServer().getPluginManager().registerEvents(new SkullBlockListener(), this);
 	}
 
