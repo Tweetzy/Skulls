@@ -23,11 +23,13 @@ import ca.tweetzy.rose.command.Command;
 import ca.tweetzy.rose.command.ReturnType;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.enums.ViewMode;
+import ca.tweetzy.skulls.api.interfaces.SkullUser;
 import ca.tweetzy.skulls.guis.SkullsViewGUI;
-import lombok.NonNull;
+import ca.tweetzy.skulls.impl.SkullPlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -50,7 +52,18 @@ public final class SearchCommand extends Command {
 		final StringBuilder builder = new StringBuilder();
 		for (String arg : args) builder.append(" ").append(arg);
 
-		Skulls.getGuiManager().showGUI(player, new SkullsViewGUI(null, Skulls.getPlayerManager().findPlayer(player), builder.toString().trim(), ViewMode.SEARCH));
+		SkullUser skullUser = Skulls.getPlayerManager().findPlayer(player);
+
+		if (skullUser == null)
+			Skulls.getDataManager().insertPlayer(new SkullPlayer(player.getUniqueId(), new ArrayList<>()), (createError, created) -> {
+				if (createError == null) {
+					Skulls.getPlayerManager().addPlayer(created);
+					Skulls.getGuiManager().showGUI(player, new SkullsViewGUI(null, created, builder.toString().trim(), ViewMode.SEARCH));
+
+				}
+			});
+		else
+			Skulls.getGuiManager().showGUI(player, new SkullsViewGUI(null, skullUser, builder.toString().trim(), ViewMode.SEARCH));
 
 		return ReturnType.SUCCESS;
 	}
