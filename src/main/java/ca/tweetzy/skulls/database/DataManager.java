@@ -221,7 +221,6 @@ public final class DataManager extends DataManagerAbstract {
 			try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + this.getTablePrefix() + "players")) {
 				ResultSet resultSet = statement.executeQuery();
 				while (resultSet.next()) {
-					Common.log(resultSet.getString("uuid"));
 					skulls.add(extractSkullPlayer(resultSet));
 				}
 
