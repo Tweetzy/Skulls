@@ -48,6 +48,9 @@ public enum Translation {
 	CATEGORY_PERMISSION("misc.category permission", "&cYou do not have permission to access that category!"),
 	PLAYER_OFFLINE("misc.player not found", "&cThe player &4%player% &cis not online!"),
 	ID_TAKEN("misc.player not found", "&cThat category id is already in use!"),
+	SKULL_NOT_FOUND("misc.skull not found", "&cNo skull by that id could be found"),
+	NO_SKULL_INFO("misc.no skull info", "&cCould not determine ID of that skull"),
+	SKULL_TITLE("skull.name", "&e%skull_name%"),
 
 	ALPHABET("categories.alphabet", "Alphabet"),
 	ANIMALS("categories.animals", "Animals"),
@@ -70,7 +73,13 @@ public enum Translation {
 	INPUT_CATEGORY_CREATE_TITLE("input.category create.title", "&eCategory Creation"),
 	INPUT_CATEGORY_CREATE_SUBTITLE("input.category create.subtitle", "&fEnter id for new category"),
 
-
+	INSPECT_INFO("inspect info", Arrays.asList(
+			"&8&m-----------------------------------------------------",
+			"",
+			"&eSkull ID&f: &a%skull_id%",
+			"",
+			"&8&m-----------------------------------------------------"
+	)),
 
 	// GUIS
 	GUI_HISTORIES_TITLE("gui.histories.title", "&eSkulls &8> &7Histories"),
@@ -101,8 +110,6 @@ public enum Translation {
 
 	GUI_CUSTOM_CATEGORY_LIST_ITEMS_NEW_NAME("gui.custom category list.items.new.name", "<GRADIENT:DD5E89>&lNew Category</GRADIENT:fbc7d4>"),
 	GUI_CUSTOM_CATEGORY_LIST_ITEMS_NEW_LORE("gui.custom category list.items.new.lore", Arrays.asList("", "&e&lClick &8» &7To create new category")),
-
-
 
 
 	GUI_EDIT_TITLE("gui.edit.title", "&eSkulls &8> &7Edit &8> &7%skull_id%"),
@@ -148,10 +155,10 @@ public enum Translation {
 	)),
 
 
-	GUI_SKULLS_LIST_TITLE_CATEGORY("gui.skulls list.title.category", "&eSkulls &8> &7%category_name% &8> &7%current_page%"),
-	GUI_SKULLS_LIST_TITLE_FAVOURITES("gui.skulls list.title.favourites", "&eSkulls &8> &7Favourites &8> &7%current_page%"),
-	GUI_SKULLS_LIST_TITLE_SEARCH("gui.skulls list.title.search", "&eSkulls &8> &7%search_phrase% &8> &7%current_page%"),
-	GUI_SKULLS_LIST_TITLE_ALL("gui.skulls list.title.all", "&eSkulls &8> &7All &8> &7%current_page%"),
+	GUI_SKULLS_LIST_TITLE_CATEGORY("gui.skulls list.title.category", "&eSkulls &8> &7%category_name%"),
+	GUI_SKULLS_LIST_TITLE_FAVOURITES("gui.skulls list.title.favourites", "&eSkulls &8> &7Favourites"),
+	GUI_SKULLS_LIST_TITLE_SEARCH("gui.skulls list.title.search", "&eSkulls &8> &7%search_phrase%"),
+	GUI_SKULLS_LIST_TITLE_ALL("gui.skulls list.title.all", "&eSkulls &8> &7All"),
 
 	GUI_SKULLS_LIST_ITEMS_SKULL_NAME("gui.skulls list.items.skull.name", "&e%skull_name%"),
 
