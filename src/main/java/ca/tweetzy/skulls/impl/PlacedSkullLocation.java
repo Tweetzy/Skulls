@@ -16,23 +16,33 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ca.tweetzy.skulls.api.events;
+package ca.tweetzy.skulls.impl;
 
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.NotNull;
+import ca.tweetzy.skulls.api.interfaces.PlacedSkull;
+import lombok.AllArgsConstructor;
+import org.bukkit.Location;
 
-/**
- * Date Created: April 20 2022
- * Time Created: 9:47 p.m.
- *
- * @author Kiran Hart
- */
-public final class SkullsLoadedEvent extends Event {
+import java.util.UUID;
 
-	@NotNull
+@AllArgsConstructor
+public final class PlacedSkullLocation implements PlacedSkull {
+
+	private final UUID id;
+	private final int skullId;
+	private final Location location;
+
 	@Override
-	public HandlerList getHandlers() {
-		return null;
+	public UUID getId() {
+		return this.id;
+	}
+
+	@Override
+	public int getSkullId() {
+		return this.skullId;
+	}
+
+	@Override
+	public Location getLocation() {
+		return this.location;
 	}
 }
