@@ -84,7 +84,7 @@ public final class MainGUI extends BaseGUI {
 		setButton(4, 2, QuickItem.of(SkullItem.get("skulls:25001"))
 				.name(Translation.GUI_MAIN_ITEMS_CUSTOM_CATEGORIES_NAME.getString())
 				.lore(Translation.GUI_MAIN_ITEMS_CUSTOM_CATEGORIES_LORE.getList())
-				.make(), click -> click.manager.showGUI(click.player, new CustomCategoryListGUI(this)));
+				.make(), click -> click.manager.showGUI(click.player, new CustomCategoryListGUI(click.player, this)));
 
 		setButton(4, 6, QuickItem.of(SkullItem.get("skulls:39696"))
 				.name(Translation.GUI_MAIN_ITEMS_FAVOURITES_NAME.getString())

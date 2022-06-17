@@ -36,7 +36,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class PlayerManager {
 
 	private final Map<UUID, SkullUser> players = new ConcurrentHashMap<>();
-	private final Map<UUID, SkullUser> requiresUpdate = new ConcurrentHashMap<>();
 
 	public void addPlayer(@NonNull final SkullUser skullUser) {
 		this.players.put(skullUser.getUUID(), skullUser);

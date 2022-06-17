@@ -24,6 +24,7 @@ import ca.tweetzy.rose.command.ReturnType;
 import ca.tweetzy.rose.comp.NBTEditor;
 import ca.tweetzy.rose.utils.Common;
 import ca.tweetzy.rose.utils.QuickItem;
+import ca.tweetzy.skulls.NumberHelper;
 import ca.tweetzy.skulls.settings.Settings;
 import ca.tweetzy.skulls.settings.Translation;
 import org.bukkit.Bukkit;
@@ -67,7 +68,7 @@ public final class PlayerHeadCommand extends Command {
 
 			final ItemStack item = QuickItem.of(targetUser)
 					.name(Settings.PLAYER_HEAD_NAME.getString().replace("%player_name%", targetUser.getName()))
-					.amount(args.length > 1 ? tryInt(args[1], 1) : 1)
+					.amount(args.length > 1 ? NumberHelper.tryInt(args[1], 1) : 1)
 					.make();
 
 			if (args.length == 3) {
@@ -94,7 +95,7 @@ public final class PlayerHeadCommand extends Command {
 
 	@Override
 	public String getPermissionNode() {
-		return "skulls.cmd.phead";
+		return "skulls.command.phead";
 	}
 
 	@Override
@@ -105,14 +106,5 @@ public final class PlayerHeadCommand extends Command {
 	@Override
 	public String getDescription() {
 		return "Give yourself or player a player head";
-	}
-
-	public int tryInt(String value, int def) {
-		try {
-			Integer.parseInt(value);
-		} catch (NumberFormatException e) {
-			return def;
-		}
-		return Integer.parseInt(value);
 	}
 }
