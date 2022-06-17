@@ -25,7 +25,6 @@ import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.interfaces.PlacedSkull;
 import ca.tweetzy.skulls.api.interfaces.Skull;
 import ca.tweetzy.skulls.impl.PlacedSkullLocation;
-import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -37,8 +36,6 @@ import org.bukkit.inventory.ItemStack;
 import java.util.UUID;
 
 public final class SkullBlockListener implements Listener {
-
-	final NamespacedKey key = new NamespacedKey(Skulls.getInstance(), "Skulls");
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onSkullPlace(final BlockPlaceEvent event) {
