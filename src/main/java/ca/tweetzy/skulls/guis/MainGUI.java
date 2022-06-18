@@ -59,7 +59,7 @@ public final class MainGUI extends BaseGUI {
 					.lore(Translation.GUI_MAIN_ITEMS_CATEGORY_LORE.getList("category_size", Skulls.getSkullManager().getSkullCount(baseCategory.getId())))
 					.make(), click -> {
 
-				if (!click.player.hasPermission("skulls.category." + baseCategory.getId().toLowerCase())) {
+				if (!click.player.hasPermission("skulls.category." + baseCategory.getId().toLowerCase().replace(" ", "").replace("&",""))) {
 					Common.tell(click.player, Translation.CATEGORY_PERMISSION.getKey());
 					return;
 				}
@@ -71,14 +71,23 @@ public final class MainGUI extends BaseGUI {
 		setButton(4, 4, QuickItem.of(SkullItem.get("skulls:5650"))
 				.name(Translation.GUI_MAIN_ITEMS_SEARCH_NAME.getString())
 				.lore(Translation.GUI_MAIN_ITEMS_SEARCH_LORE.getList())
-				.make(), click -> new TitleInput(click.player, Translation.INPUT_SKULL_SEARCH_TITLE.getString(), Translation.INPUT_SKULL_SEARCH_SUBTITLE.getString()) {
+				.make(), click -> {
 
-			@Override
-			public boolean onResult(String string) {
-				if (string.matches("[\\\\^$.|?*+(){}]")) return false;
-				Skulls.getGuiManager().showGUI(click.player, new SkullsViewGUI(MainGUI.this, Skulls.getPlayerManager().findPlayer(click.player), string.trim(), ViewMode.SEARCH));
-				return true;
+			if (!click.player.hasPermission("skulls.search")) {
+				Common.tell(click.player, Translation.NO_PERMISSIONS.getKey());
+				return;
 			}
+
+			new TitleInput(click.player, Translation.INPUT_SKULL_SEARCH_TITLE.getString(), Translation.INPUT_SKULL_SEARCH_SUBTITLE.getString()) {
+
+				@Override
+				public boolean onResult(String string) {
+					if (string.matches("[\\\\^$.|?*+(){}]")) return false;
+					Skulls.getGuiManager().showGUI(click.player, new SkullsViewGUI(MainGUI.this, Skulls.getPlayerManager().findPlayer(click.player), string.trim(), ViewMode.SEARCH));
+					return true;
+				}
+			};
+
 		});
 
 		setButton(4, 2, QuickItem.of(SkullItem.get("skulls:25001"))
@@ -89,7 +98,15 @@ public final class MainGUI extends BaseGUI {
 		setButton(4, 6, QuickItem.of(SkullItem.get("skulls:39696"))
 				.name(Translation.GUI_MAIN_ITEMS_FAVOURITES_NAME.getString())
 				.lore(Translation.GUI_MAIN_ITEMS_FAVOURITES_LORE.getList())
-				.make(), click -> click.manager.showGUI(click.player, new SkullsViewGUI(this, Skulls.getPlayerManager().findPlayer(click.player), "", ViewMode.FAVOURITE)));
+				.make(), click -> {
+
+			if (!click.player.hasPermission("skulls.favourites")) {
+				Common.tell(click.player, Translation.NO_PERMISSIONS.getKey());
+				return;
+			}
+
+			click.manager.showGUI(click.player, new SkullsViewGUI(this, Skulls.getPlayerManager().findPlayer(click.player), "", ViewMode.FAVOURITE));
+		});
 
 
 		if (this.player.hasPermission("skulls.admin") || this.player.isOp()) {

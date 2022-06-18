@@ -99,6 +99,11 @@ public final class CustomCategoryListGUI extends PagedGUI<Category> {
 
 	@Override
 	protected void onClick(Category category, GuiClickEvent clickEvent) {
+		if (!clickEvent.player.hasPermission("skulls.customcategory." + category.getId().toLowerCase())) {
+			Common.tell(clickEvent.player, Translation.NO_PERMISSIONS.getKey());
+			return;
+		}
+
 		clickEvent.manager.showGUI(clickEvent.player, new SkullsViewGUI(this, Skulls.getPlayerManager().findPlayer(clickEvent.player), category.getId(), ViewMode.LIST));
 	}
 }

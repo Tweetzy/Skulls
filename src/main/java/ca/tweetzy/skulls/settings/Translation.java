@@ -46,6 +46,7 @@ public enum Translation {
 	NOT_ENOUGH_MONEY("misc.not enough money", "&cYou do not have enough money!"),
 	NOT_A_NUMBER("misc.not a number", "&cThat is not a valid number"),
 	CATEGORY_PERMISSION("misc.category permission", "&cYou do not have permission to access that category!"),
+	NO_PERMISSIONS("misc.no permission", "&cYou do not have permission to use that!"),
 	PLAYER_OFFLINE("misc.player not found", "&cThe player &4%player% &cis not online!"),
 	ID_TAKEN("misc.player not found", "&cThat category id is already in use!"),
 	SKULL_NOT_FOUND("misc.skull not found", "&cNo skull by that id could be found"),
