@@ -39,6 +39,7 @@ public final class Settings {
 	public static final ConfigSetting CHARGE_FOR_HEADS = new ConfigSetting(config, "charge for heads", true, "Should skulls charge users without permission for heads?");
 	public static final ConfigSetting ECONOMY = new ConfigSetting(config, "economy", "Vault", "You can use Vault or Item");
 	public static final ConfigSetting ITEM_ECONOMY_ITEM = new ConfigSetting(config, "item economy item", CompMaterial.GOLD_INGOT.name());
+	public static final ConfigSetting MAIN_MENU_REQUIRES_NO_PERM = new ConfigSetting(config, "main menu requires no permission", true);
 
 	public static final ConfigSetting CATEGORIES_ALPHABET_ENABLED = new ConfigSetting(config, "enabled categories.alphabet", true);
 	public static final ConfigSetting CATEGORIES_ANIMALS_ENABLED = new ConfigSetting(config, "enabled categories.animals", true);

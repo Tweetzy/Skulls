@@ -23,6 +23,7 @@ import ca.tweetzy.rose.command.Command;
 import ca.tweetzy.rose.command.ReturnType;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.guis.MainGUI;
+import ca.tweetzy.skulls.settings.Settings;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -45,7 +46,8 @@ public final class SkullsCommand extends Command {
 		if (commandSender instanceof Player) {
 			final Player player = (Player) commandSender;
 
-			Skulls.getGuiManager().showGUI(player, new MainGUI(player));
+			if (player.hasPermission("skulls.command.main") || Settings.MAIN_MENU_REQUIRES_NO_PERM.getBoolean())
+				Skulls.getGuiManager().showGUI(player, new MainGUI(player));
 		}
 
 		return ReturnType.SUCCESS;

@@ -25,12 +25,14 @@ import ca.tweetzy.rose.gui.template.PagedGUI;
 import ca.tweetzy.rose.utils.Common;
 import ca.tweetzy.rose.utils.QuickItem;
 import ca.tweetzy.skulls.Skulls;
+import ca.tweetzy.skulls.api.enums.BaseCategory;
 import ca.tweetzy.skulls.api.interfaces.History;
 import ca.tweetzy.skulls.settings.Translation;
 import org.bukkit.inventory.ItemStack;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Date Created: May 03 2022
@@ -61,6 +63,26 @@ public final class HistoryViewGUI extends PagedGUI<History> {
 						"history_time", sdf.format(resultDate)
 				))
 				.make();
+	}
+
+	@Override
+	protected void drawAdditional() {
+		setButton(5,8, QuickItem.of(CompMaterial.GOLD_NUGGET).name("&e&lForce Sync Prices").lore("&7Clicking this will force update all the prices", "&7for all skulls to the default category price", "&7set within the configuration file.").make(), click -> {
+//			Skulls.getDataManager().syncSkullPricesByCategory(null);
+
+			AtomicInteger total = new AtomicInteger(0);
+
+			Skulls.getSkullManager().getSkulls().forEach(skull -> {
+				final BaseCategory category = BaseCategory.getById(skull.getCategory());
+				if (skull.getPrice() != category.getDefaultPrice()) {
+					skull.setPrice(category.getDefaultPrice());
+					skull.sync();
+					total.incrementAndGet();
+				}
+			});
+
+			Common.tell(click.player, "&aUpdated a total of &e" + total.get() + " &askulls");
+		});
 	}
 
 	@Override

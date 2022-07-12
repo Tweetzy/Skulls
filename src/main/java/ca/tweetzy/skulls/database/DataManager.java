@@ -25,6 +25,7 @@ import ca.tweetzy.rose.database.UpdateCallback;
 import ca.tweetzy.rose.utils.Common;
 import ca.tweetzy.skulls.Serialize;
 import ca.tweetzy.skulls.Skulls;
+import ca.tweetzy.skulls.api.enums.BaseCategory;
 import ca.tweetzy.skulls.api.interfaces.*;
 import ca.tweetzy.skulls.impl.*;
 import lombok.NonNull;
@@ -196,6 +197,24 @@ public final class DataManager extends DataManagerAbstract {
 			} catch (Exception e) {
 				resolveCallback(callback, e);
 			}
+		}));
+	}
+
+	public void syncSkullPricesByCategory(Callback<Boolean> callback) {
+		this.runAsync(() -> this.databaseConnector.connect(connection -> {
+			final PreparedStatement statement = connection.prepareStatement("UPDATE " + this.getTablePrefix() + "skull SET price = ? WHERE category = ?");
+
+			for (BaseCategory value : BaseCategory.values()) {
+				statement.setDouble(1, value.getDefaultPrice());
+				statement.setString(2, value.getId());
+				statement.addBatch();
+			}
+
+			int[] updated = statement.executeBatch();
+			Common.log("updated" + updated.length);
+
+			if (callback != null)
+				this.sync(() -> callback.accept(null, updated.length > 0));
 		}));
 	}
 
