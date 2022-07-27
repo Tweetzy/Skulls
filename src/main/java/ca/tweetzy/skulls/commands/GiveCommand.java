@@ -18,10 +18,10 @@
 
 package ca.tweetzy.skulls.commands;
 
-import ca.tweetzy.rose.command.AllowedExecutor;
-import ca.tweetzy.rose.command.Command;
-import ca.tweetzy.rose.command.ReturnType;
-import ca.tweetzy.rose.utils.Common;
+import ca.tweetzy.feather.command.AllowedExecutor;
+import ca.tweetzy.feather.command.Command;
+import ca.tweetzy.feather.command.ReturnType;
+import ca.tweetzy.feather.utils.Common;
 import ca.tweetzy.skulls.NumberHelper;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.interfaces.Skull;
@@ -31,7 +31,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
-import java.util.Random;
 
 public final class GiveCommand extends Command {
 
@@ -64,8 +63,7 @@ public final class GiveCommand extends Command {
 
 		final int amount = args.length == 3 ? NumberHelper.tryInt(args[2], 1) : 1;
 
-		final Random random = new Random();
-		Skull skull = isRandomHead ? Skulls.getSkullManager().getSkulls().get(random.nextInt(Skulls.getSkullManager().getSkulls().size())) : Skulls.getSkullManager().getSkull(Integer.parseInt(args[1]));
+		Skull skull = isRandomHead ? Skulls.getSkullManager().getRandomSkull() : Skulls.getSkullManager().getSkull(Integer.parseInt(args[1]));
 
 		if (skull == null) {
 			Common.tell(sender, Translation.SKULL_NOT_FOUND.getString());
@@ -74,7 +72,7 @@ public final class GiveCommand extends Command {
 
 		for (int i = 0; i < amount; i++) {
 			if (isRandomHead)
-				skull = Skulls.getSkullManager().getSkulls().get(random.nextInt(Skulls.getSkullManager().getSkulls().size()));
+				skull = Skulls.getSkullManager().getRandomSkull();
 
 			if (isGiveAll)
 				for (Player player : Bukkit.getOnlinePlayers()) {

@@ -18,9 +18,9 @@
 
 package ca.tweetzy.skulls.manager;
 
-import ca.tweetzy.rose.comp.enums.CompMaterial;
-import ca.tweetzy.rose.utils.Common;
-import ca.tweetzy.rose.utils.QuickItem;
+import ca.tweetzy.feather.comp.enums.CompMaterial;
+import ca.tweetzy.feather.utils.Common;
+import ca.tweetzy.feather.utils.QuickItem;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.enums.BaseCategory;
 import ca.tweetzy.skulls.api.interfaces.History;
@@ -57,6 +57,8 @@ import java.util.stream.Collectors;
  * @author Kiran Hart
  */
 public final class SkullManager implements Manager {
+
+	private final Random random = new Random();
 
 	@Getter
 	@Setter
@@ -98,6 +100,11 @@ public final class SkullManager implements Manager {
 
 			return this.skulls.stream().filter(skull -> Skulls.getCategoryManager().findCategory(category).getSkulls().contains(skull.getId())).collect(Collectors.toList());
 		}
+	}
+
+	public Skull getRandomSkull() {
+		final List<Skull> enabledSkulls = getSkulls().stream().filter(skull -> BaseCategory.getById(skull.getCategory()).isEnabled()).collect(Collectors.toList());
+		return enabledSkulls.get(random.nextInt(enabledSkulls.size()));
 	}
 
 	public List<Skull> getSkullsBySearch(String phrase) {
