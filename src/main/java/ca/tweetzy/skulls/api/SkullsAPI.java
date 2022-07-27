@@ -54,6 +54,14 @@ public interface SkullsAPI {
 	ItemStack getSkullItem(final int id);
 
 	/**
+	 * Gets a random skull from a random category,
+	 * it will not get a skull from a disabled category
+	 *
+	 * @return a random {@link Skull} from enabled category
+	 */
+	Skull getRandomSkull();
+
+	/**
 	 * Get all the skulls in the given category.
 	 *
 	 * @param category The category to get the skulls from.

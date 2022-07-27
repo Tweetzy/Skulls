@@ -44,6 +44,11 @@ public final class SkullsAPIImplementation implements SkullsAPI {
 	}
 
 	@Override
+	public Skull getRandomSkull() {
+		return Skulls.getSkullManager().getRandomSkull();
+	}
+
+	@Override
 	public List<Skull> getSkulls(@NonNull BaseCategory category) {
 		return Skulls.getSkullManager().getSkulls(category);
 	}
