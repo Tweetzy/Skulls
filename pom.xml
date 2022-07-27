@@ -7,7 +7,7 @@
     <artifactId>skulls</artifactId>
 
     <name>Skulls</name>
-    <version>3.2.0</version>
+    <version>3.3.0</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -15,8 +15,8 @@
         <jarName>Skulls</jarName>
         <main.class>${project.groupId}.${project.artifactId}.${project.name}</main.class>
         <java.version>1.8</java.version>
-        <rose.version>1.3.2</rose.version>
-        <rose.path>ca.tweetzy</rose.path>
+        <feather.version>3.0.0</feather.version>
+        <feather.path>ca.tweetzy</feather.path>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -28,9 +28,9 @@
     </repositories>
     <dependencies>
         <dependency>
-            <groupId>${rose.path}</groupId>
-            <artifactId>rose</artifactId>
-            <version>${rose.version}</version>
+            <groupId>${feather.path}</groupId>
+            <artifactId>feather</artifactId>
+            <version>${feather.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.MilkBowl</groupId>
@@ -72,7 +72,7 @@
                     <createDependencyReducedPom>false</createDependencyReducedPom>
                     <artifactSet>
                         <includes>
-                            <include>${rose.path}:rose*</include>
+                            <include>${feather.path}:feather*</include>
                         </includes>
                     </artifactSet>
                     <filters>
