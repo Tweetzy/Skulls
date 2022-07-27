@@ -18,9 +18,9 @@
 
 package ca.tweetzy.skulls.settings;
 
-import ca.tweetzy.rose.comp.enums.CompMaterial;
-import ca.tweetzy.rose.files.ConfigSetting;
-import ca.tweetzy.rose.files.file.YamlFile;
+import ca.tweetzy.feather.comp.enums.CompMaterial;
+import ca.tweetzy.feather.files.ConfigSetting;
+import ca.tweetzy.feather.files.file.YamlFile;
 import ca.tweetzy.skulls.Skulls;
 import lombok.SneakyThrows;
 
@@ -32,7 +32,7 @@ import lombok.SneakyThrows;
  */
 public final class Settings {
 
-	static final YamlFile config = Skulls.getInstance().getCoreConfig();
+	static final YamlFile config = Skulls.getCoreConfig();
 
 	public static final ConfigSetting LANG = new ConfigSetting(config, "language", "english", "Default language file");
 	public static final ConfigSetting PREFIX = new ConfigSetting(config, "prefix", "<GRADIENT:DD5E89>&lSkulls</GRADIENT:fbc7d4>&r &8»", "Prefix to be used in chat");

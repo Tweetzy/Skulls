@@ -18,15 +18,17 @@
 
 package ca.tweetzy.skulls;
 
-import ca.tweetzy.rose.RoseCore;
-import ca.tweetzy.rose.RosePlugin;
-import ca.tweetzy.rose.command.CommandManager;
-import ca.tweetzy.rose.comp.enums.CompMaterial;
-import ca.tweetzy.rose.database.DataMigrationManager;
-import ca.tweetzy.rose.database.DatabaseConnector;
-import ca.tweetzy.rose.database.SQLiteConnector;
-import ca.tweetzy.rose.gui.GuiManager;
-import ca.tweetzy.rose.utils.Common;
+import ca.tweetzy.feather.FeatherCore;
+import ca.tweetzy.feather.FeatherPlugin;
+import ca.tweetzy.feather.command.CommandManager;
+import ca.tweetzy.feather.comp.enums.CompMaterial;
+import ca.tweetzy.feather.config.tweetzy.TweetzyYamlConfig;
+import ca.tweetzy.feather.database.DataMigrationManager;
+import ca.tweetzy.feather.database.DatabaseConnector;
+import ca.tweetzy.feather.database.SQLiteConnector;
+import ca.tweetzy.feather.files.file.YamlFile;
+import ca.tweetzy.feather.gui.GuiManager;
+import ca.tweetzy.feather.utils.Common;
 import ca.tweetzy.skulls.api.SkullsAPI;
 import ca.tweetzy.skulls.commands.*;
 import ca.tweetzy.skulls.database.DataManager;
@@ -42,6 +44,10 @@ import ca.tweetzy.skulls.manager.PlayerManager;
 import ca.tweetzy.skulls.manager.SkullManager;
 import ca.tweetzy.skulls.settings.Locale;
 import ca.tweetzy.skulls.settings.Settings;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Date Created: April 04 2022
@@ -49,7 +55,9 @@ import ca.tweetzy.skulls.settings.Settings;
  *
  * @author Kiran Hart
  */
-public final class Skulls extends RosePlugin {
+public final class Skulls extends FeatherPlugin {
+
+	private final YamlFile coreConfig = new YamlFile("config.yml");
 
 	private final GuiManager guiManager = new GuiManager(this);
 	private final CommandManager commandManager = new CommandManager(this);
@@ -81,7 +89,7 @@ public final class Skulls extends RosePlugin {
 
 	@Override
 	protected void onFlight() {
-		RoseCore.registerPlugin(this, 5, CompMaterial.ZOMBIE_HEAD.name());
+		FeatherCore.registerPlugin(this, 5, CompMaterial.ZOMBIE_HEAD.name());
 
 		// settings and locale setup
 		Settings.setup();
@@ -107,7 +115,17 @@ public final class Skulls extends RosePlugin {
 	}
 
 	public static Skulls getInstance() {
-		return (Skulls) RosePlugin.getInstance();
+		return (Skulls) FeatherPlugin.getInstance();
+	}
+
+	@NotNull
+	@Override
+	public List<TweetzyYamlConfig> getConfigs() {
+		return null;
+	}
+
+	public static YamlFile getCoreConfig() {
+		return getInstance().coreConfig;
 	}
 
 	// gui manager

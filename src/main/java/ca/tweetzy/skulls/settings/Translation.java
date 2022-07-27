@@ -18,7 +18,7 @@
 
 package ca.tweetzy.skulls.settings;
 
-import ca.tweetzy.rose.utils.Replacer;
+import ca.tweetzy.feather.utils.Replacer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

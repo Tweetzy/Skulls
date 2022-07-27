@@ -18,11 +18,11 @@
 
 package ca.tweetzy.skulls.database;
 
-import ca.tweetzy.rose.database.Callback;
-import ca.tweetzy.rose.database.DataManagerAbstract;
-import ca.tweetzy.rose.database.DatabaseConnector;
-import ca.tweetzy.rose.database.UpdateCallback;
-import ca.tweetzy.rose.utils.Common;
+import ca.tweetzy.feather.database.Callback;
+import ca.tweetzy.feather.database.DataManagerAbstract;
+import ca.tweetzy.feather.database.DatabaseConnector;
+import ca.tweetzy.feather.database.UpdateCallback;
+import ca.tweetzy.feather.utils.Common;
 import ca.tweetzy.skulls.Serialize;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.enums.BaseCategory;

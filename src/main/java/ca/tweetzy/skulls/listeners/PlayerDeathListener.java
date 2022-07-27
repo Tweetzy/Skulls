@@ -18,7 +18,7 @@
 
 package ca.tweetzy.skulls.listeners;
 
-import ca.tweetzy.rose.utils.QuickItem;
+import ca.tweetzy.feather.utils.QuickItem;
 import ca.tweetzy.skulls.settings.Settings;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

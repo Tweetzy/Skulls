@@ -18,7 +18,7 @@
 
 package ca.tweetzy.skulls.impl.economy;
 
-import ca.tweetzy.rose.utils.Common;
+import ca.tweetzy.feather.utils.Common;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.interfaces.Economy;
 import lombok.NonNull;

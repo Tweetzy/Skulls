@@ -18,7 +18,7 @@
 
 package ca.tweetzy.skulls;
 
-import ca.tweetzy.rose.comp.enums.CompMaterial;
+import ca.tweetzy.feather.comp.enums.CompMaterial;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang.math.NumberUtils;

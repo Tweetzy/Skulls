@@ -18,11 +18,11 @@
 
 package ca.tweetzy.skulls.commands;
 
-import ca.tweetzy.rose.command.AllowedExecutor;
-import ca.tweetzy.rose.command.Command;
-import ca.tweetzy.rose.command.ReturnType;
-import ca.tweetzy.rose.utils.Common;
-import ca.tweetzy.rose.utils.QuickItem;
+import ca.tweetzy.feather.command.AllowedExecutor;
+import ca.tweetzy.feather.command.Command;
+import ca.tweetzy.feather.command.ReturnType;
+import ca.tweetzy.feather.utils.Common;
+import ca.tweetzy.feather.utils.QuickItem;
 import ca.tweetzy.skulls.NumberHelper;
 import ca.tweetzy.skulls.settings.Settings;
 import ca.tweetzy.skulls.settings.Translation;
