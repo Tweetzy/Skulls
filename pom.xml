@@ -88,7 +88,7 @@
                     </filters>
                     <relocations>
                         <relocation>
-                            <pattern>ca.tweetzy.tweety</pattern>
+                            <pattern>ca.tweetzy.feather</pattern>
                             <shadedPattern>${project.groupId}.${project.artifactId}.core</shadedPattern>
                         </relocation>
                     </relocations>

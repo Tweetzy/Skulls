@@ -46,7 +46,6 @@ import ca.tweetzy.skulls.settings.Locale;
 import ca.tweetzy.skulls.settings.Settings;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -57,7 +56,7 @@ import java.util.List;
  */
 public final class Skulls extends FeatherPlugin {
 
-	private final YamlFile coreConfig = new YamlFile("config.yml");
+	private final YamlFile coreConfig = new YamlFile(getDataFolder() + "/config.yml");
 
 	private final GuiManager guiManager = new GuiManager(this);
 	private final CommandManager commandManager = new CommandManager(this);
@@ -73,7 +72,15 @@ public final class Skulls extends FeatherPlugin {
 	private DataManager dataManager;
 
 	@Override
-	protected void onWake() {
+	protected void onFlight() {
+		FeatherCore.registerPlugin(this, 5, CompMaterial.ZOMBIE_HEAD.name());
+
+		// settings and locale setup
+		Settings.setup();
+		Locale.setup();
+
+		Common.setPrefix(Settings.PREFIX.getString());
+
 		// setup sqlite
 		this.databaseConnector = new SQLiteConnector(this);
 		this.dataManager = new DataManager(this.databaseConnector, this);
@@ -85,17 +92,6 @@ public final class Skulls extends FeatherPlugin {
 
 		// run table migrations
 		dataMigrationManager.runMigrations();
-	}
-
-	@Override
-	protected void onFlight() {
-		FeatherCore.registerPlugin(this, 5, CompMaterial.ZOMBIE_HEAD.name());
-
-		// settings and locale setup
-		Settings.setup();
-		Locale.setup();
-
-		Common.setPrefix(Settings.PREFIX.getString());
 
 		this.skullManager.load();
 		this.playerManager.load();

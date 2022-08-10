@@ -84,6 +84,7 @@ public final class Settings {
 
 	@SneakyThrows
 	public static void setup() {
+		config.createOrLoadWithComments();
 		config.applySettings();
 		config.save();
 	}
