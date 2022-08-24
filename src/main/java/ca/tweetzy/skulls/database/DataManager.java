@@ -57,7 +57,6 @@ public final class DataManager extends DataManagerAbstract {
 
 	public void insertSkulls(Collection<Skull> skulls) {
 		this.runAsync(() -> this.databaseConnector.connect(connection -> {
-
 			PreparedStatement statement = connection.prepareStatement("INSERT OR IGNORE INTO " + this.getTablePrefix() + "skull(id, name, category, texture, tags, price, blocked) VALUES(?, ?, ?, ?, ?, ?, ?)");
 			for (Skull skull : skulls) {
 				statement.setInt(1, skull.getId());
