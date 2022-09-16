@@ -141,7 +141,7 @@ public final class MainGUI extends BaseGUI {
 						"&8&m-----------------------------------------------------",
 						"",
 						ChatUtil.centerMessage("&E&lTweetzy Patreon"),
-						ChatUtil.centerMessage("&bhttps://patreon.tweetzy.ca"),
+						ChatUtil.centerMessage("&bhttps://patreon.com/kiranhart"),
 						"&8&m-----------------------------------------------------"
 				);
 			});

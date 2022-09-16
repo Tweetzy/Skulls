@@ -1,6 +1,9 @@
 ---
-name: Report a Bug about: Report an issue with the plugin title: ''
-labels: bug assignees: ''
+name: Report a Bug about: 
+about: Report an issue with the plugin 
+title: ''
+labels: bug
+assignees: ''
 
 ---
 
