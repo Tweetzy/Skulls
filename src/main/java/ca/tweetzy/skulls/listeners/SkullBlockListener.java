@@ -37,8 +37,10 @@ import java.util.UUID;
 
 public final class SkullBlockListener implements Listener {
 
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler()
 	public void onSkullPlace(final BlockPlaceEvent event) {
+		if (event.isCancelled()) return;
+
 		final ItemStack item = PlayerUtil.getHand(event.getPlayer());
 		if (!NBTEditor.contains(item, "Skulls:ID")) return;
 
@@ -49,8 +51,10 @@ public final class SkullBlockListener implements Listener {
 		Skulls.getSkullManager().addPlacedSkull(new PlacedSkullLocation(UUID.randomUUID(), skullId, block.getLocation()));
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler()
 	public void onSkullBreak(final BlockBreakEvent event) {
+		if (event.isCancelled()) return;
+
 		final Block block = event.getBlock();
 		if (block.getType() != CompMaterial.PLAYER_HEAD.parseMaterial()) return;
 
