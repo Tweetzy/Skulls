@@ -24,6 +24,7 @@ import ca.tweetzy.feather.utils.PlayerUtil;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.interfaces.PlacedSkull;
 import ca.tweetzy.skulls.api.interfaces.Skull;
+import ca.tweetzy.skulls.hooks.WorldGuardHook;
 import ca.tweetzy.skulls.impl.PlacedSkullLocation;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
@@ -40,6 +41,11 @@ public final class SkullBlockListener implements Listener {
 	@EventHandler()
 	public void onSkullPlace(final BlockPlaceEvent event) {
 		if (event.isCancelled()) return;
+		if (!WorldGuardHook.isAllowedPlace(event.getPlayer(), event.getBlock())) {
+			event.setBuild(false);
+			event.setCancelled(true);
+			return;
+		}
 
 		final ItemStack item = PlayerUtil.getHand(event.getPlayer());
 		if (!NBTEditor.contains(item, "Skulls:ID")) return;
@@ -54,6 +60,10 @@ public final class SkullBlockListener implements Listener {
 	@EventHandler()
 	public void onSkullBreak(final BlockBreakEvent event) {
 		if (event.isCancelled()) return;
+		if (!WorldGuardHook.isAllowedBreak(event.getPlayer(), event.getBlock())) {
+			event.setCancelled(true);
+			return;
+		}
 
 		final Block block = event.getBlock();
 		if (block.getType() != CompMaterial.PLAYER_HEAD.parseMaterial()) return;
