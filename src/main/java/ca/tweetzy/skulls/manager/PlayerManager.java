@@ -20,12 +20,15 @@ package ca.tweetzy.skulls.manager;
 
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.interfaces.SkullUser;
+import ca.tweetzy.skulls.impl.SkullPlayer;
 import lombok.NonNull;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Date Created: April 04 2022
@@ -50,7 +53,18 @@ public final class PlayerManager {
 	}
 
 	public SkullUser findPlayer(@NonNull final UUID uuid) {
-		return this.players.getOrDefault(uuid, null);
+		final AtomicReference<SkullUser> skullUser = new AtomicReference<>(this.players.getOrDefault(uuid, null));
+
+		if (skullUser.get() != null) return skullUser.get();
+
+		Skulls.getDataManager().insertPlayer(new SkullPlayer(uuid, new ArrayList<>()), (createError, created) -> {
+			if (createError == null) {
+				addPlayer(created);
+				skullUser.set(created);
+			}
+		});
+
+		return skullUser.get();
 	}
 
 	public void load() {
