@@ -22,7 +22,6 @@ import ca.tweetzy.feather.FeatherCore;
 import ca.tweetzy.feather.FeatherPlugin;
 import ca.tweetzy.feather.command.CommandManager;
 import ca.tweetzy.feather.comp.enums.CompMaterial;
-import ca.tweetzy.feather.config.tweetzy.TweetzyYamlConfig;
 import ca.tweetzy.feather.database.DataMigrationManager;
 import ca.tweetzy.feather.database.DatabaseConnector;
 import ca.tweetzy.feather.database.SQLiteConnector;
@@ -44,9 +43,6 @@ import ca.tweetzy.skulls.manager.PlayerManager;
 import ca.tweetzy.skulls.manager.SkullManager;
 import ca.tweetzy.skulls.settings.Locale;
 import ca.tweetzy.skulls.settings.Settings;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 /**
  * Date Created: April 04 2022
@@ -114,11 +110,6 @@ public final class Skulls extends FeatherPlugin {
 		return (Skulls) FeatherPlugin.getInstance();
 	}
 
-	@NotNull
-	@Override
-	public List<TweetzyYamlConfig> getConfigs() {
-		return null;
-	}
 
 	public static YamlFile getCoreConfig() {
 		return getInstance().coreConfig;
