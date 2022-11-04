@@ -33,6 +33,10 @@
             <id>griefdefender</id>
             <url>https://repo.glaremasters.me/repository/bloodshot</url>
         </repository>
+        <repository>
+            <id>techscode</id>
+            <url>https://repo.techscode.com/repository/maven-releases/</url>
+        </repository>
     </repositories>
     <dependencies>
         <dependency>
@@ -58,7 +62,11 @@
             <version>1.7</version>
             <scope>provided</scope>
         </dependency>
-
+        <dependency>
+            <groupId>me.TechsCode</groupId>
+            <artifactId>UltraEconomyAPI</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
     <build>
         <finalName>${jarName}</finalName>

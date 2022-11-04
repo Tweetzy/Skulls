@@ -5,4 +5,5 @@ author: ${author}
 api-version: 1.13
 softdepend:
   - Vault
+  - UltraEconomy
 commands:
