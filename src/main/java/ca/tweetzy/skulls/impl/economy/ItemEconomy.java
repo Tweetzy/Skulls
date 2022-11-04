@@ -18,7 +18,7 @@
 
 package ca.tweetzy.skulls.impl.economy;
 
-import ca.tweetzy.skulls.PlayerInventoryHelper;
+import ca.tweetzy.skulls.model.PlayerInventoryHelper;
 import ca.tweetzy.skulls.api.interfaces.Economy;
 import ca.tweetzy.skulls.settings.Settings;
 import lombok.NonNull;

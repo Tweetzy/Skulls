@@ -23,7 +23,7 @@ import ca.tweetzy.feather.database.DataManagerAbstract;
 import ca.tweetzy.feather.database.DatabaseConnector;
 import ca.tweetzy.feather.database.UpdateCallback;
 import ca.tweetzy.feather.utils.Common;
-import ca.tweetzy.skulls.Serialize;
+import ca.tweetzy.skulls.model.Serialize;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.enums.BaseCategory;
 import ca.tweetzy.skulls.api.interfaces.*;

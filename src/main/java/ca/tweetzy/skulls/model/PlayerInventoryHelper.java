@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ca.tweetzy.skulls;
+package ca.tweetzy.skulls.model;
 
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;

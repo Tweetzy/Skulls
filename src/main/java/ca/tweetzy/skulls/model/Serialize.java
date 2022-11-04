@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ca.tweetzy.skulls;
+package ca.tweetzy.skulls.model;
 
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
@@ -45,11 +45,11 @@ public final class Serialize {
 
 		return new Location(
 				Bukkit.getWorld(split[0]),
-				Double.parseDouble(split[1]),
-				Double.parseDouble(split[2]),
-				Double.parseDouble(split[3]),
-				Float.parseFloat(split[4]),
-				Float.parseFloat(split[5])
+				Double.parseDouble(split[1].replace(",",".")),
+				Double.parseDouble(split[2].replace(",",".")),
+				Double.parseDouble(split[3].replace(",",".")),
+				Float.parseFloat(split[4].replace(",",".")),
+				Float.parseFloat(split[5].replace(",","."))
 		);
 	}
 }

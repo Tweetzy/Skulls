@@ -16,32 +16,29 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ca.tweetzy.skulls;
+package ca.tweetzy.skulls.model;
 
-import ca.tweetzy.feather.comp.enums.CompMaterial;
-import lombok.NonNull;
 import lombok.experimental.UtilityClass;
-import org.apache.commons.lang.math.NumberUtils;
-import org.bukkit.inventory.ItemStack;
 
-/**
- * Date Created: May 01 2022
- * Time Created: 11:46 a.m.
- *
- * @author Kiran Hart
- */
 @UtilityClass
-public final class SkullItem {
+public final class NumberHelper {
 
-	public ItemStack get(@NonNull final String texture) {
-		if (!texture.startsWith("skulls:"))
-			return CompMaterial.matchCompMaterial(texture).orElse(CompMaterial.STONE).parseItem();
+	public int tryInt(String value, int def) {
+		try {
+			Integer.parseInt(value);
+		} catch (NumberFormatException e) {
+			return def;
+		}
+		return Integer.parseInt(value);
+	}
 
-		final String[] split = texture.split(":");
+	public boolean isInt(String value) {
+		try {
+			Integer.parseInt(value);
+		} catch (NumberFormatException e) {
+			return false;
+		}
 
-		if (!NumberUtils.isNumber(split[1]))
-			return CompMaterial.STONE.parseItem();
-
-		return Skulls.getSkullManager().getSkullItem(Integer.parseInt(split[1]));
+		return true;
 	}
 }
