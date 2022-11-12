@@ -7,7 +7,7 @@
     <artifactId>skulls</artifactId>
 
     <name>Skulls</name>
-    <version>3.5.1</version>
+    <version>3.5.2</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -15,7 +15,7 @@
         <jarName>Skulls</jarName>
         <main.class>${project.groupId}.${project.artifactId}.${project.name}</main.class>
         <java.version>1.8</java.version>
-        <feather.version>3.4.4</feather.version>
+        <feather.version>3.5.0</feather.version>
         <feather.path>ca.tweetzy</feather.path>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -41,7 +41,7 @@
     <dependencies>
         <dependency>
             <groupId>${feather.path}</groupId>
-            <artifactId>feather</artifactId>
+            <artifactId>flight</artifactId>
             <version>${feather.version}</version>
         </dependency>
         <dependency>
@@ -101,7 +101,7 @@
                     <createDependencyReducedPom>false</createDependencyReducedPom>
                     <artifactSet>
                         <includes>
-                            <include>${feather.path}:feather*</include>
+                            <include>${feather.path}:flight*</include>
                         </includes>
                     </artifactSet>
                     <filters>
@@ -117,7 +117,7 @@
                     </filters>
                     <relocations>
                         <relocation>
-                            <pattern>ca.tweetzy.feather</pattern>
+                            <pattern>ca.tweetzy.flight</pattern>
                             <shadedPattern>${project.groupId}.${project.artifactId}.core</shadedPattern>
                         </relocation>
                     </relocations>
