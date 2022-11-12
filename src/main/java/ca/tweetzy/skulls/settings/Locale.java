@@ -18,9 +18,9 @@
 
 package ca.tweetzy.skulls.settings;
 
-import ca.tweetzy.feather.files.comments.format.YamlCommentFormat;
-import ca.tweetzy.feather.files.file.YamlFile;
-import ca.tweetzy.feather.utils.Common;
+import ca.tweetzy.flight.files.comments.format.YamlCommentFormat;
+import ca.tweetzy.flight.files.file.YamlFile;
+import ca.tweetzy.flight.utils.Common;
 import ca.tweetzy.skulls.Skulls;
 import lombok.NonNull;
 import lombok.SneakyThrows;

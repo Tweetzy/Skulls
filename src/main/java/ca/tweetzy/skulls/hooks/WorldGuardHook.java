@@ -57,6 +57,8 @@ public final class WorldGuardHook {
 		if (WorldGuard.getInstance().getPlatform().getSessionManager().hasBypass(WorldGuardPlugin.inst().wrapPlayer(player), world))
 			return true;
 
-		return query.testState(loc, WorldGuardPlugin.inst().wrapPlayer(player), Flags.BLOCK_BREAK);
+
+		return query.testState(loc, WorldGuardPlugin.inst().wrapPlayer(player), Flags.BUILD);
+
 	}
 }

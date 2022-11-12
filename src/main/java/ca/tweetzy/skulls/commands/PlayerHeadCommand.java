@@ -18,11 +18,12 @@
 
 package ca.tweetzy.skulls.commands;
 
-import ca.tweetzy.feather.command.AllowedExecutor;
-import ca.tweetzy.feather.command.Command;
-import ca.tweetzy.feather.command.ReturnType;
-import ca.tweetzy.feather.utils.Common;
-import ca.tweetzy.feather.utils.QuickItem;
+import ca.tweetzy.flight.command.AllowedExecutor;
+import ca.tweetzy.flight.command.Command;
+import ca.tweetzy.flight.command.ReturnType;
+import ca.tweetzy.flight.utils.Common;
+import ca.tweetzy.flight.utils.QuickItem;
+import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.model.NumberHelper;
 import ca.tweetzy.skulls.settings.Settings;
 import ca.tweetzy.skulls.settings.Translation;
@@ -52,7 +53,7 @@ public final class PlayerHeadCommand extends Command {
 			return ReturnType.INVALID_SYNTAX;
 		}
 
-		Common.runAsync(() -> {
+		Bukkit.getServer().getScheduler().runTaskAsynchronously(Skulls.getInstance(), () -> {
 			if (args.length == 0) {
 				final Player executor = (Player) sender;
 				executor.getInventory().addItem(QuickItem.of(executor).name(Settings.PLAYER_HEAD_NAME.getString().replace("%player_name%", executor.getName())).make());
