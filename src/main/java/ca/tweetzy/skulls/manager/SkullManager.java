@@ -18,9 +18,9 @@
 
 package ca.tweetzy.skulls.manager;
 
-import ca.tweetzy.feather.comp.enums.CompMaterial;
-import ca.tweetzy.feather.utils.Common;
-import ca.tweetzy.feather.utils.QuickItem;
+import ca.tweetzy.flight.comp.enums.CompMaterial;
+import ca.tweetzy.flight.utils.Common;
+import ca.tweetzy.flight.utils.QuickItem;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.enums.BaseCategory;
 import ca.tweetzy.skulls.api.interfaces.History;
@@ -35,6 +35,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import org.apache.commons.lang.math.NumberUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
@@ -162,7 +163,7 @@ public final class SkullManager implements Manager {
 
 	public void downloadHeads() {
 		setDownloading(true);
-		Common.runAsync(() -> {
+		Bukkit.getServer().getScheduler().runTaskAsynchronously(Skulls.getInstance(), () -> {
 			final List<Skull> heads = new ArrayList<>();
 
 			Common.log("&r&aBeginning initial download, it may take some time to insert all the skulls into the data file!");
@@ -317,14 +318,14 @@ public final class SkullManager implements Manager {
 
 			if (this.histories.isEmpty()) {
 				Common.log("&cCould not find any inserts, attempting to redownload them!");
-				Common.runAsync(() -> {
+				Bukkit.getServer().getScheduler().runTaskAsynchronously(Skulls.getInstance(), () -> {
 					final List<History> dlHistory = downloadHistories();
 					Skulls.getDataManager().insertHistories(dlHistory);
 					this.histories.addAll(dlHistory);
 				});
 			} else {
 
-				Common.runAsync(() -> {
+				Bukkit.getServer().getScheduler().runTaskAsynchronously(Skulls.getInstance(), () -> {
 					// check for new inserts
 					final List<History> dlHistory = downloadHistories();
 

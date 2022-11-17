@@ -18,11 +18,12 @@
 
 package ca.tweetzy.skulls.guis;
 
-import ca.tweetzy.feather.comp.enums.CompMaterial;
-import ca.tweetzy.feather.gui.Gui;
-import ca.tweetzy.feather.gui.template.BaseGUI;
-import ca.tweetzy.feather.utils.QuickItem;
-import ca.tweetzy.feather.utils.input.TitleInput;
+import ca.tweetzy.flight.comp.enums.CompMaterial;
+import ca.tweetzy.flight.gui.Gui;
+import ca.tweetzy.flight.gui.template.BaseGUI;
+import ca.tweetzy.flight.utils.QuickItem;
+import ca.tweetzy.flight.utils.input.TitleInput;
+import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.interfaces.Skull;
 import ca.tweetzy.skulls.settings.Locale;
 import ca.tweetzy.skulls.settings.Translation;
@@ -55,7 +56,7 @@ public final class SkullEditGUI extends BaseGUI {
 		setButton(3, 1, QuickItem.of(CompMaterial.NAME_TAG)
 				.name(Translation.GUI_EDIT_ITEMS_NAME_NAME.getString())
 				.lore(Translation.GUI_EDIT_ITEMS_NAME_LORE.getList())
-				.make(), click -> new TitleInput(click.player, Translation.INPUT_SKULL_EDIT_TITLE.getString(), Translation.INPUT_SKULL_EDIT_NAME.getString()) {
+				.make(), click -> new TitleInput(Skulls.getInstance(),click.player, Translation.INPUT_SKULL_EDIT_TITLE.getString(), Translation.INPUT_SKULL_EDIT_NAME.getString()) {
 
 			@Override
 			public boolean onResult(String string) {
@@ -70,7 +71,7 @@ public final class SkullEditGUI extends BaseGUI {
 		setButton(3, 3, QuickItem.of(CompMaterial.GOLD_INGOT)
 				.name(Translation.GUI_EDIT_ITEMS_PRICE_NAME.getString())
 				.lore(Translation.GUI_EDIT_ITEMS_PRICE_LORE.getList())
-				.make(), click -> new TitleInput(click.player, Translation.INPUT_SKULL_EDIT_TITLE.getString(), Translation.INPUT_SKULL_EDIT_PRICE.getString()) {
+				.make(), click -> new TitleInput(Skulls.getInstance(),click.player, Translation.INPUT_SKULL_EDIT_TITLE.getString(), Translation.INPUT_SKULL_EDIT_PRICE.getString()) {
 
 			@Override
 			public boolean onResult(String string) {

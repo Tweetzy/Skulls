@@ -18,7 +18,7 @@
 
 package ca.tweetzy.skulls.model;
 
-import ca.tweetzy.feather.comp.enums.CompMaterial;
+import ca.tweetzy.flight.comp.enums.CompMaterial;
 import ca.tweetzy.skulls.Skulls;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;

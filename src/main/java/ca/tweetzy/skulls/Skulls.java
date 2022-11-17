@@ -18,16 +18,14 @@
 
 package ca.tweetzy.skulls;
 
-import ca.tweetzy.feather.FeatherCore;
-import ca.tweetzy.feather.FeatherPlugin;
-import ca.tweetzy.feather.command.CommandManager;
-import ca.tweetzy.feather.comp.enums.CompMaterial;
-import ca.tweetzy.feather.database.DataMigrationManager;
-import ca.tweetzy.feather.database.DatabaseConnector;
-import ca.tweetzy.feather.database.SQLiteConnector;
-import ca.tweetzy.feather.files.file.YamlFile;
-import ca.tweetzy.feather.gui.GuiManager;
-import ca.tweetzy.feather.utils.Common;
+import ca.tweetzy.flight.FlightPlugin;
+import ca.tweetzy.flight.command.CommandManager;
+import ca.tweetzy.flight.config.tweetzy.TweetzyYamlConfig;
+import ca.tweetzy.flight.database.DataMigrationManager;
+import ca.tweetzy.flight.database.DatabaseConnector;
+import ca.tweetzy.flight.database.SQLiteConnector;
+import ca.tweetzy.flight.gui.GuiManager;
+import ca.tweetzy.flight.utils.Common;
 import ca.tweetzy.skulls.api.SkullsAPI;
 import ca.tweetzy.skulls.commands.*;
 import ca.tweetzy.skulls.database.DataManager;
@@ -50,9 +48,9 @@ import ca.tweetzy.skulls.settings.Settings;
  *
  * @author Kiran Hart
  */
-public final class Skulls extends FeatherPlugin {
+public final class Skulls extends FlightPlugin {
 
-	private final YamlFile coreConfig = new YamlFile(getDataFolder() + "/config.yml");
+	private final TweetzyYamlConfig coreConfig = new TweetzyYamlConfig(this, "config.yml");
 
 	private final GuiManager guiManager = new GuiManager(this);
 	private final CommandManager commandManager = new CommandManager(this);
@@ -69,8 +67,6 @@ public final class Skulls extends FeatherPlugin {
 
 	@Override
 	protected void onFlight() {
-		FeatherCore.registerPlugin(this, 5, CompMaterial.ZOMBIE_HEAD.name());
-
 		// settings and locale setup
 		Settings.setup();
 		Locale.setup();
@@ -107,11 +103,11 @@ public final class Skulls extends FeatherPlugin {
 	}
 
 	public static Skulls getInstance() {
-		return (Skulls) FeatherPlugin.getInstance();
+		return (Skulls) FlightPlugin.getInstance();
 	}
 
 
-	public static YamlFile getCoreConfig() {
+	public static TweetzyYamlConfig getCoreConfig() {
 		return getInstance().coreConfig;
 	}
 

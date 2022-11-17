@@ -18,16 +18,16 @@
 
 package ca.tweetzy.skulls.guis;
 
-import ca.tweetzy.feather.comp.enums.CompMaterial;
-import ca.tweetzy.feather.gui.template.BaseGUI;
-import ca.tweetzy.feather.utils.ChatUtil;
-import ca.tweetzy.feather.utils.Common;
-import ca.tweetzy.feather.utils.QuickItem;
-import ca.tweetzy.feather.utils.input.TitleInput;
-import ca.tweetzy.skulls.model.SkullItem;
+import ca.tweetzy.flight.comp.enums.CompMaterial;
+import ca.tweetzy.flight.gui.template.BaseGUI;
+import ca.tweetzy.flight.utils.ChatUtil;
+import ca.tweetzy.flight.utils.Common;
+import ca.tweetzy.flight.utils.QuickItem;
+import ca.tweetzy.flight.utils.input.TitleInput;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.enums.BaseCategory;
 import ca.tweetzy.skulls.api.enums.ViewMode;
+import ca.tweetzy.skulls.model.SkullItem;
 import ca.tweetzy.skulls.settings.Translation;
 import lombok.NonNull;
 import org.bukkit.entity.Player;
@@ -59,7 +59,7 @@ public final class MainGUI extends BaseGUI {
 					.lore(Translation.GUI_MAIN_ITEMS_CATEGORY_LORE.getList("category_size", Skulls.getSkullManager().getSkullCount(baseCategory.getId())))
 					.make(), click -> {
 
-				if (!click.player.hasPermission("skulls.category." + baseCategory.getId().toLowerCase().replace(" ", "").replace("&",""))) {
+				if (!click.player.hasPermission("skulls.category." + baseCategory.getId().toLowerCase().replace(" ", "").replace("&", ""))) {
 					Common.tell(click.player, Translation.CATEGORY_PERMISSION.getKey());
 					return;
 				}
@@ -78,7 +78,7 @@ public final class MainGUI extends BaseGUI {
 				return;
 			}
 
-			new TitleInput(click.player, Translation.INPUT_SKULL_SEARCH_TITLE.getString(), Translation.INPUT_SKULL_SEARCH_SUBTITLE.getString()) {
+			new TitleInput(Skulls.getInstance(), click.player, Translation.INPUT_SKULL_SEARCH_TITLE.getString(), Translation.INPUT_SKULL_SEARCH_SUBTITLE.getString()) {
 
 				@Override
 				public boolean onResult(String string) {

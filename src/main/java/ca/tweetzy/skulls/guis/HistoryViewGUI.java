@@ -18,16 +18,17 @@
 
 package ca.tweetzy.skulls.guis;
 
-import ca.tweetzy.feather.comp.enums.CompMaterial;
-import ca.tweetzy.feather.gui.Gui;
-import ca.tweetzy.feather.gui.events.GuiClickEvent;
-import ca.tweetzy.feather.gui.template.PagedGUI;
-import ca.tweetzy.feather.utils.Common;
-import ca.tweetzy.feather.utils.QuickItem;
+import ca.tweetzy.flight.comp.enums.CompMaterial;
+import ca.tweetzy.flight.gui.Gui;
+import ca.tweetzy.flight.gui.events.GuiClickEvent;
+import ca.tweetzy.flight.gui.template.PagedGUI;
+import ca.tweetzy.flight.utils.Common;
+import ca.tweetzy.flight.utils.QuickItem;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.enums.BaseCategory;
 import ca.tweetzy.skulls.api.interfaces.History;
 import ca.tweetzy.skulls.settings.Translation;
+import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 
 import java.text.SimpleDateFormat;
@@ -90,7 +91,7 @@ public final class HistoryViewGUI extends PagedGUI<History> {
 		final boolean downloaded = Skulls.getSkullManager().getIdList().contains(history.getSkulls().get(0));
 		if (downloaded) return;
 
-		Common.runAsync(() -> {
+		Bukkit.getServer().getScheduler().runTaskAsynchronously(Skulls.getInstance(), () -> {
 			Skulls.getSkullManager().downloadHistorySkulls(history, finished -> clickEvent.manager.showGUI(clickEvent.player, new HistoryViewGUI(new MainGUI(clickEvent.player))));
 		});
 	}

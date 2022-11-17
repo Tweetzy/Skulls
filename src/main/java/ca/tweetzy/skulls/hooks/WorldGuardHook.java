@@ -35,7 +35,7 @@ import org.bukkit.entity.Player;
 public final class WorldGuardHook {
 
 	public boolean isAllowedPlace(@NonNull final Player player, @NonNull final Block block) {
-		if (!Bukkit.getPluginManager().isPluginEnabled("WorldGuard")) return false;
+		if (!Bukkit.getPluginManager().isPluginEnabled("WorldGuard")) return true;
 
 		final RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
 		final Location loc = BukkitAdapter.adapt(block.getLocation());
@@ -48,7 +48,7 @@ public final class WorldGuardHook {
 	}
 
 	public boolean isAllowedBreak(@NonNull final Player player, @NonNull final Block block) {
-		if (!Bukkit.getPluginManager().isPluginEnabled("WorldGuard")) return false;
+		if (!Bukkit.getPluginManager().isPluginEnabled("WorldGuard")) return true;
 
 		final RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
 		final Location loc = BukkitAdapter.adapt(block.getLocation());
@@ -57,6 +57,8 @@ public final class WorldGuardHook {
 		if (WorldGuard.getInstance().getPlatform().getSessionManager().hasBypass(WorldGuardPlugin.inst().wrapPlayer(player), world))
 			return true;
 
-		return query.testState(loc, WorldGuardPlugin.inst().wrapPlayer(player), Flags.BLOCK_BREAK);
+
+		return query.testState(loc, WorldGuardPlugin.inst().wrapPlayer(player), Flags.BUILD);
+
 	}
 }

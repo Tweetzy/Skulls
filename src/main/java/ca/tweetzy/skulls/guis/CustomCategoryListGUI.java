@@ -18,13 +18,13 @@
 
 package ca.tweetzy.skulls.guis;
 
-import ca.tweetzy.feather.comp.enums.CompMaterial;
-import ca.tweetzy.feather.gui.Gui;
-import ca.tweetzy.feather.gui.events.GuiClickEvent;
-import ca.tweetzy.feather.gui.template.PagedGUI;
-import ca.tweetzy.feather.utils.Common;
-import ca.tweetzy.feather.utils.QuickItem;
-import ca.tweetzy.feather.utils.input.TitleInput;
+import ca.tweetzy.flight.comp.enums.CompMaterial;
+import ca.tweetzy.flight.gui.Gui;
+import ca.tweetzy.flight.gui.events.GuiClickEvent;
+import ca.tweetzy.flight.gui.template.PagedGUI;
+import ca.tweetzy.flight.utils.Common;
+import ca.tweetzy.flight.utils.QuickItem;
+import ca.tweetzy.flight.utils.input.TitleInput;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.enums.ViewMode;
 import ca.tweetzy.skulls.api.interfaces.Category;
@@ -67,7 +67,7 @@ public final class CustomCategoryListGUI extends PagedGUI<Category> {
 			setButton(5, 4, QuickItem.of(CompMaterial.SLIME_BALL)
 					.name(Translation.GUI_CUSTOM_CATEGORY_LIST_ITEMS_NEW_NAME.getString())
 					.lore(Translation.GUI_CUSTOM_CATEGORY_LIST_ITEMS_NEW_LORE.getList())
-					.make(), click -> new TitleInput(click.player, Translation.INPUT_CATEGORY_CREATE_TITLE.getString(), Translation.INPUT_CATEGORY_CREATE_SUBTITLE.getString()) {
+					.make(), click -> new TitleInput(Skulls.getInstance(),click.player, Translation.INPUT_CATEGORY_CREATE_TITLE.getString(), Translation.INPUT_CATEGORY_CREATE_SUBTITLE.getString()) {
 
 				@Override
 				public void onExit(Player player) {

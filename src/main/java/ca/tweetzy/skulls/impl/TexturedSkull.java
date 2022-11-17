@@ -18,8 +18,8 @@
 
 package ca.tweetzy.skulls.impl;
 
-import ca.tweetzy.feather.comp.NBTEditor;
-import ca.tweetzy.feather.utils.QuickItem;
+import ca.tweetzy.flight.comp.NBTEditor;
+import ca.tweetzy.flight.utils.QuickItem;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.interfaces.Skull;
 import ca.tweetzy.skulls.settings.Translation;
