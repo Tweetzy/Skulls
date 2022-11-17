@@ -23,7 +23,7 @@ import ca.tweetzy.flight.database.DataManagerAbstract;
 import ca.tweetzy.flight.database.DatabaseConnector;
 import ca.tweetzy.flight.database.UpdateCallback;
 import ca.tweetzy.flight.utils.Common;
-import ca.tweetzy.skulls.model.Serialize;
+import ca.tweetzy.flight.utils.SerializeUtil;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.enums.BaseCategory;
 import ca.tweetzy.skulls.api.interfaces.*;
@@ -121,7 +121,7 @@ public final class DataManager extends DataManagerAbstract {
 				fetch.setString(1, placedSkull.getId().toString());
 				statement.setString(1, placedSkull.getId().toString());
 				statement.setInt(2, placedSkull.getSkullId());
-				statement.setString(3, Serialize.serializeLocation(placedSkull.getLocation()));
+				statement.setString(3, SerializeUtil.serializeLocation(placedSkull.getLocation()));
 				statement.executeUpdate();
 
 				if (callback != null) {
@@ -389,7 +389,7 @@ public final class DataManager extends DataManagerAbstract {
 		return new PlacedSkullLocation(
 				UUID.fromString(resultSet.getString("id")),
 				resultSet.getInt("skull_id"),
-				Serialize.deserializeLocation(resultSet.getString("location"))
+				SerializeUtil.deserializeLocation(resultSet.getString("location"))
 		);
 	}
 

@@ -18,8 +18,7 @@
 
 package ca.tweetzy.skulls.settings;
 
-import ca.tweetzy.flight.files.comments.format.YamlCommentFormat;
-import ca.tweetzy.flight.files.file.YamlFile;
+import ca.tweetzy.flight.config.tweetzy.TweetzyYamlConfig;
 import ca.tweetzy.flight.utils.Common;
 import ca.tweetzy.skulls.Skulls;
 import lombok.NonNull;
@@ -41,7 +40,7 @@ import java.util.Map;
 @SuppressWarnings("all")
 public final class Locale {
 
-	private static final Map<String, YamlFile> LOCALES = new HashMap<>();
+	private static final Map<String, TweetzyYamlConfig> LOCALES = new HashMap<>();
 	private static final Map<String, Object> PHRASES = new HashMap<>();
 
 	private static String defaultLanguage = "english";
@@ -61,41 +60,36 @@ public final class Locale {
 			if (file.getName().equalsIgnoreCase("english.yml")) continue;
 			if (file.getName().equalsIgnoreCase(defaultLanguage + ".yml")) continue;
 
-			final YamlFile yamlFile = new YamlFile(Skulls.getInstance().getDataFolder() + "/locales/" + file.getName());
-			yamlFile.createOrLoadWithComments();
-			yamlFile.setCommentFormat(YamlCommentFormat.PRETTY);
+			final TweetzyYamlConfig yamlFile = new TweetzyYamlConfig(Skulls.getInstance(), "/locales/" + file.getName());
 
 			PHRASES.forEach((key, value) -> {
-				if (!yamlFile.isSet(key))
-					yamlFile.set(key, value);
+				if (!yamlFile.has(key))
+					yamlFile.createEntry(key, value);
 			});
 
-			yamlFile.path("file language").set(file.getName().replace(".yml", "")).comment("For internal use, this is auto generated based on file name");
+			yamlFile.createEntry("file language", file.getName().replace(".yml", "")).withComment("For internal use, this is auto generated based on file name");
+			yamlFile.init();
 
-			yamlFile.save();
 			LOCALES.put(file.getName().replace(".yml", ""), yamlFile);
 		}
 	}
 
 	@SneakyThrows
 	private static void setupDefaults(String name) {
-		final YamlFile yamlFile = new YamlFile(Skulls.getInstance().getDataFolder() + "/locales/" + name + ".yml");
-		yamlFile.createOrLoadWithComments();
-		yamlFile.setCommentFormat(YamlCommentFormat.PRETTY);
+		final TweetzyYamlConfig yamlFile = new TweetzyYamlConfig(Skulls.getInstance(), "/locales/" + name + ".yml");
 
 		PHRASES.forEach((key, value) -> {
-			if (!yamlFile.isSet(key))
-				yamlFile.set(key, value);
+			if (!yamlFile.has(key))
+				yamlFile.createEntry(key, value);
 		});
 
-		yamlFile.path("file language")
-				.set(name)
-				.comment("This is the default language for Skulls to use another language" +
-						"\nchange the default language in the config.yml" +
-						"\nif the file does not exists, it will generate using the default english" +
-						"\ntranslations, you can then make edits from there.");
+		yamlFile.createEntry("file language", name)
+				.withComment("This is the default language for Skulls to use another language")
+				.withComment("change the default language in the config.yml")
+				.withComment("if the file does not exists, it will generate using the default english")
+				.withComment("translations, you can then make edits from there.");
 
-		yamlFile.save();
+		yamlFile.init();
 
 		LOCALES.put(name, yamlFile);
 	}
@@ -117,16 +111,16 @@ public final class Locale {
 	}
 
 	private static Object getPhraseEnglish(String key) {
-		return LOCALES.get("english").get(key);
+		return LOCALES.get("english").getOr(key, null);
 	}
 
 	private static Object getPhrase(String key, String language) {
-		YamlFile file = LOCALES.get(language);
+		TweetzyYamlConfig file = LOCALES.get(language);
 
 		if (file == null)
 			return getPhraseEnglish(key);
 
-		return file.get(key, getPhraseEnglish(key));
+		return file.getOr(key, getPhraseEnglish(key));
 	}
 
 	public static void tell(CommandSender sender, String key) {
