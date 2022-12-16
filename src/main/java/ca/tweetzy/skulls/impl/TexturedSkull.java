@@ -19,12 +19,15 @@
 package ca.tweetzy.skulls.impl;
 
 import ca.tweetzy.flight.comp.NBTEditor;
+import ca.tweetzy.flight.comp.SkullUtils;
+import ca.tweetzy.flight.comp.enums.CompMaterial;
 import ca.tweetzy.flight.utils.QuickItem;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.interfaces.Skull;
 import ca.tweetzy.skulls.settings.Translation;
 import lombok.AllArgsConstructor;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.List;
 
@@ -97,7 +100,15 @@ public final class TexturedSkull implements Skull {
 
 	@Override
 	public ItemStack getItemStack() {
-		return QuickItem.of(NBTEditor.getHead(this.texture)).name(Translation.SKULL_TITLE.getString("skull_name", this.name)).tag("Skulls:ID", String.valueOf(this.id)).make();
+		final ItemStack head =  QuickItem.of(CompMaterial.PLAYER_HEAD).name(Translation.SKULL_TITLE.getString("skull_name", this.name)).tag("Skulls:ID", String.valueOf(this.id)).make();
+		final SkullMeta meta = (SkullMeta) head.getItemMeta();
+
+		if (meta != null) {
+			SkullUtils.applySkin(meta, this.texture);
+			head.setItemMeta(meta);
+		}
+
+		return head;
 	}
 
 	@Override
