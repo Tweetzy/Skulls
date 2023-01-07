@@ -100,15 +100,15 @@ public final class TexturedSkull implements Skull {
 
 	@Override
 	public ItemStack getItemStack() {
-		final ItemStack head =  QuickItem.of(CompMaterial.PLAYER_HEAD).name(Translation.SKULL_TITLE.getString("skull_name", this.name)).tag("Skulls:ID", String.valueOf(this.id)).make();
-		final SkullMeta meta = (SkullMeta) head.getItemMeta();
 
-		if (meta != null) {
-			SkullUtils.applySkin(meta, this.texture);
-			head.setItemMeta(meta);
-		}
+//		 final SkullMeta meta = (SkullMeta) head.getItemMeta();
+//
+//		if (meta != null) {
+//			SkullUtils.applySkin(meta, this.texture);
+//			head.setItemMeta(meta);
+//		}
 
-		return head;
+		return QuickItem.of(NBTEditor.getHead(this.texture)).name(Translation.SKULL_TITLE.getString("skull_name", this.name)).tag("Skulls:ID", String.valueOf(this.id)).make();
 	}
 
 	@Override
