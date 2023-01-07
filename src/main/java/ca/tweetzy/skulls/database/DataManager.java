@@ -251,7 +251,7 @@ public final class DataManager extends DataManagerAbstract {
 
 	public void insertPlayer(@NonNull final SkullUser user, Callback<SkullUser> callback) {
 		this.runAsync(() -> this.databaseConnector.connect(connection -> {
-			try (PreparedStatement statement = connection.prepareStatement("INSERT INTO " + this.getTablePrefix() + "players (uuid, favourites) VALUES(?, ?)")) {
+			try (PreparedStatement statement = connection.prepareStatement("INSERT INTO " + this.getTablePrefix() + "players (uuid, favourites) VALUES(?, ?) ON CONFLICT(uuid) DO NOTHING;")) {
 				PreparedStatement fetch = connection.prepareStatement("SELECT * FROM " + this.getTablePrefix() + "players WHERE uuid = ?");
 
 				fetch.setString(1, user.getUUID().toString());
