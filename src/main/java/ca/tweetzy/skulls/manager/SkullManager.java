@@ -250,8 +250,9 @@ public final class SkullManager implements Manager {
 				}
 
 				Skulls.getDataManager().insertSkulls(heads);
-				finished.accept(heads);
 			});
+			finished.accept(heads);
+
 
 		} catch (Exception e) {
 			Common.log("&cTweetzy.ca's api is currently unavailable, you can try again shortly.");
@@ -295,7 +296,7 @@ public final class SkullManager implements Manager {
 				downloadHeads();
 			} else {
 				Common.log("&aLoaded &e" + this.skulls.size() + " &askulls in &f" + String.format("%,.3f", (System.nanoTime() - start) / 1e+6) + "&ams");
-
+				setLoading(false);
 			}
 		});
 

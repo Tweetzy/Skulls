@@ -21,11 +21,12 @@ package ca.tweetzy.skulls.commands;
 import ca.tweetzy.flight.command.AllowedExecutor;
 import ca.tweetzy.flight.command.Command;
 import ca.tweetzy.flight.command.ReturnType;
+import ca.tweetzy.flight.settings.TranslationManager;
 import ca.tweetzy.flight.utils.Common;
-import ca.tweetzy.skulls.model.NumberHelper;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.interfaces.Skull;
-import ca.tweetzy.skulls.settings.Translation;
+import ca.tweetzy.skulls.model.NumberHelper;
+import ca.tweetzy.skulls.settings.Translations;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -50,14 +51,15 @@ public final class GiveCommand extends Command {
 			target = Bukkit.getPlayerExact(args[0]);
 
 		if (target == null && !isGiveAll) {
-			Common.tell(sender, Translation.PLAYER_OFFLINE.getString("player", args[0]));
+			Common.tell(sender, TranslationManager.string(Translations.PLAYER_OFFLINE, "value", args[0]));
 			return ReturnType.FAIL;
 		}
 
 		boolean isRandomHead = args[1].equalsIgnoreCase("random");
 
 		if (!isRandomHead && !NumberHelper.isInt(args[1])) {
-			Common.tell(sender, Translation.NOT_A_NUMBER.getString());
+			Common.tell(sender, TranslationManager.string(Translations.NOT_A_NUMBER, "value", args[1]));
+
 			return ReturnType.FAIL;
 		}
 
@@ -66,7 +68,7 @@ public final class GiveCommand extends Command {
 		Skull skull = isRandomHead ? Skulls.getSkullManager().getRandomSkull() : Skulls.getSkullManager().getSkull(Integer.parseInt(args[1]));
 
 		if (skull == null) {
-			Common.tell(sender, Translation.SKULL_NOT_FOUND.getString());
+			Common.tell(sender, TranslationManager.string(Translations.SKULL_NOT_FOUND));
 			return ReturnType.FAIL;
 		}
 

@@ -21,12 +21,13 @@ package ca.tweetzy.skulls.guis;
 import ca.tweetzy.flight.comp.enums.CompMaterial;
 import ca.tweetzy.flight.gui.Gui;
 import ca.tweetzy.flight.gui.template.BaseGUI;
+import ca.tweetzy.flight.settings.TranslationManager;
+import ca.tweetzy.flight.utils.Common;
 import ca.tweetzy.flight.utils.QuickItem;
 import ca.tweetzy.flight.utils.input.TitleInput;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.interfaces.Skull;
-import ca.tweetzy.skulls.settings.Locale;
-import ca.tweetzy.skulls.settings.Translation;
+import ca.tweetzy.skulls.settings.Translations;
 import org.apache.commons.lang.math.NumberUtils;
 
 /**
@@ -42,7 +43,7 @@ public final class SkullEditGUI extends BaseGUI {
 	private final int page;
 
 	public SkullEditGUI(final Gui parent, Skull skull, int page) {
-		super(parent, Translation.GUI_EDIT_TITLE.getString("skull_id", skull.getId()), 6);
+		super(parent, TranslationManager.string(Translations.GUI_EDIT_TITLE, "skull_id", skull.getId()), 6);
 		this.parent = parent;
 		this.skull = skull;
 		this.page = page;
@@ -54,9 +55,9 @@ public final class SkullEditGUI extends BaseGUI {
 		setItem(1, 4, this.skull.getItemStack());
 
 		setButton(3, 1, QuickItem.of(CompMaterial.NAME_TAG)
-				.name(Translation.GUI_EDIT_ITEMS_NAME_NAME.getString())
-				.lore(Translation.GUI_EDIT_ITEMS_NAME_LORE.getList())
-				.make(), click -> new TitleInput(Skulls.getInstance(),click.player, Translation.INPUT_SKULL_EDIT_TITLE.getString(), Translation.INPUT_SKULL_EDIT_NAME.getString()) {
+				.name(TranslationManager.string(Translations.GUI_EDIT_ITEMS_NAME_NAME))
+				.lore(TranslationManager.list(Translations.GUI_EDIT_ITEMS_NAME_LORE))
+				.make(), click -> new TitleInput(Skulls.getInstance(), click.player, TranslationManager.string(Translations.INPUT_SKULL_EDIT_TITLE), TranslationManager.string(Translations.INPUT_SKULL_EDIT_NAME)) {
 
 			@Override
 			public boolean onResult(String string) {
@@ -69,15 +70,15 @@ public final class SkullEditGUI extends BaseGUI {
 		});
 
 		setButton(3, 3, QuickItem.of(CompMaterial.GOLD_INGOT)
-				.name(Translation.GUI_EDIT_ITEMS_PRICE_NAME.getString())
-				.lore(Translation.GUI_EDIT_ITEMS_PRICE_LORE.getList())
-				.make(), click -> new TitleInput(Skulls.getInstance(),click.player, Translation.INPUT_SKULL_EDIT_TITLE.getString(), Translation.INPUT_SKULL_EDIT_PRICE.getString()) {
+				.name(TranslationManager.string(Translations.GUI_EDIT_ITEMS_PRICE_NAME))
+				.lore(TranslationManager.list(Translations.GUI_EDIT_ITEMS_PRICE_LORE))
+				.make(), click -> new TitleInput(Skulls.getInstance(), click.player, TranslationManager.string(Translations.INPUT_SKULL_EDIT_TITLE), TranslationManager.string(Translations.INPUT_SKULL_EDIT_PRICE)) {
 
 			@Override
 			public boolean onResult(String string) {
 				if (string.isEmpty()) return false;
 				if (!NumberUtils.isNumber(string.trim())) {
-					Locale.tell(click.player, Translation.NOT_A_NUMBER.getKey());
+					Common.tell(click.player, TranslationManager.string(Translations.NOT_A_NUMBER, "value", string));
 					return false;
 				}
 
@@ -89,8 +90,8 @@ public final class SkullEditGUI extends BaseGUI {
 		});
 
 		setButton(3, 5, QuickItem.of(CompMaterial.BOOKSHELF)
-				.name(Translation.GUI_EDIT_ITEMS_ADD_CATEGORY_NAME.getString())
-				.lore(Translation.GUI_EDIT_ITEMS_ADD_CATEGORY_LORE.getList())
+				.name(TranslationManager.string(Translations.GUI_EDIT_ITEMS_ADD_CATEGORY_NAME))
+				.lore(TranslationManager.list(Translations.GUI_EDIT_ITEMS_ADD_CATEGORY_LORE))
 				.make(), click -> click.manager.showGUI(click.player, new CategorySelectorGUI(selected -> {
 
 			if (!selected.getSkulls().contains(skull.getId())) {
@@ -102,8 +103,8 @@ public final class SkullEditGUI extends BaseGUI {
 		})));
 
 		setButton(3, 7, QuickItem.of(this.skull.isBlocked() ? CompMaterial.RED_STAINED_GLASS_PANE : CompMaterial.LIME_STAINED_GLASS_PANE)
-				.name(Translation.GUI_EDIT_ITEMS_BLOCKED_NAME.getString())
-				.lore(Translation.GUI_EDIT_ITEMS_BLOCKED_LORE.getList("is_true", (this.skull.isBlocked() ? Translation.MISC_IS_TRUE.getString() : Translation.MISC_IS_FALSE.getString())))
+				.name(TranslationManager.string(Translations.GUI_EDIT_ITEMS_BLOCKED_NAME))
+				.lore(TranslationManager.list(Translations.GUI_EDIT_ITEMS_BLOCKED_LORE, "is_true", (this.skull.isBlocked() ? TranslationManager.string(Translations.MISC_IS_TRUE) : TranslationManager.string(Translations.MISC_IS_FALSE))))
 				.make(), click -> {
 
 

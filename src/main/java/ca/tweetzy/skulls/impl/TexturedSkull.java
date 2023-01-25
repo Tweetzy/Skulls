@@ -19,15 +19,13 @@
 package ca.tweetzy.skulls.impl;
 
 import ca.tweetzy.flight.comp.NBTEditor;
-import ca.tweetzy.flight.comp.SkullUtils;
-import ca.tweetzy.flight.comp.enums.CompMaterial;
+import ca.tweetzy.flight.settings.TranslationManager;
 import ca.tweetzy.flight.utils.QuickItem;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.interfaces.Skull;
-import ca.tweetzy.skulls.settings.Translation;
+import ca.tweetzy.skulls.settings.Translations;
 import lombok.AllArgsConstructor;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.List;
 
@@ -108,7 +106,7 @@ public final class TexturedSkull implements Skull {
 //			head.setItemMeta(meta);
 //		}
 
-		return QuickItem.of(NBTEditor.getHead(this.texture)).name(Translation.SKULL_TITLE.getString("skull_name", this.name)).tag("Skulls:ID", String.valueOf(this.id)).make();
+		return QuickItem.of(NBTEditor.getHead(this.texture)).name(TranslationManager.string(Translations.SKULL_TITLE, "skull_name", this.name)).tag("Skulls:ID", String.valueOf(this.id)).make();
 	}
 
 	@Override

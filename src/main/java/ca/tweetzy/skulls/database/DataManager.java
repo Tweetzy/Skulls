@@ -70,7 +70,7 @@ public final class DataManager extends DataManagerAbstract {
 			}
 
 			statement.executeBatch();
-			Skulls.getInstance().getSkullManager().setDownloading(false);
+			Skulls.getSkullManager().setDownloading(false);
 			Common.broadcast("&r&aFinished inserting all heads into the data file!");
 		}));
 	}

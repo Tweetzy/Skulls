@@ -39,8 +39,8 @@ import ca.tweetzy.skulls.manager.CategoryManager;
 import ca.tweetzy.skulls.manager.EconomyManager;
 import ca.tweetzy.skulls.manager.PlayerManager;
 import ca.tweetzy.skulls.manager.SkullManager;
-import ca.tweetzy.skulls.settings.Locale;
 import ca.tweetzy.skulls.settings.Settings;
+import ca.tweetzy.skulls.settings.Translations;
 
 /**
  * Date Created: April 04 2022
@@ -69,7 +69,7 @@ public final class Skulls extends FlightPlugin {
 	protected void onFlight() {
 		// settings and locale setup
 		Settings.setup();
-		Locale.setup();
+		Translations.init();
 
 		Common.setPrefix(Settings.PREFIX.getString());
 
