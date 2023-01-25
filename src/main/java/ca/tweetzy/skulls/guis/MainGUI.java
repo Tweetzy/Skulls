@@ -20,6 +20,7 @@ package ca.tweetzy.skulls.guis;
 
 import ca.tweetzy.flight.comp.enums.CompMaterial;
 import ca.tweetzy.flight.gui.template.BaseGUI;
+import ca.tweetzy.flight.settings.TranslationManager;
 import ca.tweetzy.flight.utils.ChatUtil;
 import ca.tweetzy.flight.utils.Common;
 import ca.tweetzy.flight.utils.QuickItem;
@@ -28,7 +29,7 @@ import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.enums.BaseCategory;
 import ca.tweetzy.skulls.api.enums.ViewMode;
 import ca.tweetzy.skulls.model.SkullItem;
-import ca.tweetzy.skulls.settings.Translation;
+import ca.tweetzy.skulls.settings.Translations;
 import lombok.NonNull;
 import org.bukkit.entity.Player;
 
@@ -43,7 +44,7 @@ public final class MainGUI extends BaseGUI {
 	private final Player player;
 
 	public MainGUI(@NonNull final Player player) {
-		super(null, Translation.GUI_MAIN_TITLE.getString(), 6);
+		super(null, TranslationManager.string(Translations.GUI_MAIN_TITLE), 6);
 		this.player = player;
 		draw();
 	}
@@ -55,12 +56,12 @@ public final class MainGUI extends BaseGUI {
 			if (!baseCategory.isEnabled()) continue;
 			setButton(baseCategory.getSlot(), QuickItem
 					.of(Skulls.getSkullManager().getSkullItem(baseCategory.getTexture()))
-					.name(Translation.GUI_MAIN_ITEMS_CATEGORY_NAME.getString("category_name", baseCategory.getName()))
-					.lore(Translation.GUI_MAIN_ITEMS_CATEGORY_LORE.getList("category_size", Skulls.getSkullManager().getSkullCount(baseCategory.getId())))
+					.name(TranslationManager.string(Translations.GUI_MAIN_ITEMS_CATEGORY_NAME, "category_name", baseCategory.getName()))
+					.lore(TranslationManager.list(Translations.GUI_MAIN_ITEMS_CATEGORY_LORE, "category_size", Skulls.getSkullManager().getSkullCount(baseCategory.getId())))
 					.make(), click -> {
 
 				if (!click.player.hasPermission("skulls.category." + baseCategory.getId().toLowerCase().replace(" ", "").replace("&", ""))) {
-					Common.tell(click.player, Translation.CATEGORY_PERMISSION.getKey());
+					Common.tell(click.player, TranslationManager.string(Translations.CATEGORY_PERMISSION));
 					return;
 				}
 
@@ -69,16 +70,16 @@ public final class MainGUI extends BaseGUI {
 		}
 
 		setButton(4, 4, QuickItem.of(SkullItem.get("skulls:5650"))
-				.name(Translation.GUI_MAIN_ITEMS_SEARCH_NAME.getString())
-				.lore(Translation.GUI_MAIN_ITEMS_SEARCH_LORE.getList())
+				.name(TranslationManager.string(Translations.GUI_MAIN_ITEMS_SEARCH_NAME))
+				.lore(TranslationManager.list(Translations.GUI_MAIN_ITEMS_SEARCH_LORE))
 				.make(), click -> {
 
 			if (!click.player.hasPermission("skulls.search")) {
-				Common.tell(click.player, Translation.NO_PERMISSIONS.getKey());
+				Common.tell(click.player, TranslationManager.string(Translations.NO_PERMISSION));
 				return;
 			}
 
-			new TitleInput(Skulls.getInstance(), click.player, Translation.INPUT_SKULL_SEARCH_TITLE.getString(), Translation.INPUT_SKULL_SEARCH_SUBTITLE.getString()) {
+			new TitleInput(Skulls.getInstance(), click.player, TranslationManager.string(Translations.INPUT_SKULL_SEARCH_TITLE), TranslationManager.string(Translations.INPUT_SKULL_SEARCH_SUBTITLE)) {
 
 				@Override
 				public boolean onResult(String string) {
@@ -91,17 +92,17 @@ public final class MainGUI extends BaseGUI {
 		});
 
 		setButton(4, 2, QuickItem.of(SkullItem.get("skulls:25001"))
-				.name(Translation.GUI_MAIN_ITEMS_CUSTOM_CATEGORIES_NAME.getString())
-				.lore(Translation.GUI_MAIN_ITEMS_CUSTOM_CATEGORIES_LORE.getList())
+				.name(TranslationManager.string(Translations.GUI_MAIN_ITEMS_CUSTOM_CATEGORIES_NAME))
+				.lore(TranslationManager.list(Translations.GUI_MAIN_ITEMS_CUSTOM_CATEGORIES_LORE))
 				.make(), click -> click.manager.showGUI(click.player, new CustomCategoryListGUI(click.player, this)));
 
 		setButton(4, 6, QuickItem.of(SkullItem.get("skulls:39696"))
-				.name(Translation.GUI_MAIN_ITEMS_FAVOURITES_NAME.getString())
-				.lore(Translation.GUI_MAIN_ITEMS_FAVOURITES_LORE.getList())
+				.name(TranslationManager.string(Translations.GUI_MAIN_ITEMS_FAVOURITES_NAME))
+				.lore(TranslationManager.list(Translations.GUI_MAIN_ITEMS_FAVOURITES_LORE))
 				.make(), click -> {
 
 			if (!click.player.hasPermission("skulls.favourites")) {
-				Common.tell(click.player, Translation.NO_PERMISSIONS.getKey());
+				Common.tell(click.player, TranslationManager.string(Translations.NO_PERMISSION));
 				return;
 			}
 

@@ -21,12 +21,13 @@ package ca.tweetzy.skulls.commands;
 import ca.tweetzy.flight.command.AllowedExecutor;
 import ca.tweetzy.flight.command.Command;
 import ca.tweetzy.flight.command.ReturnType;
+import ca.tweetzy.flight.settings.TranslationManager;
 import ca.tweetzy.flight.utils.Common;
 import ca.tweetzy.flight.utils.QuickItem;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.model.NumberHelper;
 import ca.tweetzy.skulls.settings.Settings;
-import ca.tweetzy.skulls.settings.Translation;
+import ca.tweetzy.skulls.settings.Translations;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -74,7 +75,7 @@ public final class PlayerHeadCommand extends Command {
 			if (args.length == 3) {
 				final Player targetPlayer = Bukkit.getPlayerExact(args[2]);
 				if (targetPlayer == null) {
-					Common.tell(sender, Translation.PLAYER_OFFLINE.getString("player", args[2]));
+					Common.tell(sender, TranslationManager.string(Translations.PLAYER_OFFLINE, "value", args[2]));
 					return;
 				}
 

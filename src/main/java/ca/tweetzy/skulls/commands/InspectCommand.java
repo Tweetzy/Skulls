@@ -23,12 +23,13 @@ import ca.tweetzy.flight.command.Command;
 import ca.tweetzy.flight.command.ReturnType;
 import ca.tweetzy.flight.comp.NBTEditor;
 import ca.tweetzy.flight.comp.enums.CompMaterial;
+import ca.tweetzy.flight.settings.TranslationManager;
 import ca.tweetzy.flight.utils.Common;
 import ca.tweetzy.flight.utils.PlayerUtil;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.interfaces.PlacedSkull;
 import ca.tweetzy.skulls.api.interfaces.Skull;
-import ca.tweetzy.skulls.settings.Translation;
+import ca.tweetzy.skulls.settings.Translations;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -66,12 +67,11 @@ public final class InspectCommand extends Command {
 
 		final Skull skull = Skulls.getSkullManager().getSkull(skullId);
 		if (skull == null) {
-			Common.tell(player, Translation.NO_SKULL_INFO.getString());
+			Common.tell(sender, TranslationManager.string(Translations.NO_SKULL_INFO));
 			return ReturnType.FAIL;
 		}
 
-
-		Translation.INSPECT_INFO.getList("skull_id", skullId).forEach(line -> Common.tellNoPrefix(player, line));
+		Common.tellNoPrefix(sender, TranslationManager.list(Translations.INSPECT_INFO, "skull_id", String.valueOf(skullId)).toArray(new String[0]));
 		return ReturnType.SUCCESS;
 	}
 

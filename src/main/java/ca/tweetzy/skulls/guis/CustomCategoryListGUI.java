@@ -22,6 +22,7 @@ import ca.tweetzy.flight.comp.enums.CompMaterial;
 import ca.tweetzy.flight.gui.Gui;
 import ca.tweetzy.flight.gui.events.GuiClickEvent;
 import ca.tweetzy.flight.gui.template.PagedGUI;
+import ca.tweetzy.flight.settings.TranslationManager;
 import ca.tweetzy.flight.utils.Common;
 import ca.tweetzy.flight.utils.QuickItem;
 import ca.tweetzy.flight.utils.input.TitleInput;
@@ -29,7 +30,7 @@ import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.enums.ViewMode;
 import ca.tweetzy.skulls.api.interfaces.Category;
 import ca.tweetzy.skulls.impl.SkullCategory;
-import ca.tweetzy.skulls.settings.Translation;
+import ca.tweetzy.skulls.settings.Translations;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -47,7 +48,7 @@ public final class CustomCategoryListGUI extends PagedGUI<Category> {
 	private final Player viewer;
 
 	public CustomCategoryListGUI(Player viewer, Gui parent) {
-		super(parent, Translation.GUI_CUSTOM_CATEGORY_LIST_TITLE.getString(), 6, Skulls.getCategoryManager().getCustomCategories());
+		super(parent, TranslationManager.string(Translations.GUI_CUSTOM_CATEGORY_LIST_TITLE), 6, Skulls.getCategoryManager().getCustomCategories());
 		this.viewer = viewer;
 		draw();
 	}
@@ -55,8 +56,8 @@ public final class CustomCategoryListGUI extends PagedGUI<Category> {
 	@Override
 	protected ItemStack makeDisplayItem(Category category) {
 		return QuickItem.of(CompMaterial.WRITTEN_BOOK)
-				.name(Translation.GUI_CUSTOM_CATEGORY_LIST_ITEMS_CATEGORY_NAME.getString("category_name", category.getName()))
-				.lore(Translation.GUI_CUSTOM_CATEGORY_LIST_ITEMS_CATEGORY_LORE.getList("category_size", category.getSkulls().size()))
+				.name(TranslationManager.string(Translations.GUI_CUSTOM_CATEGORY_LIST_ITEMS_CATEGORY_NAME, "category_name", category.getName()))
+				.lore(TranslationManager.list(Translations.GUI_CUSTOM_CATEGORY_LIST_ITEMS_CATEGORY_LORE, "category_size", category.getSkulls().size()))
 				.hideTags(true)
 				.make();
 	}
@@ -65,9 +66,9 @@ public final class CustomCategoryListGUI extends PagedGUI<Category> {
 	protected void drawAdditional() {
 		if (this.viewer.hasPermission("skulls.admin"))
 			setButton(5, 4, QuickItem.of(CompMaterial.SLIME_BALL)
-					.name(Translation.GUI_CUSTOM_CATEGORY_LIST_ITEMS_NEW_NAME.getString())
-					.lore(Translation.GUI_CUSTOM_CATEGORY_LIST_ITEMS_NEW_LORE.getList())
-					.make(), click -> new TitleInput(Skulls.getInstance(),click.player, Translation.INPUT_CATEGORY_CREATE_TITLE.getString(), Translation.INPUT_CATEGORY_CREATE_SUBTITLE.getString()) {
+					.name(TranslationManager.string(Translations.GUI_CUSTOM_CATEGORY_LIST_ITEMS_NEW_NAME))
+					.lore(TranslationManager.list(Translations.GUI_CUSTOM_CATEGORY_LIST_ITEMS_NEW_LORE))
+					.make(), click -> new TitleInput(Skulls.getInstance(), click.player, TranslationManager.string(Translations.INPUT_CATEGORY_CREATE_TITLE), TranslationManager.string(Translations.INPUT_CATEGORY_CREATE_SUBTITLE)) {
 
 				@Override
 				public void onExit(Player player) {
@@ -79,7 +80,7 @@ public final class CustomCategoryListGUI extends PagedGUI<Category> {
 					string = ChatColor.stripColor(string.trim());
 
 					if (Skulls.getCategoryManager().findCategory(string) != null) {
-						Common.tell(click.player, Translation.ID_TAKEN.getString());
+						Common.tell(click.player, TranslationManager.string(Translations.ID_TAKEN));
 						return false;
 					}
 
@@ -100,7 +101,7 @@ public final class CustomCategoryListGUI extends PagedGUI<Category> {
 	@Override
 	protected void onClick(Category category, GuiClickEvent clickEvent) {
 		if (!clickEvent.player.hasPermission("skulls.customcategory." + category.getId().toLowerCase())) {
-			Common.tell(clickEvent.player, Translation.NO_PERMISSIONS.getKey());
+			Common.tell(clickEvent.player, TranslationManager.string(Translations.CATEGORY_PERMISSION));
 			return;
 		}
 

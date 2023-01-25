@@ -21,14 +21,15 @@ package ca.tweetzy.skulls.guis;
 import ca.tweetzy.flight.gui.Gui;
 import ca.tweetzy.flight.gui.events.GuiClickEvent;
 import ca.tweetzy.flight.gui.template.PagedGUI;
+import ca.tweetzy.flight.settings.TranslationManager;
+import ca.tweetzy.flight.utils.Common;
 import ca.tweetzy.flight.utils.QuickItem;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.enums.ViewMode;
 import ca.tweetzy.skulls.api.interfaces.Skull;
 import ca.tweetzy.skulls.api.interfaces.SkullUser;
-import ca.tweetzy.skulls.settings.Locale;
 import ca.tweetzy.skulls.settings.Settings;
-import ca.tweetzy.skulls.settings.Translation;
+import ca.tweetzy.skulls.settings.Translations;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -50,7 +51,7 @@ public final class SkullsViewGUI extends PagedGUI<Skull> {
 	public SkullsViewGUI(final Gui parent, final SkullUser skullPlayer, final String category, final ViewMode viewMode) {
 		super(
 				parent,
-				viewMode == ViewMode.SEARCH ? Translation.GUI_SKULLS_LIST_TITLE_SEARCH.getString("search_phrase", category) : viewMode == ViewMode.FAVOURITE ? Translation.GUI_SKULLS_LIST_TITLE_FAVOURITES.getString() : Translation.GUI_SKULLS_LIST_TITLE_CATEGORY.getString("category_name", category),
+				viewMode == ViewMode.SEARCH ? TranslationManager.string(Translations.GUI_SKULLS_LIST_TITLE_SEARCH, "search_phrase", category) : viewMode == ViewMode.FAVOURITE ? TranslationManager.string(Translations.GUI_SKULLS_LIST_TITLE_FAVOURITES) : TranslationManager.string(Translations.GUI_SKULLS_LIST_TITLE_CATEGORY, "category_name", category),
 				6,
 				viewMode == ViewMode.SEARCH ? Skulls.getSkullManager().getSkullsBySearch(category) : viewMode == ViewMode.FAVOURITE ? Skulls.getSkullManager().getSkulls(skullPlayer.getFavourites()) : Skulls.getSkullManager().getSkulls(category)
 		);
@@ -64,31 +65,31 @@ public final class SkullsViewGUI extends PagedGUI<Skull> {
 
 	@Override
 	protected ItemStack makeDisplayItem(Skull skull) {
-		final QuickItem item = QuickItem.of(skull.getItemStack()).name(Translation.GUI_SKULLS_LIST_ITEMS_SKULL_NAME.getString("skull_name", skull.getName()));
+		final QuickItem item = QuickItem.of(skull.getItemStack()).name(TranslationManager.string(Translations.GUI_SKULLS_LIST_ITEMS_SKULL_NAME, "skull_name", skull.getName()));
 
-		item.lore(Translation.GUI_SKULLS_LIST_ITEMS_SKULL_LORE_ID.getString("skull_id", skull.getId()));
-		item.lore(Translation.GUI_SKULLS_LIST_ITEMS_SKULL_LORE_TAGS.getString("skull_tags", String.join(", ", skull.getTags())));
+		item.lore(TranslationManager.string(Translations.GUI_SKULLS_LIST_ITEMS_SKULL_LORE_ID, "skull_id", skull.getId()));
+		item.lore(TranslationManager.string(Translations.GUI_SKULLS_LIST_ITEMS_SKULL_LORE_TAGS, "skull_tags", String.join(", ", skull.getTags())));
 
 		if (Settings.CHARGE_FOR_HEADS.getBoolean() && skull.getPrice() > 0) {
-			item.lore(Translation.GUI_SKULLS_LIST_ITEMS_SKULL_LORE_PRICE.getString("skull_price", String.format("%,.2f", skull.getPrice())));
+			item.lore(TranslationManager.string(Translations.GUI_SKULLS_LIST_ITEMS_SKULL_LORE_PRICE, "skull_price", String.format("%,.2f", skull.getPrice())));
 		}
 
 		if (!skull.isBlocked() && this.skullPlayer.getFavourites().contains(skull.getId())) {
 			item.lore(" ");
-			item.lore(Translation.GUI_SKULLS_LIST_ITEMS_SKULL_LORE_FAVOURITED.getString());
+			item.lore(TranslationManager.string(Translations.GUI_SKULLS_LIST_ITEMS_SKULL_LORE_FAVOURITED));
 			item.lore(" ");
 		} else {
 			item.lore(" ");
 		}
 
-		item.lore(skull.isBlocked() ? Translation.GUI_SKULLS_LIST_ITEMS_SKULL_LORE_BLOCKED.getString() : Translation.GUI_SKULLS_LIST_ITEMS_SKULL_LORE_TAKE.getString());
+		item.lore(skull.isBlocked() ? TranslationManager.string(Translations.GUI_SKULLS_LIST_ITEMS_SKULL_LORE_BLOCKED) : TranslationManager.string(Translations.GUI_SKULLS_LIST_ITEMS_SKULL_LORE_TAKE));
 
 		if (!skull.isBlocked()) {
-			item.lore(this.skullPlayer.getFavourites().contains(skull.getId()) ? Translation.GUI_SKULLS_LIST_ITEMS_SKULL_LORE_UN_FAVOURITE.getString() : Translation.GUI_SKULLS_LIST_ITEMS_SKULL_LORE_FAVOURITE.getString());
+			item.lore(this.skullPlayer.getFavourites().contains(skull.getId()) ? TranslationManager.string(Translations.GUI_SKULLS_LIST_ITEMS_SKULL_LORE_UN_FAVOURITE) : TranslationManager.string(Translations.GUI_SKULLS_LIST_ITEMS_SKULL_LORE_FAVOURITE));
 		}
 
 		if (this.player.hasPermission("skulls.admin"))
-			item.lore(" ", Translation.GUI_SKULLS_LIST_ITEMS_SKULL_LORE_EDIT.getString());
+			item.lore(" ", TranslationManager.string(Translations.GUI_SKULLS_LIST_ITEMS_SKULL_LORE_EDIT));
 
 		return item.make();
 	}
@@ -115,7 +116,7 @@ public final class SkullsViewGUI extends PagedGUI<Skull> {
 			}
 
 			if (!Skulls.getEconomyManager().has(player, price)) {
-				Locale.tell(player, Translation.NOT_ENOUGH_MONEY.getKey());
+				Common.tell(player, TranslationManager.string(Translations.NO_MONEY));
 				return;
 			}
 
@@ -145,8 +146,8 @@ public final class SkullsViewGUI extends PagedGUI<Skull> {
 
 	private String getTitle(ViewMode viewMode, String category) {
 		return viewMode == ViewMode.SEARCH ?
-				Translation.GUI_SKULLS_LIST_TITLE_SEARCH.getString("search_phrase", category)
-				: viewMode == ViewMode.FAVOURITE ? Translation.GUI_SKULLS_LIST_TITLE_FAVOURITES.getString()
-				: Translation.GUI_SKULLS_LIST_TITLE_CATEGORY.getString("category_name", category);
+				TranslationManager.string(Translations.GUI_SKULLS_LIST_TITLE_SEARCH, "search_phrase", category)
+				: viewMode == ViewMode.FAVOURITE ? TranslationManager.string(Translations.GUI_SKULLS_LIST_TITLE_FAVOURITES)
+				: TranslationManager.string(Translations.GUI_SKULLS_LIST_TITLE_CATEGORY, "category_name", category);
 	}
 }

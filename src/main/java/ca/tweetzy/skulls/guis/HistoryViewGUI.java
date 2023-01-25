@@ -22,12 +22,13 @@ import ca.tweetzy.flight.comp.enums.CompMaterial;
 import ca.tweetzy.flight.gui.Gui;
 import ca.tweetzy.flight.gui.events.GuiClickEvent;
 import ca.tweetzy.flight.gui.template.PagedGUI;
+import ca.tweetzy.flight.settings.TranslationManager;
 import ca.tweetzy.flight.utils.Common;
 import ca.tweetzy.flight.utils.QuickItem;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.enums.BaseCategory;
 import ca.tweetzy.skulls.api.interfaces.History;
-import ca.tweetzy.skulls.settings.Translation;
+import ca.tweetzy.skulls.settings.Translations;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 
@@ -44,7 +45,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public final class HistoryViewGUI extends PagedGUI<History> {
 
 	public HistoryViewGUI(Gui parent) {
-		super(parent, Translation.GUI_HISTORIES_TITLE.getString(), 6, Skulls.getSkullManager().getHistories());
+		super(parent, TranslationManager.string(Translations.GUI_HISTORIES_TITLE), 6, Skulls.getSkullManager().getHistories());
 		draw();
 	}
 
@@ -57,10 +58,10 @@ public final class HistoryViewGUI extends PagedGUI<History> {
 
 		return QuickItem
 				.of(downloaded ? CompMaterial.LIME_STAINED_GLASS_PANE : CompMaterial.RED_STAINED_GLASS_PANE)
-				.name(Translation.GUI_HISTORIES_ITEMS_HISTORY_NAME.getString("history_id", history.getID()))
-				.lore(Translation.GUI_HISTORIES_ITEMS_HISTORY_LORE.getList(
+				.name(TranslationManager.string(Translations.GUI_HISTORIES_ITEMS_HISTORY_NAME, "history_id", history.getID()))
+				.lore(TranslationManager.list(Translations.GUI_HISTORIES_ITEMS_HISTORY_LORE,
 						"history_size", history.getSkulls().size(),
-						"is_true", downloaded ? Translation.MISC_IS_TRUE.getString() : Translation.MISC_IS_FALSE.getString(),
+						"is_true", TranslationManager.string(downloaded ? Translations.MISC_IS_TRUE : Translations.MISC_IS_FALSE),
 						"history_time", sdf.format(resultDate)
 				))
 				.make();
@@ -68,7 +69,7 @@ public final class HistoryViewGUI extends PagedGUI<History> {
 
 	@Override
 	protected void drawAdditional() {
-		setButton(5,8, QuickItem.of(CompMaterial.GOLD_NUGGET).name("&e&lForce Sync Prices").lore("&7Clicking this will force update all the prices", "&7for all skulls to the default category price", "&7set within the configuration file.").make(), click -> {
+		setButton(5, 8, QuickItem.of(CompMaterial.GOLD_NUGGET).name("&e&lForce Sync Prices").lore("&7Clicking this will force update all the prices", "&7for all skulls to the default category price", "&7set within the configuration file.").make(), click -> {
 //			Skulls.getDataManager().syncSkullPricesByCategory(null);
 
 			AtomicInteger total = new AtomicInteger(0);

@@ -59,6 +59,8 @@ public final class SearchCommand extends Command {
 				if (createError == null) {
 					Skulls.getPlayerManager().addPlayer(created);
 					Skulls.getGuiManager().showGUI(player, new SkullsViewGUI(null, created, builder.toString().trim(), ViewMode.SEARCH));
+				} else {
+					Skulls.getGuiManager().showGUI(player, new SkullsViewGUI(null, new SkullPlayer(player.getUniqueId(), new ArrayList<>()), builder.toString().trim(), ViewMode.SEARCH));
 
 				}
 			});
