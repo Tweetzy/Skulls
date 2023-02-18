@@ -29,6 +29,7 @@ import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.enums.BaseCategory;
 import ca.tweetzy.skulls.api.enums.ViewMode;
 import ca.tweetzy.skulls.model.SkullItem;
+import ca.tweetzy.skulls.settings.Settings;
 import ca.tweetzy.skulls.settings.Translations;
 import lombok.NonNull;
 import org.bukkit.entity.Player;
@@ -60,10 +61,11 @@ public final class MainGUI extends BaseGUI {
 					.lore(TranslationManager.list(Translations.GUI_MAIN_ITEMS_CATEGORY_LORE, "category_size", Skulls.getSkullManager().getSkullCount(baseCategory.getId())))
 					.make(), click -> {
 
-				if (!click.player.hasPermission("skulls.category." + baseCategory.getId().toLowerCase().replace(" ", "").replace("&", ""))) {
-					Common.tell(click.player, TranslationManager.string(Translations.CATEGORY_PERMISSION));
-					return;
-				}
+				if (!Settings.GENERAL_USAGE_REQUIRES_NO_PERM.getBoolean())
+					if (!click.player.hasPermission("skulls.category." + baseCategory.getId().toLowerCase().replace(" ", "").replace("&", ""))) {
+						Common.tell(click.player, TranslationManager.string(Translations.CATEGORY_PERMISSION));
+						return;
+					}
 
 				click.manager.showGUI(click.player, new SkullsViewGUI(this, Skulls.getPlayerManager().findPlayer(click.player), baseCategory.getId(), ViewMode.LIST));
 			});
@@ -74,10 +76,11 @@ public final class MainGUI extends BaseGUI {
 				.lore(TranslationManager.list(Translations.GUI_MAIN_ITEMS_SEARCH_LORE))
 				.make(), click -> {
 
-			if (!click.player.hasPermission("skulls.search")) {
-				Common.tell(click.player, TranslationManager.string(Translations.NO_PERMISSION));
-				return;
-			}
+			if (!Settings.GENERAL_USAGE_REQUIRES_NO_PERM.getBoolean())
+				if (!click.player.hasPermission("skulls.search")) {
+					Common.tell(click.player, TranslationManager.string(Translations.NO_PERMISSION));
+					return;
+				}
 
 			new TitleInput(Skulls.getInstance(), click.player, TranslationManager.string(Translations.INPUT_SKULL_SEARCH_TITLE), TranslationManager.string(Translations.INPUT_SKULL_SEARCH_SUBTITLE)) {
 
@@ -101,10 +104,11 @@ public final class MainGUI extends BaseGUI {
 				.lore(TranslationManager.list(Translations.GUI_MAIN_ITEMS_FAVOURITES_LORE))
 				.make(), click -> {
 
-			if (!click.player.hasPermission("skulls.favourites")) {
-				Common.tell(click.player, TranslationManager.string(Translations.NO_PERMISSION));
-				return;
-			}
+			if (!Settings.GENERAL_USAGE_REQUIRES_NO_PERM.getBoolean())
+				if (!click.player.hasPermission("skulls.favourites")) {
+					Common.tell(click.player, TranslationManager.string(Translations.NO_PERMISSION));
+					return;
+				}
 
 			click.manager.showGUI(click.player, new SkullsViewGUI(this, Skulls.getPlayerManager().findPlayer(click.player), "", ViewMode.FAVOURITE));
 		});

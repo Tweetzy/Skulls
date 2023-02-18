@@ -49,10 +49,10 @@ public final class SkullsCommand extends Command {
 		if (commandSender instanceof Player) {
 			final Player player = (Player) commandSender;
 
-			if (Skulls.getSkullManager().isLoading()) {
-				Common.tell(player, TranslationManager.string(Translations.LOADING));
-				return ReturnType.FAIL;
-			}
+//			if (Skulls.getSkullManager().isLoading()) {
+//				Common.tell(player, TranslationManager.string(Translations.LOADING));
+//				return ReturnType.FAIL;
+//			}
 
 			if (player.hasPermission("skulls.command.main") || Settings.MAIN_MENU_REQUIRES_NO_PERM.getBoolean())
 				Skulls.getGuiManager().showGUI(player, new MainGUI(player));

@@ -38,6 +38,7 @@ public final class Settings extends FlightSettings {
 	public static final ConfigEntry ECONOMY = create("economy", "Vault").withComment("You can use Vault or Item");
 	public static final ConfigEntry ITEM_ECONOMY_ITEM = create("item economy item", CompMaterial.GOLD_INGOT.name());
 	public static final ConfigEntry MAIN_MENU_REQUIRES_NO_PERM = create("main menu requires no permission", true);
+	public static final ConfigEntry GENERAL_USAGE_REQUIRES_NO_PERM = create("general usage requires no permission", false, "If true, no permission is required to use except for admin stuff");
 
 	public static final ConfigEntry CATEGORIES_ALPHABET_ENABLED = create("enabled categories.alphabet", true);
 	public static final ConfigEntry CATEGORIES_ANIMALS_ENABLED = create("enabled categories.animals", true);

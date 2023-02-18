@@ -253,7 +253,6 @@ public final class SkullManager implements Manager {
 			});
 			finished.accept(heads);
 
-
 		} catch (Exception e) {
 			Common.log("&cTweetzy.ca's api is currently unavailable, you can try again shortly.");
 		}

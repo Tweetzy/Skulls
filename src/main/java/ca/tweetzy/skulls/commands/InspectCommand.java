@@ -29,6 +29,7 @@ import ca.tweetzy.flight.utils.PlayerUtil;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.interfaces.PlacedSkull;
 import ca.tweetzy.skulls.api.interfaces.Skull;
+import ca.tweetzy.skulls.settings.Settings;
 import ca.tweetzy.skulls.settings.Translations;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
@@ -82,7 +83,7 @@ public final class InspectCommand extends Command {
 
 	@Override
 	public String getPermissionNode() {
-		return "skulls.command.inspect";
+		return Settings.GENERAL_USAGE_REQUIRES_NO_PERM.getBoolean() ? null : "skulls.command.inspect";
 	}
 
 	@Override

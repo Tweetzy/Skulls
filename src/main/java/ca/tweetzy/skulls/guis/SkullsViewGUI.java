@@ -124,7 +124,11 @@ public final class SkullsViewGUI extends PagedGUI<Skull> {
 			player.getInventory().addItem(skull.getItemStack());
 		}
 
-		if (event.clickType == ClickType.RIGHT && player.hasPermission("skulls.favourite")) {
+		if (event.clickType == ClickType.RIGHT) {
+			if (!Settings.GENERAL_USAGE_REQUIRES_NO_PERM.getBoolean() && !player.hasPermission("skulls.favourite"))
+				return;
+
+
 			this.skullPlayer.toggleFavourite(skull.getId());
 			this.skullPlayer.sync();
 
