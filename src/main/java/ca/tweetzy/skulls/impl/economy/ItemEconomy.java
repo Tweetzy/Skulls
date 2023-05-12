@@ -18,11 +18,14 @@
 
 package ca.tweetzy.skulls.impl.economy;
 
-import ca.tweetzy.skulls.model.PlayerInventoryHelper;
+import ca.tweetzy.flight.utils.Common;
+import ca.tweetzy.flight.utils.PlayerUtil;
 import ca.tweetzy.skulls.api.interfaces.Economy;
+import ca.tweetzy.skulls.model.PlayerInventoryHelper;
 import ca.tweetzy.skulls.settings.Settings;
 import lombok.NonNull;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * Date Created: April 21 2022
@@ -31,6 +34,10 @@ import org.bukkit.entity.Player;
  * @author Kiran Hart
  */
 public final class ItemEconomy implements Economy {
+
+	public ItemEconomy() {
+		Common.log("&aSetting up item economy provider");
+	}
 
 	@Override
 	public String getName() {
@@ -44,12 +51,15 @@ public final class ItemEconomy implements Economy {
 
 	@Override
 	public boolean has(@NonNull Player player, double amount) {
-		return PlayerInventoryHelper.getItemCountInPlayerInventory(player, Settings.ITEM_ECONOMY_ITEM.getMaterial().parseItem()) >= (int) amount;
+		final ItemStack item = Settings.ITEM_ECONOMY_ITEM.getItemStack();
+		final int total = PlayerUtil.getItemCountInPlayerInventory(player, item);
+		return total >= (int) amount;
 	}
 
 	@Override
 	public void withdraw(@NonNull Player player, double amount) {
-		PlayerInventoryHelper.removeSpecificItemQuantityFromPlayer(player, Settings.ITEM_ECONOMY_ITEM.getMaterial().parseItem(), (int) amount);
+		final ItemStack item = Settings.ITEM_ECONOMY_ITEM.getItemStack();
+		PlayerInventoryHelper.removeSpecificItemQuantityFromPlayer(player, item, (int) amount);
 	}
 
 	@Override
