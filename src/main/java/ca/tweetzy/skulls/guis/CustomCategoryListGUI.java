@@ -30,6 +30,7 @@ import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.enums.ViewMode;
 import ca.tweetzy.skulls.api.interfaces.Category;
 import ca.tweetzy.skulls.impl.SkullCategory;
+import ca.tweetzy.skulls.settings.Settings;
 import ca.tweetzy.skulls.settings.Translations;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -100,10 +101,11 @@ public final class CustomCategoryListGUI extends PagedGUI<Category> {
 
 	@Override
 	protected void onClick(Category category, GuiClickEvent clickEvent) {
-		if (!clickEvent.player.hasPermission("skulls.customcategory." + category.getId().toLowerCase())) {
-			Common.tell(clickEvent.player, TranslationManager.string(Translations.CATEGORY_PERMISSION));
-			return;
-		}
+		if (!Settings.GENERAL_USAGE_REQUIRES_NO_PERM.getBoolean())
+			if (!clickEvent.player.hasPermission("skulls.customcategory." + category.getId().toLowerCase())) {
+				Common.tell(clickEvent.player, TranslationManager.string(Translations.CATEGORY_PERMISSION));
+				return;
+			}
 
 		clickEvent.manager.showGUI(clickEvent.player, new SkullsViewGUI(this, Skulls.getPlayerManager().findPlayer(clickEvent.player), category.getId(), ViewMode.LIST));
 	}

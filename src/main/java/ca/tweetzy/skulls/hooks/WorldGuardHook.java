@@ -58,7 +58,7 @@ public final class WorldGuardHook {
 			return true;
 
 
-		return query.testState(loc, WorldGuardPlugin.inst().wrapPlayer(player), Flags.BUILD);
+		return query.testState(loc, WorldGuardPlugin.inst().wrapPlayer(player), Flags.BUILD) || query.testState(loc, WorldGuardPlugin.inst().wrapPlayer(player), Flags.BLOCK_BREAK);
 
 	}
 }

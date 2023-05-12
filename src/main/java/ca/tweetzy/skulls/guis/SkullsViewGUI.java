@@ -18,11 +18,13 @@
 
 package ca.tweetzy.skulls.guis;
 
+import ca.tweetzy.flight.comp.enums.CompMaterial;
 import ca.tweetzy.flight.gui.Gui;
 import ca.tweetzy.flight.gui.events.GuiClickEvent;
 import ca.tweetzy.flight.gui.template.PagedGUI;
 import ca.tweetzy.flight.settings.TranslationManager;
 import ca.tweetzy.flight.utils.Common;
+import ca.tweetzy.flight.utils.PlayerUtil;
 import ca.tweetzy.flight.utils.QuickItem;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.enums.ViewMode;
@@ -124,7 +126,11 @@ public final class SkullsViewGUI extends PagedGUI<Skull> {
 			player.getInventory().addItem(skull.getItemStack());
 		}
 
-		if (event.clickType == ClickType.RIGHT && player.hasPermission("skulls.favourite")) {
+		if (event.clickType == ClickType.RIGHT) {
+			if (!Settings.GENERAL_USAGE_REQUIRES_NO_PERM.getBoolean() && !player.hasPermission("skulls.favourite"))
+				return;
+
+
 			this.skullPlayer.toggleFavourite(skull.getId());
 			this.skullPlayer.sync();
 

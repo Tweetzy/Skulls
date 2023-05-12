@@ -20,7 +20,6 @@ package ca.tweetzy.skulls;
 
 import ca.tweetzy.flight.FlightPlugin;
 import ca.tweetzy.flight.command.CommandManager;
-import ca.tweetzy.flight.config.tweetzy.TweetzyYamlConfig;
 import ca.tweetzy.flight.database.DataMigrationManager;
 import ca.tweetzy.flight.database.DatabaseConnector;
 import ca.tweetzy.flight.database.SQLiteConnector;
@@ -49,8 +48,6 @@ import ca.tweetzy.skulls.settings.Translations;
  * @author Kiran Hart
  */
 public final class Skulls extends FlightPlugin {
-
-	private final TweetzyYamlConfig coreConfig = new TweetzyYamlConfig(this, "config.yml");
 
 	private final GuiManager guiManager = new GuiManager(this);
 	private final CommandManager commandManager = new CommandManager(this);
@@ -104,11 +101,6 @@ public final class Skulls extends FlightPlugin {
 
 	public static Skulls getInstance() {
 		return (Skulls) FlightPlugin.getInstance();
-	}
-
-
-	public static TweetzyYamlConfig getCoreConfig() {
-		return getInstance().coreConfig;
 	}
 
 	// gui manager

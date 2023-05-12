@@ -7,7 +7,7 @@
     <artifactId>skulls</artifactId>
 
     <name>Skulls</name>
-    <version>3.8.0</version>
+    <version>3.9.2</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -15,7 +15,7 @@
         <jarName>Skulls</jarName>
         <main.class>${project.groupId}.${project.artifactId}.${project.name}</main.class>
         <java.version>1.8</java.version>
-        <flight.version>3.10.0</flight.version>
+        <flight.version>3.12.0</flight.version>
         <flight.path>ca.tweetzy</flight.path>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -25,6 +25,10 @@
             <id>repsy</id>
             <name>Tweetzy Maven Repo On Repsy</name>
             <url>https://repo.repsy.io/mvn/kiran/tweetzy</url>
+        </repository>
+        <repository>
+            <id>nms-repo</id>
+            <url>https://repo.codemc.io/repository/nms/</url>
         </repository>
         <repository>
             <id>jitpack.io</id>
@@ -45,6 +49,11 @@
     </repositories>
     <dependencies>
         <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot</artifactId>
+            <version>1.19.4-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>  <dependency>
             <groupId>${flight.path}</groupId>
             <artifactId>flight</artifactId>
             <version>${flight.version}</version>
@@ -66,7 +75,12 @@
             <artifactId>VaultAPI</artifactId>
             <version>1.7</version>
             <scope>provided</scope>
-        </dependency>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.bukkit</groupId>
+                    <artifactId>bukkit</artifactId>
+                </exclusion>
+            </exclusions> </dependency>
         <dependency>
             <groupId>me.TechsCode</groupId>
             <artifactId>UltraEconomyAPI</artifactId>
@@ -139,27 +153,10 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>C:\Dev\Minecraft\latest\plugins</outputDirectory>
+                            <outputDirectory>D:\Development\Spigot Servers\Latest Version\plugins</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>C:\Users\Kiran\Documents\Development\Minecraft\Active\${project.name}\target</directory>
-                                    <include>${project.name}.jar</include>
-                                    <filtering>false</filtering>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>copy-to-ready-jars</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>C:\Users\Kiran\Documents\Development\Minecraft\Ready Jars\</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>C:\Users\Kiran\Documents\Development\Minecraft\Active\${project.name}\target</directory>
+                                    <directory>${project.build.directory}</directory>
                                     <include>${project.name}.jar</include>
                                     <filtering>false</filtering>
                                 </resource>

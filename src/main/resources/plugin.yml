@@ -6,4 +6,7 @@ api-version: 1.13
 softdepend:
   - Vault
   - UltraEconomy
+  - WorldGuard
+  - WorldEdit
+  - FastAsyncWorldEdit
 commands:

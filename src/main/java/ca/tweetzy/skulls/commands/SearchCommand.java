@@ -26,6 +26,7 @@ import ca.tweetzy.skulls.api.enums.ViewMode;
 import ca.tweetzy.skulls.api.interfaces.SkullUser;
 import ca.tweetzy.skulls.guis.SkullsViewGUI;
 import ca.tweetzy.skulls.impl.SkullPlayer;
+import ca.tweetzy.skulls.settings.Settings;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -77,7 +78,7 @@ public final class SearchCommand extends Command {
 
 	@Override
 	public String getPermissionNode() {
-		return "skulls.command.search";
+		return Settings.GENERAL_USAGE_REQUIRES_NO_PERM.getBoolean() ? null : "skulls.command.search";
 	}
 
 	@Override
