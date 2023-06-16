@@ -18,8 +18,9 @@
 
 package ca.tweetzy.skulls.listeners;
 
-import ca.tweetzy.flight.comp.NBTEditor;
 import ca.tweetzy.flight.comp.enums.CompMaterial;
+import ca.tweetzy.flight.nbtapi.NBT;
+import ca.tweetzy.flight.utils.Common;
 import ca.tweetzy.flight.utils.PlayerUtil;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.interfaces.PlacedSkull;
@@ -47,13 +48,13 @@ public final class SkullBlockListener implements Listener {
 		}
 
 		final ItemStack item = PlayerUtil.getHand(event.getPlayer());
-		if (!NBTEditor.contains(item, "Skulls:ID")) {
+		if (!NBT.get(item, nbt -> nbt.hasTag("Skulls:ID"))) {
 			return;
 		}
 
 		final Block block = event.getBlockPlaced();
 		if (block.getType() == CompMaterial.PLAYER_HEAD.parseMaterial() || block.getType() == CompMaterial.PLAYER_WALL_HEAD.parseMaterial()) {
-			final int skullId = Integer.parseInt(NBTEditor.getString(item, "Skulls:ID"));
+			final int skullId = Integer.parseInt(NBT.get(item, nbt -> nbt.getString("Skulls:ID")));
 			Skulls.getSkullManager().addPlacedSkull(new PlacedSkullLocation(UUID.randomUUID(), skullId, block.getLocation()));
 		}
 
