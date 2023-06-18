@@ -21,8 +21,8 @@ package ca.tweetzy.skulls.commands;
 import ca.tweetzy.flight.command.AllowedExecutor;
 import ca.tweetzy.flight.command.Command;
 import ca.tweetzy.flight.command.ReturnType;
-import ca.tweetzy.flight.comp.NBTEditor;
 import ca.tweetzy.flight.comp.enums.CompMaterial;
+import ca.tweetzy.flight.nbtapi.NBT;
 import ca.tweetzy.flight.settings.TranslationManager;
 import ca.tweetzy.flight.utils.Common;
 import ca.tweetzy.flight.utils.PlayerUtil;
@@ -60,8 +60,8 @@ public final class InspectCommand extends Command {
 				skullId = placedSkull.getSkullId();
 			}
 		} else {
-			if (NBTEditor.contains(hand, "Skulls:ID")) {
-				final String skullIdString = NBTEditor.getString(hand, "Skulls:ID");
+			if (NBT.get(hand, nbt -> nbt.hasTag("Skulls:ID"))) {
+				final String skullIdString = NBT.get(hand, nbt -> nbt.getString("Skulls:ID"));
 				skullId = Integer.parseInt(skullIdString);
 			}
 		}
