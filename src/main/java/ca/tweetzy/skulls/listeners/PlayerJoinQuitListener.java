@@ -18,8 +18,11 @@
 
 package ca.tweetzy.skulls.listeners;
 
+import ca.tweetzy.flight.utils.Common;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.impl.SkullPlayer;
+import ca.tweetzy.skulls.settings.Settings;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -35,6 +38,27 @@ import java.util.ArrayList;
  * @author Kiran Hart
  */
 public final class PlayerJoinQuitListener implements Listener {
+
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onOpdPlayerJoin(final PlayerJoinEvent event) {
+		final Player player = event.getPlayer();
+		if (!player.isOp()) return;
+
+		if (!Settings.TELL_OP_PATREON_LINK.getBoolean()) return;
+		Bukkit.getServer().getScheduler().runTaskLater(Skulls.getInstance(), () -> {
+			Common.tellNoPrefix(player,
+					"",
+					"<center>%pl_name%",
+					"<center>&7If you like the plugin, please consider supporting",
+					"<center>&7me on patreon for as low as &a$1 &7a month.",
+					"<center>&7It will help me keep the skulls db up and for me",
+					"<center>&7to be able to provide updates regularly",
+					"",
+					"<center>&6https://patreon.com/kiranhart",
+					""
+			);
+		}, 5L);
+	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerJoin(final PlayerJoinEvent event) {

@@ -20,7 +20,6 @@ package ca.tweetzy.skulls.listeners;
 
 import ca.tweetzy.flight.comp.enums.CompMaterial;
 import ca.tweetzy.flight.nbtapi.NBT;
-import ca.tweetzy.flight.utils.Common;
 import ca.tweetzy.flight.utils.PlayerUtil;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.interfaces.PlacedSkull;
@@ -48,6 +47,8 @@ public final class SkullBlockListener implements Listener {
 		}
 
 		final ItemStack item = PlayerUtil.getHand(event.getPlayer());
+		if (item == null || item.getType() == CompMaterial.AIR.parseMaterial() || item.getAmount() == 0) return;
+
 		if (!NBT.get(item, nbt -> nbt.hasTag("Skulls:ID"))) {
 			return;
 		}

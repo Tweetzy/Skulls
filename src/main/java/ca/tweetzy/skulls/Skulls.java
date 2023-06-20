@@ -69,6 +69,7 @@ public final class Skulls extends FlightPlugin {
 		Translations.init();
 
 		Common.setPrefix(Settings.PREFIX.getString());
+		Common.setPluginName("<GRADIENT:DD5E89>&lSkulls</GRADIENT:fbc7d4>");
 
 		// setup sqlite
 		this.databaseConnector = new SQLiteConnector(this);
