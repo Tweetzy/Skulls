@@ -63,7 +63,8 @@ public final class GiveCommand extends Command {
 			return ReturnType.FAIL;
 		}
 
-		final int amount = args.length == 3 ? NumberHelper.tryInt(args[2], 1) : 1;
+		int amount = args.length == 3 ? NumberHelper.tryInt(args[2], 1) : 1;
+		if (amount > 36) amount = 36;
 
 		Skull skull = isRandomHead ? Skulls.getSkullManager().getRandomSkull() : Skulls.getSkullManager().getSkull(Integer.parseInt(args[1]));
 
