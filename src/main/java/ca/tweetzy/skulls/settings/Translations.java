@@ -117,7 +117,7 @@ public final class Translations extends TranslationManager {
 
 	public static final TranslationEntry GUI_EDIT_ITEMS_PRICE_NAME = create("gui.edit.items.price.name", "<GRADIENT:DD5E89>&lSkull Price</GRADIENT:fbc7d4>");
 
-	public static final TranslationEntry GUI_EDIT_ITEMS_PRICE_LORE = create("gui.edit.items.price.lore", "", "&e&lClick & 8» & 7To edit skull price");
+	public static final TranslationEntry GUI_EDIT_ITEMS_PRICE_LORE = create("gui.edit.items.price.lore", "", "&e&lClick &8» &7To edit skull price");
 
 	public static final TranslationEntry GUI_EDIT_ITEMS_ADD_CATEGORY_NAME = create("gui.edit.items.add category.name", "<GRADIENT:DD5E89>&lAdd To Category</GRADIENT:fbc7d4>");
 
