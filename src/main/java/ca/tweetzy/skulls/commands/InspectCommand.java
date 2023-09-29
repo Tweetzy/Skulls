@@ -60,8 +60,8 @@ public final class InspectCommand extends Command {
 				skullId = placedSkull.getSkullId();
 			}
 		} else {
-			if (NBT.get(hand, nbt -> nbt.hasTag("Skulls:ID"))) {
-				final String skullIdString = NBT.get(hand, nbt -> nbt.getString("Skulls:ID"));
+			if (NBT.get(hand, nbt -> (boolean) nbt.hasTag("Skulls:ID"))) {
+				final String skullIdString = NBT.get(hand, nbt -> (String) nbt.getString("Skulls:ID"));
 				skullId = Integer.parseInt(skullIdString);
 			}
 		}

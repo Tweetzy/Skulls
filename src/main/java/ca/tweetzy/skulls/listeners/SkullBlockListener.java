@@ -49,13 +49,13 @@ public final class SkullBlockListener implements Listener {
 		final ItemStack item = PlayerUtil.getHand(event.getPlayer());
 		if (item == null || item.getType() == CompMaterial.AIR.parseMaterial() || item.getAmount() == 0) return;
 
-		if (!NBT.get(item, nbt -> nbt.hasTag("Skulls:ID"))) {
+		if (!NBT.get(item, nbt -> (boolean) nbt.hasTag("Skulls:ID"))) {
 			return;
 		}
 
 		final Block block = event.getBlockPlaced();
 		if (block.getType() == CompMaterial.PLAYER_HEAD.parseMaterial() || block.getType() == CompMaterial.PLAYER_WALL_HEAD.parseMaterial()) {
-			final int skullId = Integer.parseInt(NBT.get(item, nbt -> nbt.getString("Skulls:ID")));
+			final int skullId = Integer.parseInt(NBT.get(item, nbt -> (String) nbt.getString("Skulls:ID")));
 			Skulls.getSkullManager().addPlacedSkull(new PlacedSkullLocation(UUID.randomUUID(), skullId, block.getLocation()));
 		}
 
