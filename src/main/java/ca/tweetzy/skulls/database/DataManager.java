@@ -71,7 +71,7 @@ public final class DataManager extends DataManagerAbstract {
 
 			statement.executeBatch();
 			Skulls.getSkullManager().setDownloading(false);
-			Common.broadcast("&r&aFinished inserting all heads into the data file!");
+			Common.log("&r&aFinished inserting all heads into the data file!");
 		}));
 	}
 
