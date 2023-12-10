@@ -40,6 +40,7 @@ public final class Settings extends FlightSettings {
 	public static final ConfigEntry MAIN_MENU_REQUIRES_NO_PERM = create("main menu requires no permission", true);
 	public static final ConfigEntry GENERAL_USAGE_REQUIRES_NO_PERM = create("general usage requires no permission", false, "If true, no permission is required to use except for admin stuff");
 	public static final ConfigEntry TELL_OP_PATREON_LINK = create("tell ops patron on join", true);
+	public static final ConfigEntry SKULL_TRACKING = create("track skull placement", true, "If disabled skulls will no longer drop in creative");
 
 	public static final ConfigEntry CATEGORIES_ALPHABET_ENABLED = create("enabled categories.alphabet", true);
 	public static final ConfigEntry CATEGORIES_ANIMALS_ENABLED = create("enabled categories.animals", true);

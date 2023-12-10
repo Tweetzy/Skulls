@@ -97,7 +97,9 @@ public final class Skulls extends FlightPlugin {
 		// events
 		getServer().getPluginManager().registerEvents(new PlayerJoinQuitListener(), this);
 		getServer().getPluginManager().registerEvents(new PlayerDeathListener(), this);
-		getServer().getPluginManager().registerEvents(new SkullBlockListener(), this);
+		if (Settings.SKULL_TRACKING.getBoolean()) {
+			getServer().getPluginManager().registerEvents(new SkullBlockListener(), this);
+		}
 	}
 
 	public static Skulls getInstance() {
