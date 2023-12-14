@@ -62,7 +62,7 @@ public abstract class SkullsBaseGUI extends BaseGUI {
 
 	@Override
 	protected int getPreviousButtonSlot() {
-		return 49;
+		return 48;
 	}
 
 	@Override

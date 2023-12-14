@@ -61,7 +61,7 @@ public abstract class SkullsPagedGUI<T> extends PagedGUI<T> {
 
 	@Override
 	protected int getPreviousButtonSlot() {
-		return 49;
+		return 48;
 	}
 
 	@Override
