@@ -72,6 +72,17 @@ public final class Translations extends TranslationManager {
 	);
 
 	// GUIS
+	public static final TranslationEntry GUI_BTN_BACK_NAME = create("gui.buttons.back.name", "&aBack");
+	public static final TranslationEntry GUI_BTN_BACK_LORE = create("gui.buttons.back.lore", "&7Click to go back");
+	public static final TranslationEntry GUI_BTN_EXIT_NAME = create("gui.buttons.exit.name", "&cExit");
+	public static final TranslationEntry GUI_BTN_EXIT_LORE = create("gui.buttons.exit.lore", "&7Click to close menu");
+
+	public static final TranslationEntry GUI_BTN_PREV_NAME = create("gui.buttons.previous.name", "&ePrevious");
+	public static final TranslationEntry GUI_BTN_PREV_LORE = create("gui.buttons.previous.lore", "&7Click to go back a page");
+	public static final TranslationEntry GUI_BTN_NEXT_NAME = create("gui.buttons.next.name", "&eNext");
+	public static final TranslationEntry GUI_BTN_NEXT_LORE = create("gui.buttons.next.lore", "&7Click to next page");
+
+
 	public static final TranslationEntry GUI_HISTORIES_TITLE = create("gui.histories.title", "&eSkulls &8> &7Histories");
 
 	public static final TranslationEntry GUI_HISTORIES_ITEMS_HISTORY_NAME = create("gui.histories.items.history.name", "&e%history_id%");

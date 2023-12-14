@@ -59,6 +59,12 @@ public final class Settings extends FlightSettings {
 	/*
 	==================== GUI END ====================
 	 */
+
+	public static final ConfigEntry GUI_MAIN_ITEMS_FAVOURITES_SLOT = create("gui.main.items.favourites.slot", 42, "-1 to disable it");
+	public static final ConfigEntry GUI_MAIN_ITEMS_SEARCH_SLOT = create("gui.main.items.search.slot", 40, "-1 to disable it");
+	public static final ConfigEntry GUI_MAIN_ITEMS_CUSTOM_CATEGORIES_SLOT = create("gui.main.items.custom categories.slot", 38, "-1 to disable it");
+
+
 	public static final ConfigEntry GUI_MAIN_ITEMS_ALPHABET_SLOT = create("gui.main.items.alphabet.slot", 11);
 	public static final ConfigEntry GUI_MAIN_ITEMS_ANIMALS_SLOT = create("gui.main.items.animals.slot", 12);
 	public static final ConfigEntry GUI_MAIN_ITEMS_BLOCKS_SLOT = create("gui.main.items.blocks.slot", 13);

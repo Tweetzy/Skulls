@@ -29,6 +29,7 @@ import ca.tweetzy.flight.utils.input.TitleInput;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.enums.ViewMode;
 import ca.tweetzy.skulls.api.interfaces.Category;
+import ca.tweetzy.skulls.guis.abstraction.SkullsPagedGUI;
 import ca.tweetzy.skulls.impl.SkullCategory;
 import ca.tweetzy.skulls.settings.Settings;
 import ca.tweetzy.skulls.settings.Translations;
@@ -44,7 +45,7 @@ import java.util.Collections;
  *
  * @author Kiran Hart
  */
-public final class CustomCategoryListGUI extends PagedGUI<Category> {
+public final class CustomCategoryListGUI extends SkullsPagedGUI<Category> {
 
 	private final Player viewer;
 

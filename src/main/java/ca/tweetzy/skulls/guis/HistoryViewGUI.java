@@ -28,6 +28,7 @@ import ca.tweetzy.flight.utils.QuickItem;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.enums.BaseCategory;
 import ca.tweetzy.skulls.api.interfaces.History;
+import ca.tweetzy.skulls.guis.abstraction.SkullsPagedGUI;
 import ca.tweetzy.skulls.settings.Translations;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
@@ -42,7 +43,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author Kiran Hart
  */
-public final class HistoryViewGUI extends PagedGUI<History> {
+public final class HistoryViewGUI extends SkullsPagedGUI<History> {
 
 	public HistoryViewGUI(Gui parent) {
 		super(parent, TranslationManager.string(Translations.GUI_HISTORIES_TITLE), 6, Skulls.getSkullManager().getHistories());

@@ -27,6 +27,7 @@ import ca.tweetzy.flight.utils.QuickItem;
 import ca.tweetzy.flight.utils.input.TitleInput;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.interfaces.Skull;
+import ca.tweetzy.skulls.guis.abstraction.SkullsBaseGUI;
 import ca.tweetzy.skulls.settings.Translations;
 import org.apache.commons.lang.math.NumberUtils;
 
@@ -36,7 +37,7 @@ import org.apache.commons.lang.math.NumberUtils;
  *
  * @author Kiran Hart
  */
-public final class SkullEditGUI extends BaseGUI {
+public final class SkullEditGUI extends SkullsBaseGUI {
 
 	private final Gui parent;
 	private final Skull skull;

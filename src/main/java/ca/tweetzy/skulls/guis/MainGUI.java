@@ -28,6 +28,7 @@ import ca.tweetzy.flight.utils.input.TitleInput;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.enums.BaseCategory;
 import ca.tweetzy.skulls.api.enums.ViewMode;
+import ca.tweetzy.skulls.guis.abstraction.SkullsBaseGUI;
 import ca.tweetzy.skulls.model.SkullItem;
 import ca.tweetzy.skulls.settings.Settings;
 import ca.tweetzy.skulls.settings.Translations;
@@ -40,7 +41,7 @@ import org.bukkit.entity.Player;
  *
  * @author Kiran Hart
  */
-public final class MainGUI extends BaseGUI {
+public final class MainGUI extends SkullsBaseGUI {
 
 	private final Player player;
 
@@ -71,7 +72,7 @@ public final class MainGUI extends BaseGUI {
 			});
 		}
 
-		setButton(4, 4, QuickItem.of(SkullItem.get("skulls:5650"))
+		setButton(Settings.GUI_MAIN_ITEMS_SEARCH_SLOT.getInt(), QuickItem.of(SkullItem.get("skulls:5650"))
 				.name(TranslationManager.string(Translations.GUI_MAIN_ITEMS_SEARCH_NAME))
 				.lore(TranslationManager.list(Translations.GUI_MAIN_ITEMS_SEARCH_LORE))
 				.make(), click -> {
@@ -94,12 +95,12 @@ public final class MainGUI extends BaseGUI {
 
 		});
 
-		setButton(4, 2, QuickItem.of(SkullItem.get("skulls:25001"))
+		setButton(Settings.GUI_MAIN_ITEMS_CUSTOM_CATEGORIES_SLOT.getInt(), QuickItem.of(SkullItem.get("skulls:25001"))
 				.name(TranslationManager.string(Translations.GUI_MAIN_ITEMS_CUSTOM_CATEGORIES_NAME))
 				.lore(TranslationManager.list(Translations.GUI_MAIN_ITEMS_CUSTOM_CATEGORIES_LORE))
 				.make(), click -> click.manager.showGUI(click.player, new CustomCategoryListGUI(click.player, this)));
 
-		setButton(4, 6, QuickItem.of(SkullItem.get("skulls:39696"))
+		setButton(Settings.GUI_MAIN_ITEMS_FAVOURITES_SLOT.getInt(), QuickItem.of(SkullItem.get("skulls:39696"))
 				.name(TranslationManager.string(Translations.GUI_MAIN_ITEMS_FAVOURITES_NAME))
 				.lore(TranslationManager.list(Translations.GUI_MAIN_ITEMS_FAVOURITES_LORE))
 				.make(), click -> {

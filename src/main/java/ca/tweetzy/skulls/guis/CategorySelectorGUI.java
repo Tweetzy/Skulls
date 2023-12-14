@@ -20,11 +20,11 @@ package ca.tweetzy.skulls.guis;
 
 import ca.tweetzy.flight.comp.enums.CompMaterial;
 import ca.tweetzy.flight.gui.events.GuiClickEvent;
-import ca.tweetzy.flight.gui.template.PagedGUI;
 import ca.tweetzy.flight.settings.TranslationManager;
 import ca.tweetzy.flight.utils.QuickItem;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.interfaces.Category;
+import ca.tweetzy.skulls.guis.abstraction.SkullsPagedGUI;
 import ca.tweetzy.skulls.settings.Translations;
 import org.bukkit.inventory.ItemStack;
 
@@ -36,7 +36,7 @@ import java.util.function.Consumer;
  *
  * @author Kiran Hart
  */
-public final class CategorySelectorGUI extends PagedGUI<Category> {
+public final class CategorySelectorGUI extends SkullsPagedGUI<Category> {
 
 	private final Consumer<Category> selected;
 

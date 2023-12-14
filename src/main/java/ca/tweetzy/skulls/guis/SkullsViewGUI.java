@@ -24,12 +24,12 @@ import ca.tweetzy.flight.gui.events.GuiClickEvent;
 import ca.tweetzy.flight.gui.template.PagedGUI;
 import ca.tweetzy.flight.settings.TranslationManager;
 import ca.tweetzy.flight.utils.Common;
-import ca.tweetzy.flight.utils.PlayerUtil;
 import ca.tweetzy.flight.utils.QuickItem;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.enums.ViewMode;
 import ca.tweetzy.skulls.api.interfaces.Skull;
 import ca.tweetzy.skulls.api.interfaces.SkullUser;
+import ca.tweetzy.skulls.guis.abstraction.SkullsPagedGUI;
 import ca.tweetzy.skulls.settings.Settings;
 import ca.tweetzy.skulls.settings.Translations;
 import org.bukkit.Bukkit;
@@ -43,7 +43,7 @@ import org.bukkit.inventory.ItemStack;
  *
  * @author Kiran Hart
  */
-public final class SkullsViewGUI extends PagedGUI<Skull> {
+public final class SkullsViewGUI extends SkullsPagedGUI<Skull> {
 
 	private final Player player;
 	private final SkullUser skullPlayer;
@@ -143,17 +143,5 @@ public final class SkullsViewGUI extends PagedGUI<Skull> {
 		if (event.clickType == ClickType.NUMBER_KEY && player.hasPermission("skulls.admin")) {
 			event.manager.showGUI(player, new SkullEditGUI(this, skull, this.page));
 		}
-	}
-
-	@Override
-	protected void handleTitle() {
-//		setTitle(Replacer.replaceVariables(getTitle(this.viewMode, this.category), "current_page", this.page, "total_pages", this.pages));
-	}
-
-	private String getTitle(ViewMode viewMode, String category) {
-		return viewMode == ViewMode.SEARCH ?
-				TranslationManager.string(Translations.GUI_SKULLS_LIST_TITLE_SEARCH, "search_phrase", category)
-				: viewMode == ViewMode.FAVOURITE ? TranslationManager.string(Translations.GUI_SKULLS_LIST_TITLE_FAVOURITES)
-				: TranslationManager.string(Translations.GUI_SKULLS_LIST_TITLE_CATEGORY, "category_name", category);
 	}
 }
