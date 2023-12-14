@@ -28,6 +28,7 @@ import ca.tweetzy.skulls.api.interfaces.PlacedSkull;
 import ca.tweetzy.skulls.api.interfaces.Skull;
 import ca.tweetzy.skulls.impl.InsertHistory;
 import ca.tweetzy.skulls.impl.TexturedSkull;
+import ca.tweetzy.skulls.settings.Settings;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -299,14 +300,16 @@ public final class SkullManager implements Manager {
 			}
 		});
 
-		Skulls.getDataManager().getPlacedSkulls((error, all) -> {
-			if (error != null) {
-				error.printStackTrace();
-				return;
-			}
+		if (Settings.SKULL_TRACKING.getBoolean()) {
+			Skulls.getDataManager().getPlacedSkulls((error, all) -> {
+				if (error != null) {
+					error.printStackTrace();
+					return;
+				}
 
-			all.forEach(placedSkull -> this.placedSkulls.put(placedSkull.getLocation(), placedSkull));
-		});
+				all.forEach(placedSkull -> this.placedSkulls.put(placedSkull.getLocation(), placedSkull));
+			});
+		}
 
 		Skulls.getDataManager().getHistories((error, all) -> {
 			if (error != null) {
