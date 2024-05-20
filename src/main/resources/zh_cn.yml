@@ -1,0 +1,178 @@
+gui:
+  custom category list:
+    title: '&e头颅 &8> &7自定义类别'
+    items:
+      new:
+        lore:
+          - ''
+          - '&e&l点击 &8» &7创建新类别'
+        name: <GRADIENT:DD5E89>&l新类别</GRADIENT:fbc7d4>
+      category:
+        lore:
+          - '&8按此类别查看头颅'
+          - '&7总头颅数&F: &b%category_size%'
+          - ''
+          - '&e&l点击 &8» &7查看类别'
+        name: '%category_name%'
+  skulls list:
+    title:
+      all: '&e头颅 &8> &7全部'
+      search: '&e头颅 &8> &7%search_phrase%'
+      favourites: '&e头颅 &8> &7收藏'
+      category: '&e头颅 &8> &7%category_name%'
+    items:
+      skull:
+        lore:
+          take: '&e&l左键点击 &8» &7拿走一个'
+          blocked: '&c&o购买被阻止'
+          favourited: '&e&l已收藏'
+          edit: '&b&l按1 &8» &7编辑此头颅'
+          price: '&7价格: &a$%skull_price%'
+          un favourite: '&e&l右键点击 &8» &7取消收藏头颅'
+          id: '&7编号: &e%skull_id%'
+          favourite: '&e&l右键点击 &8» &7收藏头颅'
+          tags: '&7标签: &e%skull_tags%'
+        name: '&e%skull_name%'
+  buttons:
+    next:
+      lore: '&7点击到下一页'
+      name: '&e下一页'
+    exit:
+      lore: '&7点击关闭菜单'
+      name: '&c退出'
+    previous:
+      lore: '&7点击返回上一页'
+      name: '&e上一页'
+    back:
+      lore: '&7点击返回'
+      name: '&a返回'
+  edit:
+    title: '&e头颅 &8> &7编辑 &8> &7%skull_id%'
+    items:
+      blocked:
+        lore:
+          - ''
+          - '&7阻止&f: %is_true%'
+          - ''
+          - '&e&l点击 &8» &7切换阻止状态'
+        name: <GRADIENT:DD5E89>&l头颅阻止</GRADIENT:fbc7d4>
+      price:
+        lore:
+          - ''
+          - '&e&l点击 &8» &7编辑头颅价格'
+        name: <GRADIENT:DD5E89>&l头颅价格</GRADIENT:fbc7d4>
+      name:
+        lore:
+          - ''
+          - '&e&l点击 &8» &7更改头颅名称'
+        name: <GRADIENT:DD5E89>&l头颅名称</GRADIENT:fbc7d4>
+      add category:
+        lore:
+          - ''
+          - '&e&l点击 &8» &7添加到其他类别'
+        name: <GRADIENT:DD5E89>&l添加到类别</GRADIENT:fbc7d4>
+  histories:
+    title: '&e头颅 &8> &7历史记录'
+    items:
+      history:
+        lore:
+          - ''
+          - '&7总头颅数&f: &a%history_size%'
+          - '&7已下载&f: %is_true%'
+          - '&7时间&f: &a%history_time%'
+          - ''
+          - '&e&l点击 &8» &7下载头颅'
+        name: '&e%history_id%'
+  main:
+    title: '&e头颅'
+    items:
+      search:
+        lore:
+          - ''
+          - '&e&l点击 &8» &7搜索头颅'
+        name: <GRADIENT:DD5E89>&l搜索</GRADIENT:fbc7d4>
+      favourites:
+        lore:
+          - '&7你收藏的所有头颅的集合'
+          - '&7你已收藏的头颅。'
+          - ''
+          - '&e&l点击 &8» &7查看你的收藏'
+        name: <GRADIENT:DD5E89>&l收藏</GRADIENT:fbc7d4>
+      custom categories:
+        lore:
+          - ''
+          - '&e&l点击 &8» &7查看更多类别'
+        name: <GRADIENT:DD5E89>&l更多类别</GRADIENT:fbc7d4>
+      category:
+        lore:
+          - '&8按此类别查看头颅'
+          - '&7总头颅数&F: &b%category_size%'
+          - ''
+          - '&e&l点击 &8» &7查看类别'
+        name: '&e%category_name%'
+  custom category selector:
+    title: '&e头颅 &8> &7选择类别'
+    items:
+      category:
+        lore: '&e&l点击 &8» &7选择类别'
+        name: '%category_name%'
+input:
+  category create:
+    subtitle: '&f输入新类别的id'
+    title: '&e创建类别'
+  skull edit:
+    price: '&f输入新的头颅价格'
+    name: '&F输入新的头颅名称'
+    title: '&e编辑头颅'
+  skull search:
+    subtitle: '&f在聊天中输入搜索词'
+    title: '&e搜索头颅'
+categories:
+  food and drinks: 食物和饮料
+  humanoids: 玩家们
+  plants: 植物
+  blocks: 块
+  monsters: 怪物
+  alphabet: 字母表
+  animals: 动物
+  decoration: 装饰
+  humans: 人类
+  misc: 杂项
+error:
+  not a number: '&4%value% &c不是一个有效的数字!'
+  no permission: '&c你没有足够的权限!'
+  player offline: '&4%value% &c当前不在线!'
+  not enough money: '&c你没有足够的钱!'
+  player not found: '&4%value% &c未找到!'
+button:
+  number key: '按 # 键'
+  left click: 左键点击
+  right click: 右键点击
+  left shift click: Shift+左键点击
+  middle click: 中键点击
+  drop key: 按下丢弃键
+misc:
+  id taken: '&c该类别id已被使用!'
+  skull not found: '&c找不到该id的头颅'
+  no skull info: '&c无法确定该头颅的ID'
+  category permission: '&c你没有权限访问该类别!'
+  loading: '&c请稍等，仍在加载头颅'
+conditionals:
+  is true: '&A是'
+  is allowed: '&a允许'
+  is false: '&c否'
+  'false': '&C否'
+  is disallowed: '&c不允许'
+  'true': '&a是'
+  closed: '&c关闭'
+  disabled: '&c禁用'
+  enabled: '&a启用'
+  open: '&a开放'
+skull:
+  name: '&e%skull_name%'
+inspect info:
+  - '&8&m-----------------------------------------------------'
+  - ''
+  - '&e头颅ID&f: &a%skull_id%'
+  - ''
+  - '&8&m-----------------------------------------------------'
