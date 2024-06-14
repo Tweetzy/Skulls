@@ -72,7 +72,10 @@ public final class InspectCommand extends Command {
 			return ReturnType.FAIL;
 		}
 
-		Common.tellNoPrefix(sender, TranslationManager.list(Translations.INSPECT_INFO, "skull_id", String.valueOf(skullId)).toArray(new String[0]));
+		Common.tellNoPrefix(sender, TranslationManager.list(Translations.INSPECT_INFO,
+				"skull_id", String.valueOf(skullId),
+				"skull_texture", skull.getTexture()
+		).toArray(new String[0]));
 		return ReturnType.SUCCESS;
 	}
 

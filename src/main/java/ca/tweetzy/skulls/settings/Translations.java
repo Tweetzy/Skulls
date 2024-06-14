@@ -67,6 +67,7 @@ public final class Translations extends TranslationManager {
 			"&8&m-----------------------------------------------------",
 			"",
 			"&eSkull ID&f: &a%skull_id%",
+			"&eTexture URL&f: &a%skull_texture%",
 			"",
 			"&8&m-----------------------------------------------------"
 	);
