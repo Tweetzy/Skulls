@@ -50,7 +50,7 @@ public final class CustomCategoryListGUI extends SkullsPagedGUI<Category> {
 	private final Player viewer;
 
 	public CustomCategoryListGUI(Player viewer, Gui parent) {
-		super(parent, TranslationManager.string(Translations.GUI_CUSTOM_CATEGORY_LIST_TITLE), 6, Skulls.getCategoryManager().getCustomCategories());
+		super(parent, viewer, TranslationManager.string(Translations.GUI_CUSTOM_CATEGORY_LIST_TITLE), 6, Skulls.getCategoryManager().getCustomCategories());
 		this.viewer = viewer;
 		draw();
 	}
@@ -65,7 +65,9 @@ public final class CustomCategoryListGUI extends SkullsPagedGUI<Category> {
 	}
 
 	@Override
-	protected void drawAdditional() {
+	protected void drawFixed() {
+		applyBackExit();
+
 		if (this.viewer.hasPermission("skulls.admin"))
 			setButton(5, 4, QuickItem.of(CompMaterial.SLIME_BALL)
 					.name(TranslationManager.string(Translations.GUI_CUSTOM_CATEGORY_LIST_ITEMS_NEW_NAME))

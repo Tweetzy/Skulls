@@ -60,10 +60,15 @@ public final class Settings extends FlightSettings {
 	/*
 	==================== GUI END ====================
 	 */
+	public static final ConfigEntry GUI_SHARED_ITEMS_BACK_BUTTON = create("gui.shared buttons.back button.item", CompMaterial.DARK_OAK_DOOR.name());
+	public static final ConfigEntry GUI_SHARED_ITEMS_EXIT_BUTTON = create("gui.shared buttons.exit button.item", CompMaterial.BARRIER.name());
+	public static final ConfigEntry GUI_SHARED_ITEMS_PREVIOUS_BUTTON = create("gui.shared buttons.previous button.item", CompMaterial.ARROW.name());
+	public static final ConfigEntry GUI_SHARED_ITEMS_NEXT_BUTTON = create("gui.shared buttons.next button.item", CompMaterial.ARROW.name());
 
 	public static final ConfigEntry GUI_MAIN_ITEMS_FAVOURITES_SLOT = create("gui.main.items.favourites.slot", 42, "-1 to disable it");
-	public static final ConfigEntry GUI_MAIN_ITEMS_SEARCH_SLOT = create("gui.main.items.search.slot", 40, "-1 to disable it");
+	public static final ConfigEntry GUI_MAIN_ITEMS_SEARCH_SLOT = create("gui.main.items.search.slot", 41, "-1 to disable it");
 	public static final ConfigEntry GUI_MAIN_ITEMS_CUSTOM_CATEGORIES_SLOT = create("gui.main.items.custom categories.slot", 38, "-1 to disable it");
+	public static final ConfigEntry GUI_MAIN_ITEMS_PLAYER_HEADS_SLOT = create("gui.main.items.player heads.slot", 39, "-1 to disable it");
 
 
 	public static final ConfigEntry GUI_MAIN_ITEMS_ALPHABET_SLOT = create("gui.main.items.alphabet.slot", 11);
@@ -88,6 +93,7 @@ public final class Settings extends FlightSettings {
 	public static final ConfigEntry DEFAULT_PRICES_MISC = create("default prices.misc", 1.0);
 	public static final ConfigEntry DEFAULT_PRICES_MONSTERS = create("default prices.monsters", 1.0);
 	public static final ConfigEntry DEFAULT_PRICES_PLANTS = create("default prices.plants", 1.0);
+	public static final ConfigEntry DEFAULT_PRICES_PLAYER_HEADS = create("default prices.player heads", 1.0);
 
 	@SneakyThrows
 	public static void setup() {

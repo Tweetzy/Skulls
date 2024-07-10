@@ -1,5 +1,5 @@
 /*
- * Skulls
+ * Auction House
  * Copyright 2023 Kiran Hart
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,46 +18,74 @@
 
 package ca.tweetzy.skulls.guis.abstraction;
 
-import ca.tweetzy.flight.comp.enums.CompMaterial;
 import ca.tweetzy.flight.gui.Gui;
 import ca.tweetzy.flight.gui.template.BaseGUI;
 import ca.tweetzy.flight.settings.TranslationManager;
 import ca.tweetzy.flight.utils.QuickItem;
+import ca.tweetzy.skulls.settings.Settings;
 import ca.tweetzy.skulls.settings.Translations;
+import lombok.Getter;
 import lombok.NonNull;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public abstract class SkullsBaseGUI extends BaseGUI {
-	public SkullsBaseGUI(Gui parent, @NonNull String title, int rows) {
+
+	@Getter
+	protected final Player player;
+
+	public SkullsBaseGUI(Gui parent, @NonNull final Player player, @NonNull String title, int rows) {
 		super(parent, title, rows);
+		this.player = player;
+		setTitle(title);
 	}
 
-	public SkullsBaseGUI(Gui parent, @NonNull String title) {
+	public SkullsBaseGUI(Gui parent, @NonNull final Player player, @NonNull String title) {
 		super(parent, title);
+		this.player = player;
+		setTitle(title);
 	}
 
-	public SkullsBaseGUI(@NonNull String title) {
+	public SkullsBaseGUI(@NonNull final Player player, @NonNull String title) {
 		super(title);
+		this.player = player;
+		setTitle(title);
 	}
 
 	@Override
 	protected ItemStack getBackButton() {
-		return QuickItem.of(CompMaterial.DARK_OAK_DOOR).name(TranslationManager.string(Translations.GUI_BTN_BACK_NAME)).lore(TranslationManager.list(Translations.GUI_BTN_BACK_LORE)).make();
+		return QuickItem
+				.of(Settings.GUI_SHARED_ITEMS_BACK_BUTTON.getItemStack())
+				.name(TranslationManager.string(this.player, Translations.GUI_SHARED_ITEMS_BACK_BUTTON_NAME))
+				.lore(TranslationManager.list(this.player, Translations.GUI_SHARED_ITEMS_BACK_BUTTON_LORE, "left_click", TranslationManager.string(this.player, Translations.MOUSE_LEFT_CLICK)))
+				.make();
 	}
 
 	@Override
 	protected ItemStack getExitButton() {
-		return QuickItem.of(CompMaterial.BARRIER).name(TranslationManager.string(Translations.GUI_BTN_EXIT_NAME)).lore(TranslationManager.list(Translations.GUI_BTN_EXIT_LORE)).make();
+		return QuickItem
+				.of(Settings.GUI_SHARED_ITEMS_EXIT_BUTTON.getItemStack())
+				.name(TranslationManager.string(this.player, Translations.GUI_SHARED_ITEMS_EXIT_BUTTON_NAME))
+				.lore(TranslationManager.list(this.player, Translations.GUI_SHARED_ITEMS_EXIT_BUTTON_LORE, "left_click", TranslationManager.string(this.player, Translations.MOUSE_LEFT_CLICK)))
+				.make();
 	}
 
 	@Override
 	protected ItemStack getPreviousButton() {
-		return QuickItem.of(CompMaterial.ARROW).name(TranslationManager.string(Translations.GUI_BTN_PREV_NAME)).lore(TranslationManager.list(Translations.GUI_BTN_PREV_LORE)).make();
+		return QuickItem
+				.of(Settings.GUI_SHARED_ITEMS_PREVIOUS_BUTTON.getItemStack())
+				.name(TranslationManager.string(this.player, Translations.GUI_SHARED_ITEMS_PREVIOUS_BUTTON_NAME))
+				.lore(TranslationManager.list(this.player, Translations.GUI_SHARED_ITEMS_PREVIOUS_BUTTON_LORE, "left_click", TranslationManager.string(this.player, Translations.MOUSE_LEFT_CLICK)))
+				.make();
 	}
 
 	@Override
 	protected ItemStack getNextButton() {
-		return QuickItem.of(CompMaterial.ARROW).name(TranslationManager.string(Translations.GUI_BTN_NEXT_NAME)).lore(TranslationManager.list(Translations.GUI_BTN_NEXT_LORE)).make();
+		return QuickItem
+				.of(Settings.GUI_SHARED_ITEMS_NEXT_BUTTON.getItemStack())
+				.name(TranslationManager.string(this.player, Translations.GUI_SHARED_ITEMS_NEXT_BUTTON_NAME))
+				.lore(TranslationManager.list(this.player, Translations.GUI_SHARED_ITEMS_NEXT_BUTTON_LORE, "left_click", TranslationManager.string(this.player, Translations.MOUSE_LEFT_CLICK)))
+				.make();
 	}
 
 	@Override

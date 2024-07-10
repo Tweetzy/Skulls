@@ -20,7 +20,6 @@ package ca.tweetzy.skulls.guis;
 
 import ca.tweetzy.flight.comp.enums.CompMaterial;
 import ca.tweetzy.flight.gui.Gui;
-import ca.tweetzy.flight.gui.template.BaseGUI;
 import ca.tweetzy.flight.settings.TranslationManager;
 import ca.tweetzy.flight.utils.Common;
 import ca.tweetzy.flight.utils.QuickItem;
@@ -30,6 +29,7 @@ import ca.tweetzy.skulls.api.interfaces.Skull;
 import ca.tweetzy.skulls.guis.abstraction.SkullsBaseGUI;
 import ca.tweetzy.skulls.settings.Translations;
 import org.apache.commons.lang.math.NumberUtils;
+import org.bukkit.entity.Player;
 
 /**
  * Date Created: April 29 2022
@@ -43,8 +43,8 @@ public final class SkullEditGUI extends SkullsBaseGUI {
 	private final Skull skull;
 	private final int page;
 
-	public SkullEditGUI(final Gui parent, Skull skull, int page) {
-		super(parent, TranslationManager.string(Translations.GUI_EDIT_TITLE, "skull_id", skull.getId()), 6);
+	public SkullEditGUI(final Gui parent, Player player, Skull skull, int page) {
+		super(parent, player, TranslationManager.string(Translations.GUI_EDIT_TITLE, "skull_id", skull.getId()), 6);
 		this.parent = parent;
 		this.skull = skull;
 		this.page = page;
@@ -65,7 +65,7 @@ public final class SkullEditGUI extends SkullsBaseGUI {
 				if (string.isEmpty()) return false;
 				SkullEditGUI.this.skull.setName(string);
 				SkullEditGUI.this.skull.sync();
-				click.manager.showGUI(click.player, new SkullEditGUI(SkullEditGUI.this.parent, SkullEditGUI.this.skull, SkullEditGUI.this.page));
+				click.manager.showGUI(click.player, new SkullEditGUI(SkullEditGUI.this.parent, SkullEditGUI.this.player, SkullEditGUI.this.skull, SkullEditGUI.this.page));
 				return true;
 			}
 		});
@@ -85,7 +85,7 @@ public final class SkullEditGUI extends SkullsBaseGUI {
 
 				SkullEditGUI.this.skull.setPrice(Double.parseDouble(string.trim()));
 				SkullEditGUI.this.skull.sync();
-				click.manager.showGUI(click.player, new SkullEditGUI(SkullEditGUI.this.parent, SkullEditGUI.this.skull, SkullEditGUI.this.page));
+				click.manager.showGUI(click.player, new SkullEditGUI(SkullEditGUI.this.parent, SkullEditGUI.this.player, SkullEditGUI.this.skull, SkullEditGUI.this.page));
 				return true;
 			}
 		});
@@ -93,7 +93,7 @@ public final class SkullEditGUI extends SkullsBaseGUI {
 		setButton(3, 5, QuickItem.of(CompMaterial.BOOKSHELF)
 				.name(TranslationManager.string(Translations.GUI_EDIT_ITEMS_ADD_CATEGORY_NAME))
 				.lore(TranslationManager.list(Translations.GUI_EDIT_ITEMS_ADD_CATEGORY_LORE))
-				.make(), click -> click.manager.showGUI(click.player, new CategorySelectorGUI(selected -> {
+				.make(), click -> click.manager.showGUI(click.player, new CategorySelectorGUI(click.player, selected -> {
 
 			if (!selected.getSkulls().contains(skull.getId())) {
 				selected.getSkulls().add(skull.getId());
@@ -111,7 +111,7 @@ public final class SkullEditGUI extends SkullsBaseGUI {
 
 			this.skull.setBlocked(!SkullEditGUI.this.skull.isBlocked());
 			this.skull.sync();
-			click.manager.showGUI(click.player, new SkullEditGUI(this.parent, this.skull, this.page));
+			click.manager.showGUI(click.player, new SkullEditGUI(this.parent, this.player, this.skull, this.page));
 		});
 
 		applyBackExit();

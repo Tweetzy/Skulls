@@ -19,7 +19,6 @@
 package ca.tweetzy.skulls.guis;
 
 import ca.tweetzy.flight.comp.enums.CompMaterial;
-import ca.tweetzy.flight.gui.template.BaseGUI;
 import ca.tweetzy.flight.settings.TranslationManager;
 import ca.tweetzy.flight.utils.ChatUtil;
 import ca.tweetzy.flight.utils.Common;
@@ -46,7 +45,7 @@ public final class MainGUI extends SkullsBaseGUI {
 	private final Player player;
 
 	public MainGUI(@NonNull final Player player) {
-		super(null, TranslationManager.string(Translations.GUI_MAIN_TITLE), 6);
+		super(null, player, TranslationManager.string(Translations.GUI_MAIN_TITLE), 6);
 		this.player = player;
 		draw();
 	}
@@ -100,6 +99,20 @@ public final class MainGUI extends SkullsBaseGUI {
 				.lore(TranslationManager.list(Translations.GUI_MAIN_ITEMS_CUSTOM_CATEGORIES_LORE))
 				.make(), click -> click.manager.showGUI(click.player, new CustomCategoryListGUI(click.player, this)));
 
+		setButton(Settings.GUI_MAIN_ITEMS_PLAYER_HEADS_SLOT.getInt(), QuickItem.of(this.player)
+				.name(TranslationManager.string(Translations.GUI_MAIN_ITEMS_PLAYERS_NAME))
+				.lore(TranslationManager.list(Translations.GUI_MAIN_ITEMS_PLAYERS_LORE, "category_size", Skulls.getSkullManager().getOnlineOfflinePlayers().size()))
+				.make(), click -> {
+
+			if (!Settings.GENERAL_USAGE_REQUIRES_NO_PERM.getBoolean())
+				if (!click.player.hasPermission("skulls.category.playerheads")) {
+					Common.tell(click.player, TranslationManager.string(Translations.NO_PERMISSION));
+					return;
+				}
+
+			click.manager.showGUI(click.player, new PlayerHeadGUI(this, Skulls.getPlayerManager().findOrCreate(click.player)));
+		});
+
 		setButton(Settings.GUI_MAIN_ITEMS_FAVOURITES_SLOT.getInt(), QuickItem.of(SkullItem.get("skulls:39696"))
 				.name(TranslationManager.string(Translations.GUI_MAIN_ITEMS_FAVOURITES_NAME))
 				.lore(TranslationManager.list(Translations.GUI_MAIN_ITEMS_FAVOURITES_LORE))
@@ -125,7 +138,7 @@ public final class MainGUI extends SkullsBaseGUI {
 							"",
 							"&e&lClick &8» &7To view settings"
 					)
-					.make(), click -> click.manager.showGUI(click.player, new HistoryViewGUI(this)));
+					.make(), click -> click.manager.showGUI(click.player, new HistoryViewGUI(this, click.player)));
 
 			setButton(5, 8, QuickItem.of(CompMaterial.DIAMOND)
 					.name("&e&lPatreon")

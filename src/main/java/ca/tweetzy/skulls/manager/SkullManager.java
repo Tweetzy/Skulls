@@ -38,6 +38,7 @@ import lombok.Setter;
 import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.BufferedReader;
@@ -81,6 +82,16 @@ public final class SkullManager implements Manager {
 
 	@Getter
 	private final Map<Location, PlacedSkull> placedSkulls = new ConcurrentHashMap<>();
+
+	public List<OfflinePlayer> getOnlineOfflinePlayers() {
+		final List<OfflinePlayer> players = new ArrayList<>(Arrays.asList(Bukkit.getOfflinePlayers()));
+		Bukkit.getOnlinePlayers().forEach(player -> {
+			if (players.stream().anyMatch(target -> target.getUniqueId().equals(player.getUniqueId()))) return;
+			players.add(player);
+		});
+
+		return players;
+	}
 
 	public Skull getSkull(final int id) {
 		synchronized (this.skulls) {
