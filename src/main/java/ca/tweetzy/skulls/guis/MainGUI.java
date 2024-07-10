@@ -68,7 +68,7 @@ public final class MainGUI extends SkullsBaseGUI {
 						return;
 					}
 
-				click.manager.showGUI(click.player, new SkullsViewGUI(this, Skulls.getPlayerManager().findPlayer(click.player), baseCategory.getId(), ViewMode.LIST));
+				click.manager.showGUI(click.player, new SkullsViewGUI(this, Skulls.getPlayerManager().findOrCreate(click.player), baseCategory.getId(), ViewMode.LIST));
 			});
 		}
 
@@ -88,7 +88,7 @@ public final class MainGUI extends SkullsBaseGUI {
 				@Override
 				public boolean onResult(String string) {
 					if (string.matches("[\\\\^$.|?*+(){}]")) return false;
-					Skulls.getGuiManager().showGUI(click.player, new SkullsViewGUI(MainGUI.this, Skulls.getPlayerManager().findPlayer(click.player), string.trim(), ViewMode.SEARCH));
+					Skulls.getGuiManager().showGUI(click.player, new SkullsViewGUI(MainGUI.this, Skulls.getPlayerManager().findOrCreate(click.player), string.trim(), ViewMode.SEARCH));
 					return true;
 				}
 			};
@@ -111,7 +111,7 @@ public final class MainGUI extends SkullsBaseGUI {
 					return;
 				}
 
-			click.manager.showGUI(click.player, new SkullsViewGUI(this, Skulls.getPlayerManager().findPlayer(click.player), "", ViewMode.FAVOURITE));
+			click.manager.showGUI(click.player, new SkullsViewGUI(this, Skulls.getPlayerManager().findOrCreate(click.player), "", ViewMode.FAVOURITE));
 		});
 
 

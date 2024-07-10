@@ -53,18 +53,31 @@ public final class PlayerManager {
 	}
 
 	public SkullUser findPlayer(@NonNull final UUID uuid) {
-		final AtomicReference<SkullUser> skullUser = new AtomicReference<>(this.players.getOrDefault(uuid, null));
+		return this.players.get(uuid);
+	}
 
-		if (skullUser.get() != null) return skullUser.get();
+	public SkullUser findOrCreate(@NonNull final Player player) {
+		return findOrCreate(player.getUniqueId());
+	}
 
-		Skulls.getDataManager().insertPlayer(new SkullPlayer(uuid, new ArrayList<>()), (createError, created) -> {
-			if (createError == null) {
-				addPlayer(created);
-				skullUser.set(created);
-			}
-		});
+	public SkullUser findOrCreate(@NonNull final UUID uuid) {
+		final SkullUser skullUser = findPlayer(uuid);
+		final SkullUser blank = new SkullPlayer(uuid, new ArrayList<>());
 
-		return skullUser.get();
+		if (skullUser == null) {
+			Skulls.getDataManager().insertPlayer(new SkullPlayer(uuid, new ArrayList<>()), (error, result) -> {
+				SkullUser toAdd = blank;
+
+				if (error == null && result != null)
+					toAdd = result;
+
+				addPlayer(toAdd);
+			});
+
+			return blank;
+		}
+
+		return skullUser;
 	}
 
 	public void load() {

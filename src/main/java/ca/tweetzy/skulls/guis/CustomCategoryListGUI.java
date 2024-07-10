@@ -108,6 +108,6 @@ public final class CustomCategoryListGUI extends SkullsPagedGUI<Category> {
 				return;
 			}
 
-		clickEvent.manager.showGUI(clickEvent.player, new SkullsViewGUI(this, Skulls.getPlayerManager().findPlayer(clickEvent.player), category.getId(), ViewMode.LIST));
+		clickEvent.manager.showGUI(clickEvent.player, new SkullsViewGUI(this, Skulls.getPlayerManager().findOrCreate(clickEvent.player), category.getId(), ViewMode.LIST));
 	}
 }
