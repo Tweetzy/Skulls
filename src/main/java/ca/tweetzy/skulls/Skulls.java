@@ -92,7 +92,12 @@ public final class Skulls extends FlightPlugin {
 		this.guiManager.init();
 
 		// command
-		this.commandManager.registerCommandDynamically(new SkullsCommand()).addSubCommands(new SearchCommand(), new PlayerHeadCommand(), new GiveCommand(), new InspectCommand());
+		this.commandManager.registerCommandDynamically(new SkullsCommand()).addSubCommands(
+				new SearchCommand(),
+				new PlayerHeadCommand(),
+				new GiveCommand(),
+				new InspectCommand()
+		);
 
 		// events
 		getServer().getPluginManager().registerEvents(new PlayerJoinQuitListener(), this);
