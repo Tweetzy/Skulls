@@ -21,15 +21,16 @@ package ca.tweetzy.skulls.guis;
 import ca.tweetzy.flight.comp.enums.CompMaterial;
 import ca.tweetzy.flight.gui.Gui;
 import ca.tweetzy.flight.gui.events.GuiClickEvent;
-import ca.tweetzy.flight.gui.template.PagedGUI;
 import ca.tweetzy.flight.settings.TranslationManager;
 import ca.tweetzy.flight.utils.Common;
 import ca.tweetzy.flight.utils.QuickItem;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.enums.BaseCategory;
 import ca.tweetzy.skulls.api.interfaces.History;
+import ca.tweetzy.skulls.guis.abstraction.SkullsPagedGUI;
 import ca.tweetzy.skulls.settings.Translations;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.text.SimpleDateFormat;
@@ -42,10 +43,10 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author Kiran Hart
  */
-public final class HistoryViewGUI extends PagedGUI<History> {
+public final class HistoryViewGUI extends SkullsPagedGUI<History> {
 
-	public HistoryViewGUI(Gui parent) {
-		super(parent, TranslationManager.string(Translations.GUI_HISTORIES_TITLE), 6, Skulls.getSkullManager().getHistories());
+	public HistoryViewGUI(Gui parent, Player player) {
+		super(parent, player, TranslationManager.string(Translations.GUI_HISTORIES_TITLE), 6, Skulls.getSkullManager().getHistories());
 		draw();
 	}
 
@@ -68,7 +69,10 @@ public final class HistoryViewGUI extends PagedGUI<History> {
 	}
 
 	@Override
-	protected void drawAdditional() {
+	protected void drawFixed() {
+		applyBackExit();
+
+
 		setButton(5, 8, QuickItem.of(CompMaterial.GOLD_NUGGET).name("&e&lForce Sync Prices").lore("&7Clicking this will force update all the prices", "&7for all skulls to the default category price", "&7set within the configuration file.").make(), click -> {
 //			Skulls.getDataManager().syncSkullPricesByCategory(null);
 
@@ -93,7 +97,7 @@ public final class HistoryViewGUI extends PagedGUI<History> {
 		if (downloaded) return;
 
 		Bukkit.getServer().getScheduler().runTaskAsynchronously(Skulls.getInstance(), () -> {
-			Skulls.getSkullManager().downloadHistorySkulls(history, finished -> clickEvent.manager.showGUI(clickEvent.player, new HistoryViewGUI(new MainGUI(clickEvent.player))));
+			Skulls.getSkullManager().downloadHistorySkulls(history, finished -> clickEvent.manager.showGUI(clickEvent.player, new HistoryViewGUI(new MainGUI(clickEvent.player), clickEvent.player)));
 		});
 	}
 }

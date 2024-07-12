@@ -20,6 +20,7 @@ package ca.tweetzy.skulls.listeners;
 
 import ca.tweetzy.flight.utils.Common;
 import ca.tweetzy.skulls.Skulls;
+import ca.tweetzy.skulls.api.interfaces.SkullUser;
 import ca.tweetzy.skulls.impl.SkullPlayer;
 import ca.tweetzy.skulls.settings.Settings;
 import org.bukkit.Bukkit;
@@ -28,6 +29,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
 
 import java.util.ArrayList;
 
@@ -61,14 +63,18 @@ public final class PlayerJoinQuitListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onPlayerJoin(final PlayerJoinEvent event) {
+	public void onPlayerLogin(final PlayerLoginEvent event) {
+		if (event.getResult() != PlayerLoginEvent.Result.ALLOWED) return;
 		final Player player = event.getPlayer();
 
-		if (Skulls.getPlayerManager().findPlayer(player) == null)
+		SkullUser skullUser = Skulls.getPlayerManager().findPlayer(player);
+		if (skullUser == null) {
+			// insert the user
 			Skulls.getDataManager().insertPlayer(new SkullPlayer(player.getUniqueId(), new ArrayList<>()), (createError, created) -> {
 				if (createError == null)
 					Skulls.getPlayerManager().addPlayer(created);
-
 			});
+		}
 	}
+
 }

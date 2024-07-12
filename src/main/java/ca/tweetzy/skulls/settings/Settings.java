@@ -40,6 +40,7 @@ public final class Settings extends FlightSettings {
 	public static final ConfigEntry MAIN_MENU_REQUIRES_NO_PERM = create("main menu requires no permission", true);
 	public static final ConfigEntry GENERAL_USAGE_REQUIRES_NO_PERM = create("general usage requires no permission", false, "If true, no permission is required to use except for admin stuff");
 	public static final ConfigEntry TELL_OP_PATREON_LINK = create("tell ops patron on join", true);
+	public static final ConfigEntry SKULL_TRACKING = create("track skull placement", true, "If disabled skulls will no longer drop in creative");
 
 	public static final ConfigEntry CATEGORIES_ALPHABET_ENABLED = create("enabled categories.alphabet", true);
 	public static final ConfigEntry CATEGORIES_ANIMALS_ENABLED = create("enabled categories.animals", true);
@@ -59,6 +60,17 @@ public final class Settings extends FlightSettings {
 	/*
 	==================== GUI END ====================
 	 */
+	public static final ConfigEntry GUI_SHARED_ITEMS_BACK_BUTTON = create("gui.shared buttons.back button.item", CompMaterial.DARK_OAK_DOOR.name());
+	public static final ConfigEntry GUI_SHARED_ITEMS_EXIT_BUTTON = create("gui.shared buttons.exit button.item", CompMaterial.BARRIER.name());
+	public static final ConfigEntry GUI_SHARED_ITEMS_PREVIOUS_BUTTON = create("gui.shared buttons.previous button.item", CompMaterial.ARROW.name());
+	public static final ConfigEntry GUI_SHARED_ITEMS_NEXT_BUTTON = create("gui.shared buttons.next button.item", CompMaterial.ARROW.name());
+
+	public static final ConfigEntry GUI_MAIN_ITEMS_FAVOURITES_SLOT = create("gui.main.items.favourites.slot", 42, "-1 to disable it");
+	public static final ConfigEntry GUI_MAIN_ITEMS_SEARCH_SLOT = create("gui.main.items.search.slot", 41, "-1 to disable it");
+	public static final ConfigEntry GUI_MAIN_ITEMS_CUSTOM_CATEGORIES_SLOT = create("gui.main.items.custom categories.slot", 38, "-1 to disable it");
+	public static final ConfigEntry GUI_MAIN_ITEMS_PLAYER_HEADS_SLOT = create("gui.main.items.player heads.slot", 39, "-1 to disable it");
+
+
 	public static final ConfigEntry GUI_MAIN_ITEMS_ALPHABET_SLOT = create("gui.main.items.alphabet.slot", 11);
 	public static final ConfigEntry GUI_MAIN_ITEMS_ANIMALS_SLOT = create("gui.main.items.animals.slot", 12);
 	public static final ConfigEntry GUI_MAIN_ITEMS_BLOCKS_SLOT = create("gui.main.items.blocks.slot", 13);
@@ -81,6 +93,7 @@ public final class Settings extends FlightSettings {
 	public static final ConfigEntry DEFAULT_PRICES_MISC = create("default prices.misc", 1.0);
 	public static final ConfigEntry DEFAULT_PRICES_MONSTERS = create("default prices.monsters", 1.0);
 	public static final ConfigEntry DEFAULT_PRICES_PLANTS = create("default prices.plants", 1.0);
+	public static final ConfigEntry DEFAULT_PRICES_PLAYER_HEADS = create("default prices.player heads", 1.0);
 
 	@SneakyThrows
 	public static void setup() {

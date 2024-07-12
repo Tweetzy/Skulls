@@ -60,8 +60,8 @@ public final class InspectCommand extends Command {
 				skullId = placedSkull.getSkullId();
 			}
 		} else {
-			if (NBT.get(hand, nbt -> nbt.hasTag("Skulls:ID"))) {
-				final String skullIdString = NBT.get(hand, nbt -> nbt.getString("Skulls:ID"));
+			if (NBT.get(hand, nbt -> (boolean) nbt.hasTag("Skulls:ID"))) {
+				final String skullIdString = NBT.get(hand, nbt -> (String) nbt.getString("Skulls:ID"));
 				skullId = Integer.parseInt(skullIdString);
 			}
 		}
@@ -72,7 +72,10 @@ public final class InspectCommand extends Command {
 			return ReturnType.FAIL;
 		}
 
-		Common.tellNoPrefix(sender, TranslationManager.list(Translations.INSPECT_INFO, "skull_id", String.valueOf(skullId)).toArray(new String[0]));
+		Common.tellNoPrefix(sender, TranslationManager.list(Translations.INSPECT_INFO,
+				"skull_id", String.valueOf(skullId),
+				"skull_texture", skull.getTexture()
+		).toArray(new String[0]));
 		return ReturnType.SUCCESS;
 	}
 

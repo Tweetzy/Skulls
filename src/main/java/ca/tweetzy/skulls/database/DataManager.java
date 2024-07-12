@@ -56,8 +56,15 @@ public final class DataManager extends DataManagerAbstract {
 	}
 
 	public void insertSkulls(Collection<Skull> skulls) {
+		final int batchSize = 1000;
 		this.runAsync(() -> this.databaseConnector.connect(connection -> {
-			PreparedStatement statement = connection.prepareStatement("INSERT OR IGNORE INTO " + this.getTablePrefix() + "skull(id, name, category, texture, tags, price, blocked) VALUES(?, ?, ?, ?, ?, ?, ?)");
+			connection.setAutoCommit(false);
+
+			PreparedStatement statement = connection.prepareStatement(
+					"INSERT OR IGNORE INTO " + this.getTablePrefix() + "skull(id, name, category, texture, tags, price, blocked) VALUES(?, ?, ?, ?, ?, ?, ?)"
+			);
+
+			int count = 0;
 			for (Skull skull : skulls) {
 				statement.setInt(1, skull.getId());
 				statement.setString(2, skull.getName());
@@ -67,11 +74,18 @@ public final class DataManager extends DataManagerAbstract {
 				statement.setDouble(6, skull.getPrice());
 				statement.setBoolean(7, skull.isBlocked());
 				statement.addBatch();
+
+				if (++count % batchSize == 0) {
+					statement.executeBatch(); // Execute batch every batchSize
+				}
 			}
 
 			statement.executeBatch();
+			connection.commit();
+			statement.close();
+
 			Skulls.getSkullManager().setDownloading(false);
-			Common.broadcast("&r&aFinished inserting all heads into the data file!");
+			Common.log("&r&aFinished inserting all heads into the data file!");
 		}));
 	}
 

@@ -20,12 +20,14 @@ package ca.tweetzy.skulls.guis;
 
 import ca.tweetzy.flight.comp.enums.CompMaterial;
 import ca.tweetzy.flight.gui.events.GuiClickEvent;
-import ca.tweetzy.flight.gui.template.PagedGUI;
 import ca.tweetzy.flight.settings.TranslationManager;
 import ca.tweetzy.flight.utils.QuickItem;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.interfaces.Category;
+import ca.tweetzy.skulls.guis.abstraction.SkullsPagedGUI;
 import ca.tweetzy.skulls.settings.Translations;
+import lombok.NonNull;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.function.Consumer;
@@ -36,14 +38,19 @@ import java.util.function.Consumer;
  *
  * @author Kiran Hart
  */
-public final class CategorySelectorGUI extends PagedGUI<Category> {
+public final class CategorySelectorGUI extends SkullsPagedGUI<Category> {
 
 	private final Consumer<Category> selected;
 
-	public CategorySelectorGUI(Consumer<Category> selected) {
-		super(null, TranslationManager.string(Translations.GUI_CUSTOM_CATEGORY_SELECTOR_TITLE), 6, Skulls.getCategoryManager().getCustomCategories());
+	public CategorySelectorGUI(@NonNull final Player player, Consumer<Category> selected) {
+		super(null, player, TranslationManager.string(Translations.GUI_CUSTOM_CATEGORY_SELECTOR_TITLE), 6, Skulls.getCategoryManager().getCustomCategories());
 		this.selected = selected;
 		draw();
+	}
+
+	@Override
+	protected void drawFixed() {
+		applyBackExit();
 	}
 
 	@Override

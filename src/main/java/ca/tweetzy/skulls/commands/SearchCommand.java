@@ -53,7 +53,7 @@ public final class SearchCommand extends Command {
 		final StringBuilder builder = new StringBuilder();
 		for (String arg : args) builder.append(" ").append(arg);
 
-		SkullUser skullUser = Skulls.getPlayerManager().findPlayer(player);
+		SkullUser skullUser = Skulls.getPlayerManager().findOrCreate(player);
 
 		if (skullUser == null)
 			Skulls.getDataManager().insertPlayer(new SkullPlayer(player.getUniqueId(), new ArrayList<>()), (createError, created) -> {

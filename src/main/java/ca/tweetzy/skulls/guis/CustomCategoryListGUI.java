@@ -29,6 +29,7 @@ import ca.tweetzy.flight.utils.input.TitleInput;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.enums.ViewMode;
 import ca.tweetzy.skulls.api.interfaces.Category;
+import ca.tweetzy.skulls.guis.abstraction.SkullsPagedGUI;
 import ca.tweetzy.skulls.impl.SkullCategory;
 import ca.tweetzy.skulls.settings.Settings;
 import ca.tweetzy.skulls.settings.Translations;
@@ -44,12 +45,12 @@ import java.util.Collections;
  *
  * @author Kiran Hart
  */
-public final class CustomCategoryListGUI extends PagedGUI<Category> {
+public final class CustomCategoryListGUI extends SkullsPagedGUI<Category> {
 
 	private final Player viewer;
 
 	public CustomCategoryListGUI(Player viewer, Gui parent) {
-		super(parent, TranslationManager.string(Translations.GUI_CUSTOM_CATEGORY_LIST_TITLE), 6, Skulls.getCategoryManager().getCustomCategories());
+		super(parent, viewer, TranslationManager.string(Translations.GUI_CUSTOM_CATEGORY_LIST_TITLE), 6, Skulls.getCategoryManager().getCustomCategories());
 		this.viewer = viewer;
 		draw();
 	}
@@ -64,7 +65,9 @@ public final class CustomCategoryListGUI extends PagedGUI<Category> {
 	}
 
 	@Override
-	protected void drawAdditional() {
+	protected void drawFixed() {
+		applyBackExit();
+
 		if (this.viewer.hasPermission("skulls.admin"))
 			setButton(5, 4, QuickItem.of(CompMaterial.SLIME_BALL)
 					.name(TranslationManager.string(Translations.GUI_CUSTOM_CATEGORY_LIST_ITEMS_NEW_NAME))
@@ -107,6 +110,6 @@ public final class CustomCategoryListGUI extends PagedGUI<Category> {
 				return;
 			}
 
-		clickEvent.manager.showGUI(clickEvent.player, new SkullsViewGUI(this, Skulls.getPlayerManager().findPlayer(clickEvent.player), category.getId(), ViewMode.LIST));
+		clickEvent.manager.showGUI(clickEvent.player, new SkullsViewGUI(this, Skulls.getPlayerManager().findOrCreate(clickEvent.player), category.getId(), ViewMode.LIST));
 	}
 }

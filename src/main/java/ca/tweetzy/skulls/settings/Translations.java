@@ -52,6 +52,7 @@ public final class Translations extends TranslationManager {
 	public static final TranslationEntry MISC = create("categories.misc", "Miscellaneous");
 	public static final TranslationEntry MONSTERS = create("categories.monsters", "Monsters");
 	public static final TranslationEntry PLANTS = create("categories.plants", "Plants");
+	public static final TranslationEntry PLAYER_HEAD = create("categories.player head", "&e%player_name%'s Head");
 
 	public static final TranslationEntry INPUT_SKULL_EDIT_TITLE = create("input.skull edit.title", "&eEditing Skull");
 	public static final TranslationEntry INPUT_SKULL_EDIT_NAME = create("input.skull edit.name", "&FEnter the new name skull name");
@@ -67,11 +68,33 @@ public final class Translations extends TranslationManager {
 			"&8&m-----------------------------------------------------",
 			"",
 			"&eSkull ID&f: &a%skull_id%",
+			"&eTexture URL&f: &a%skull_texture%",
 			"",
 			"&8&m-----------------------------------------------------"
 	);
 
 	// GUIS
+	public static TranslationEntry GUI_SHARED_ITEMS_BACK_BUTTON_NAME = create("gui.shared buttons.back button.name", "<GRADIENT:DD5E89>&LGo Back</GRADIENT:fbc7d4>");
+	public static TranslationEntry GUI_SHARED_ITEMS_BACK_BUTTON_LORE = create("gui.shared buttons.back button.lore",
+			"&e&lClick &8» &7to go back"
+	);
+
+	public static TranslationEntry GUI_SHARED_ITEMS_EXIT_BUTTON_NAME = create("gui.shared buttons.exit button.name", "<GRADIENT:DD5E89>&LExit</GRADIENT:fbc7d4>");
+	public static TranslationEntry GUI_SHARED_ITEMS_EXIT_BUTTON_LORE = create("gui.shared buttons.exit button.lore",
+			"&e&lClick &8» &7to exit menu"
+	);
+
+	public static TranslationEntry GUI_SHARED_ITEMS_PREVIOUS_BUTTON_NAME = create("gui.shared buttons.previous button.name", "<GRADIENT:DD5E89>&lPrevious Page</GRADIENT:fbc7d4>");
+	public static TranslationEntry GUI_SHARED_ITEMS_PREVIOUS_BUTTON_LORE = create("gui.shared buttons.previous button.lore",
+			"&e&lClick &8» &7to go back a page"
+	);
+
+	public static TranslationEntry GUI_SHARED_ITEMS_NEXT_BUTTON_NAME = create("gui.shared buttons.next button.name", "<GRADIENT:DD5E89>&lNext Page</GRADIENT:fbc7d4>");
+	public static TranslationEntry GUI_SHARED_ITEMS_NEXT_BUTTON_LORE = create("gui.shared buttons.next button.lore",
+			"&e&lClick &8» &7to go to next page"
+	);
+
+
 	public static final TranslationEntry GUI_HISTORIES_TITLE = create("gui.histories.title", "&eSkulls &8> &7Histories");
 
 	public static final TranslationEntry GUI_HISTORIES_ITEMS_HISTORY_NAME = create("gui.histories.items.history.name", "&e%history_id%");
@@ -109,6 +132,10 @@ public final class Translations extends TranslationManager {
 	public static final TranslationEntry GUI_CUSTOM_CATEGORY_LIST_ITEMS_NEW_LORE = create("gui.custom category list.items.new.lore", "", "&e&lClick &8» &7To create new category");
 
 
+	public static final TranslationEntry GUI_PLAYER_HEADS_TITLE = create("gui.player heads.title", "&eSkulls &8> &7Player Heads");
+	public static final TranslationEntry GUI_PLAYER_HEADS_ITEMS_HEAD_NAME = create("gui.player heads.items.head.name", "&e%player_name%");
+
+
 	public static final TranslationEntry GUI_EDIT_TITLE = create("gui.edit.title", "&eSkulls &8> &7Edit &8> &7%skull_id%");
 
 	public static final TranslationEntry GUI_EDIT_ITEMS_NAME_NAME = create("gui.edit.items.name.name", "<GRADIENT:DD5E89>&lSkull Name</GRADIENT:fbc7d4>");
@@ -136,6 +163,15 @@ public final class Translations extends TranslationManager {
 			"&7Total Heads&F: &b%category_size%",
 			"",
 			"&e&lClick &8» &7To view category"
+	);
+
+	public static final TranslationEntry GUI_MAIN_ITEMS_PLAYERS_NAME = create("gui.main.items.players.name", "&ePlayer Heads");
+
+	public static final TranslationEntry GUI_MAIN_ITEMS_PLAYERS_LORE = create("gui.main.items.players.lore",
+			"&8View all player heads",
+			"&7Total Heads&F: &b%category_size%",
+			"",
+			"&e&lClick &8» &7To view player heads"
 	);
 
 	public static final TranslationEntry GUI_MAIN_ITEMS_FAVOURITES_NAME = create("gui.main.items.favourites.name", "<GRADIENT:DD5E89>&lFavourites</GRADIENT:fbc7d4>");

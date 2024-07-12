@@ -19,7 +19,6 @@
 package ca.tweetzy.skulls.guis;
 
 import ca.tweetzy.flight.comp.enums.CompMaterial;
-import ca.tweetzy.flight.gui.template.BaseGUI;
 import ca.tweetzy.flight.settings.TranslationManager;
 import ca.tweetzy.flight.utils.ChatUtil;
 import ca.tweetzy.flight.utils.Common;
@@ -28,6 +27,7 @@ import ca.tweetzy.flight.utils.input.TitleInput;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.enums.BaseCategory;
 import ca.tweetzy.skulls.api.enums.ViewMode;
+import ca.tweetzy.skulls.guis.abstraction.SkullsBaseGUI;
 import ca.tweetzy.skulls.model.SkullItem;
 import ca.tweetzy.skulls.settings.Settings;
 import ca.tweetzy.skulls.settings.Translations;
@@ -40,12 +40,12 @@ import org.bukkit.entity.Player;
  *
  * @author Kiran Hart
  */
-public final class MainGUI extends BaseGUI {
+public final class MainGUI extends SkullsBaseGUI {
 
 	private final Player player;
 
 	public MainGUI(@NonNull final Player player) {
-		super(null, TranslationManager.string(Translations.GUI_MAIN_TITLE), 6);
+		super(null, player, TranslationManager.string(Translations.GUI_MAIN_TITLE), 6);
 		this.player = player;
 		draw();
 	}
@@ -67,11 +67,11 @@ public final class MainGUI extends BaseGUI {
 						return;
 					}
 
-				click.manager.showGUI(click.player, new SkullsViewGUI(this, Skulls.getPlayerManager().findPlayer(click.player), baseCategory.getId(), ViewMode.LIST));
+				click.manager.showGUI(click.player, new SkullsViewGUI(this, Skulls.getPlayerManager().findOrCreate(click.player), baseCategory.getId(), ViewMode.LIST));
 			});
 		}
 
-		setButton(4, 4, QuickItem.of(SkullItem.get("skulls:5650"))
+		setButton(Settings.GUI_MAIN_ITEMS_SEARCH_SLOT.getInt(), QuickItem.of(SkullItem.get("skulls:5650"))
 				.name(TranslationManager.string(Translations.GUI_MAIN_ITEMS_SEARCH_NAME))
 				.lore(TranslationManager.list(Translations.GUI_MAIN_ITEMS_SEARCH_LORE))
 				.make(), click -> {
@@ -87,19 +87,33 @@ public final class MainGUI extends BaseGUI {
 				@Override
 				public boolean onResult(String string) {
 					if (string.matches("[\\\\^$.|?*+(){}]")) return false;
-					Skulls.getGuiManager().showGUI(click.player, new SkullsViewGUI(MainGUI.this, Skulls.getPlayerManager().findPlayer(click.player), string.trim(), ViewMode.SEARCH));
+					Skulls.getGuiManager().showGUI(click.player, new SkullsViewGUI(MainGUI.this, Skulls.getPlayerManager().findOrCreate(click.player), string.trim(), ViewMode.SEARCH));
 					return true;
 				}
 			};
 
 		});
 
-		setButton(4, 2, QuickItem.of(SkullItem.get("skulls:25001"))
+		setButton(Settings.GUI_MAIN_ITEMS_CUSTOM_CATEGORIES_SLOT.getInt(), QuickItem.of(SkullItem.get("skulls:25001"))
 				.name(TranslationManager.string(Translations.GUI_MAIN_ITEMS_CUSTOM_CATEGORIES_NAME))
 				.lore(TranslationManager.list(Translations.GUI_MAIN_ITEMS_CUSTOM_CATEGORIES_LORE))
 				.make(), click -> click.manager.showGUI(click.player, new CustomCategoryListGUI(click.player, this)));
 
-		setButton(4, 6, QuickItem.of(SkullItem.get("skulls:39696"))
+		setButton(Settings.GUI_MAIN_ITEMS_PLAYER_HEADS_SLOT.getInt(), QuickItem.of(this.player)
+				.name(TranslationManager.string(Translations.GUI_MAIN_ITEMS_PLAYERS_NAME))
+				.lore(TranslationManager.list(Translations.GUI_MAIN_ITEMS_PLAYERS_LORE, "category_size", Skulls.getSkullManager().getOnlineOfflinePlayers().size()))
+				.make(), click -> {
+
+			if (!Settings.GENERAL_USAGE_REQUIRES_NO_PERM.getBoolean())
+				if (!click.player.hasPermission("skulls.category.playerheads")) {
+					Common.tell(click.player, TranslationManager.string(Translations.NO_PERMISSION));
+					return;
+				}
+
+			click.manager.showGUI(click.player, new PlayerHeadGUI(this, Skulls.getPlayerManager().findOrCreate(click.player)));
+		});
+
+		setButton(Settings.GUI_MAIN_ITEMS_FAVOURITES_SLOT.getInt(), QuickItem.of(SkullItem.get("skulls:39696"))
 				.name(TranslationManager.string(Translations.GUI_MAIN_ITEMS_FAVOURITES_NAME))
 				.lore(TranslationManager.list(Translations.GUI_MAIN_ITEMS_FAVOURITES_LORE))
 				.make(), click -> {
@@ -110,7 +124,7 @@ public final class MainGUI extends BaseGUI {
 					return;
 				}
 
-			click.manager.showGUI(click.player, new SkullsViewGUI(this, Skulls.getPlayerManager().findPlayer(click.player), "", ViewMode.FAVOURITE));
+			click.manager.showGUI(click.player, new SkullsViewGUI(this, Skulls.getPlayerManager().findOrCreate(click.player), "", ViewMode.FAVOURITE));
 		});
 
 
@@ -124,7 +138,7 @@ public final class MainGUI extends BaseGUI {
 							"",
 							"&e&lClick &8» &7To view settings"
 					)
-					.make(), click -> click.manager.showGUI(click.player, new HistoryViewGUI(this)));
+					.make(), click -> click.manager.showGUI(click.player, new HistoryViewGUI(this, click.player)));
 
 			setButton(5, 8, QuickItem.of(CompMaterial.DIAMOND)
 					.name("&e&lPatreon")

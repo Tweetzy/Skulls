@@ -92,12 +92,19 @@ public final class Skulls extends FlightPlugin {
 		this.guiManager.init();
 
 		// command
-		this.commandManager.registerCommandDynamically(new SkullsCommand()).addSubCommands(new SearchCommand(), new PlayerHeadCommand(), new GiveCommand(), new InspectCommand());
+		this.commandManager.registerCommandDynamically(new SkullsCommand()).addSubCommands(
+				new SearchCommand(),
+				new PlayerHeadCommand(),
+				new GiveCommand(),
+				new InspectCommand()
+		);
 
 		// events
 		getServer().getPluginManager().registerEvents(new PlayerJoinQuitListener(), this);
 		getServer().getPluginManager().registerEvents(new PlayerDeathListener(), this);
-		getServer().getPluginManager().registerEvents(new SkullBlockListener(), this);
+		if (Settings.SKULL_TRACKING.getBoolean()) {
+			getServer().getPluginManager().registerEvents(new SkullBlockListener(), this);
+		}
 	}
 
 	public static Skulls getInstance() {

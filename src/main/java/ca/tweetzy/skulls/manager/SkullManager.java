@@ -28,6 +28,7 @@ import ca.tweetzy.skulls.api.interfaces.PlacedSkull;
 import ca.tweetzy.skulls.api.interfaces.Skull;
 import ca.tweetzy.skulls.impl.InsertHistory;
 import ca.tweetzy.skulls.impl.TexturedSkull;
+import ca.tweetzy.skulls.settings.Settings;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -37,6 +38,7 @@ import lombok.Setter;
 import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.BufferedReader;
@@ -80,6 +82,16 @@ public final class SkullManager implements Manager {
 
 	@Getter
 	private final Map<Location, PlacedSkull> placedSkulls = new ConcurrentHashMap<>();
+
+	public List<OfflinePlayer> getOnlineOfflinePlayers() {
+		final List<OfflinePlayer> players = new ArrayList<>(Arrays.asList(Bukkit.getOfflinePlayers()));
+		Bukkit.getOnlinePlayers().forEach(player -> {
+			if (players.stream().anyMatch(target -> target.getUniqueId().equals(player.getUniqueId()))) return;
+			players.add(player);
+		});
+
+		return players;
+	}
 
 	public Skull getSkull(final int id) {
 		synchronized (this.skulls) {
@@ -161,6 +173,30 @@ public final class SkullManager implements Manager {
 	 * For internal use only
 	 */
 
+	private void checkAndFixDatabase() {
+		Bukkit.getServer().getScheduler().runTaskAsynchronously(Skulls.getInstance(), () -> {
+			final Set<Skull> heads = new HashSet<>();
+
+			Common.log("&r&aRunning database check :)");
+
+			for (BaseCategory value : BaseCategory.values()) {
+				final List<Skull> downloaded = downloadHeadCategory(value, true);
+				downloaded.forEach(skull -> {
+					if (this.skulls.contains(skull)) return;
+					heads.add(skull);
+				});
+			}
+
+			if (this.skulls.size() < heads.size()) {
+				Common.log("&r&eFound some missing heads, downloading/inserting them now!");
+
+				this.skulls.addAll(heads);
+				this.idList.addAll(heads.stream().map(Skull::getId).toList());
+				Skulls.getDataManager().insertSkulls(new ArrayList<>(heads));
+			}
+		});
+	}
+
 	public void downloadHeads() {
 		setDownloading(true);
 		Bukkit.getServer().getScheduler().runTaskAsynchronously(Skulls.getInstance(), () -> {
@@ -169,14 +205,15 @@ public final class SkullManager implements Manager {
 			Common.log("&r&aBeginning initial download, it may take some time to insert all the skulls into the data file!");
 
 			for (BaseCategory value : BaseCategory.values()) {
-				heads.addAll(downloadHeadCategory(value));
+				heads.addAll(downloadHeadCategory(value, false));
 			}
 
 			this.skulls.addAll(heads);
-			this.idList.addAll(heads.stream().map(Skull::getId).collect(Collectors.toList()));
+			this.idList.addAll(heads.stream().map(Skull::getId).toList());
 			Skulls.getDataManager().insertSkulls(heads);
 		});
 	}
+
 
 	public List<History> downloadHistories() {
 		final List<History> histories = new ArrayList<>();
@@ -198,7 +235,7 @@ public final class SkullManager implements Manager {
 		return histories;
 	}
 
-	private List<Skull> downloadHeadCategory(@NonNull final BaseCategory category) {
+	public List<Skull> downloadHeadCategory(@NonNull final BaseCategory category, boolean silent) {
 		final List<Skull> heads = new ArrayList<>();
 		try {
 			long start = System.nanoTime();
@@ -220,9 +257,11 @@ public final class SkullManager implements Manager {
 
 			});
 
-			Common.log("&aDownloaded &e" + heads.size() + " &askulls for category &e" + category.getName() + "&a in &f" + String.format("%,.3f", (System.nanoTime() - start) / 1e+6) + "&ems");
+			if (!silent)
+				Common.log("&aDownloaded &e" + heads.size() + " &askulls for category &e" + category.getName() + "&a in &f" + String.format("%,.3f", (System.nanoTime() - start) / 1e+6) + "&ems");
 		} catch (Exception e) {
-			Common.log("&cTweetzy.ca's api is currently unavailable, you can try again shortly.");
+			if (!silent)
+				Common.log("&cTweetzy.ca's api is currently unavailable, you can try again shortly.");
 		}
 
 		return heads;
@@ -288,7 +327,7 @@ public final class SkullManager implements Manager {
 			}
 
 			this.skulls.addAll(all);
-			this.idList.addAll(all.stream().map(Skull::getId).collect(Collectors.toList()));
+			this.idList.addAll(all.stream().map(Skull::getId).toList());
 
 			if (this.skulls.isEmpty()) {
 				Common.log("&cCould not find any skulls, attempting to redownload them!");
@@ -296,17 +335,20 @@ public final class SkullManager implements Manager {
 			} else {
 				Common.log("&aLoaded &e" + this.skulls.size() + " &askulls in &f" + String.format("%,.3f", (System.nanoTime() - start) / 1e+6) + "&ams");
 				setLoading(false);
+				checkAndFixDatabase();
 			}
 		});
 
-		Skulls.getDataManager().getPlacedSkulls((error, all) -> {
-			if (error != null) {
-				error.printStackTrace();
-				return;
-			}
+		if (Settings.SKULL_TRACKING.getBoolean()) {
+			Skulls.getDataManager().getPlacedSkulls((error, all) -> {
+				if (error != null) {
+					error.printStackTrace();
+					return;
+				}
 
-			all.forEach(placedSkull -> this.placedSkulls.put(placedSkull.getLocation(), placedSkull));
-		});
+				all.forEach(placedSkull -> this.placedSkulls.put(placedSkull.getLocation(), placedSkull));
+			});
+		}
 
 		Skulls.getDataManager().getHistories((error, all) -> {
 			if (error != null) {
