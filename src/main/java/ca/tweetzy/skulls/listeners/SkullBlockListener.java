@@ -27,11 +27,14 @@ import ca.tweetzy.skulls.api.interfaces.Skull;
 import ca.tweetzy.skulls.hooks.WorldGuardHook;
 import ca.tweetzy.skulls.impl.PlacedSkullLocation;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.UUID;
 
@@ -62,25 +65,31 @@ public final class SkullBlockListener implements Listener {
 	}
 
 	@EventHandler()
-	public void onSkullBreak(final BlockBreakEvent event) {
+	public void onSkullDrop(final BlockDropItemEvent event) {
 		if (event.isCancelled()) return;
-		if (!WorldGuardHook.isAllowedBreak(event.getPlayer(), event.getBlock())) {
-			event.setCancelled(true);
+
+		final BlockState block = event.getBlockState();
+
+		if (!(block instanceof org.bukkit.block.Skull))
 			return;
+
+		if (block.getType() != CompMaterial.PLAYER_HEAD.parseMaterial() && block.getType() != CompMaterial.PLAYER_WALL_HEAD.parseMaterial())
+			return;
+
+		if (!Skulls.getSkullManager().getPlacedSkulls().containsKey(block.getLocation()))
+			return;
+
+		final PlacedSkull placedSkull = Skulls.getSkullManager().getPlacedSkulls().get(block.getLocation());
+		Skulls.getSkullManager().removePlacedSkull(placedSkull);
+
+		final Skull skull = Skulls.getSkullManager().getSkull(placedSkull.getSkullId());
+
+		for (Item item : event.getItems()) {
+			ItemStack itemStack = item.getItemStack();
+			if (!(itemStack.getItemMeta() instanceof SkullMeta))
+				continue;
+
+			item.setItemStack(skull.getItemStack());
 		}
-
-		final Block block = event.getBlock();
-
-		if (block.getType() == CompMaterial.PLAYER_HEAD.parseMaterial() || block.getType() == CompMaterial.PLAYER_WALL_HEAD.parseMaterial()) {
-			if (!Skulls.getSkullManager().getPlacedSkulls().containsKey(block.getLocation())) return;
-
-			final PlacedSkull placedSkull = Skulls.getSkullManager().getPlacedSkulls().get(block.getLocation());
-			Skulls.getSkullManager().removePlacedSkull(placedSkull);
-
-			event.setDropItems(false);
-			final Skull skull = Skulls.getSkullManager().getSkull(placedSkull.getSkullId());
-			block.getWorld().dropItemNaturally(block.getLocation(), skull.getItemStack());
-		}
-
 	}
 }
