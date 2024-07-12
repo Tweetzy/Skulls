@@ -64,8 +64,8 @@ public final class UltraEconomyEconomy extends MultiCurrencyEconomy {
 		if (account == null || this.currencyName == null)
 			return;
 
-		final float oldAmount = account.getBalance(this.currency).getOnBank();
-		account.getBalance(this.currency).setBank(oldAmount - (float) amount);
+		final double oldAmount = account.getBalance(this.currency).getOnBank();
+		account.getBalance(this.currency).setBank(oldAmount - amount);
 	}
 
 	@Override
