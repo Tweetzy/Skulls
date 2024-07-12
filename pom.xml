@@ -12,7 +12,7 @@
 
     <properties>
         <author>Kiran Hart</author>
-        <jarName>Skulls</jarName>
+        <jarName>Skulls-${project.version}</jarName>
         <main.class>${project.groupId}.${project.artifactId}.${project.name}</main.class>
         <java.version>16</java.version>
         <flight.version>3.22.3</flight.version>
