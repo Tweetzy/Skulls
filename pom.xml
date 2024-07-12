@@ -15,7 +15,7 @@
         <jarName>Skulls-${project.version}</jarName>
         <main.class>${project.groupId}.${project.artifactId}.${project.name}</main.class>
         <java.version>16</java.version>
-        <flight.version>3.22.3</flight.version>
+        <flight.version>3.23.0</flight.version>
         <flight.path>ca.tweetzy</flight.path>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -57,7 +57,8 @@
             <artifactId>spigot</artifactId>
             <version>1.20.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
-        </dependency>  <dependency>
+        </dependency>
+        <dependency>
             <groupId>${flight.path}</groupId>
             <artifactId>flight</artifactId>
             <version>${flight.version}</version>
@@ -84,7 +85,8 @@
                     <groupId>org.bukkit</groupId>
                     <artifactId>bukkit</artifactId>
                 </exclusion>
-            </exclusions> </dependency>
+            </exclusions>
+        </dependency>
         <dependency>
             <groupId>me.TechsCode</groupId>
             <artifactId>UltraEconomyAPI</artifactId>
@@ -147,6 +149,29 @@
                     </relocations>
                 </configuration>
             </plugin>
+            <!--            <plugin>-->
+            <!--                <artifactId>maven-resources-plugin</artifactId>-->
+            <!--                <version>3.0.2</version>-->
+            <!--                <executions>-->
+            <!--                    <execution>-->
+            <!--                        <id>copy-files-on-build</id>-->
+            <!--                        <phase>package</phase>-->
+            <!--                        <goals>-->
+            <!--                            <goal>copy-resources</goal>-->
+            <!--                        </goals>-->
+            <!--                        <configuration>-->
+            <!--                            <outputDirectory>D:\Development\Spigot Servers\Latest Version\plugins</outputDirectory>-->
+            <!--                            <resources>-->
+            <!--                                <resource>-->
+            <!--                                    <directory>${project.build.directory}</directory>-->
+            <!--                                    <include>${project.name}.jar</include>-->
+            <!--                                    <filtering>false</filtering>-->
+            <!--                                </resource>-->
+            <!--                            </resources>-->
+            <!--                        </configuration>-->
+            <!--                    </execution>-->
+            <!--                </executions>-->
+            <!--            </plugin>-->
         </plugins>
         <resources>
             <resource>
