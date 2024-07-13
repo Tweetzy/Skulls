@@ -90,6 +90,7 @@ public final class SkullBlockListener implements Listener {
 				continue;
 
 			item.setItemStack(skull.getItemStack());
+			break;
 		}
 	}
 }
