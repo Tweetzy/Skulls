@@ -41,11 +41,6 @@ public final class _1_InitialMigration extends DataMigration {
 	public void migrate(Connection connection, String tablePrefix) throws SQLException {
 
 		try (Statement statement = connection.createStatement()) {
-			statement.execute("CREATE TABLE " + tablePrefix + "history (" +
-					"id INTEGER PRIMARY KEY, " +
-					"time LONG NOT NULL," +
-					"skulls TEXT NULL" +
-					")");
 
 			statement.execute("CREATE TABLE " + tablePrefix + "players (" +
 					"uuid VARCHAR(36) PRIMARY KEY, " +

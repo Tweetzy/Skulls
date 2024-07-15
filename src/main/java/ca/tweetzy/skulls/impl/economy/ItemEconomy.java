@@ -21,7 +21,6 @@ package ca.tweetzy.skulls.impl.economy;
 import ca.tweetzy.flight.utils.Common;
 import ca.tweetzy.flight.utils.PlayerUtil;
 import ca.tweetzy.skulls.api.interfaces.Economy;
-import ca.tweetzy.skulls.model.PlayerInventoryHelper;
 import ca.tweetzy.skulls.settings.Settings;
 import lombok.NonNull;
 import org.bukkit.entity.Player;
@@ -59,7 +58,7 @@ public final class ItemEconomy implements Economy {
 	@Override
 	public void withdraw(@NonNull Player player, double amount) {
 		final ItemStack item = Settings.ITEM_ECONOMY_ITEM.getItemStack();
-		PlayerInventoryHelper.removeSpecificItemQuantityFromPlayer(player, item, (int) amount);
+		PlayerUtil.removeSpecificItemQuantityFromPlayer(player, item, (int) amount);
 	}
 
 	@Override

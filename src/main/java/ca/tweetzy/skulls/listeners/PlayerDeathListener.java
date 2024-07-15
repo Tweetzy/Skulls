@@ -19,12 +19,18 @@
 package ca.tweetzy.skulls.listeners;
 
 import ca.tweetzy.flight.utils.QuickItem;
+import ca.tweetzy.skulls.api.events.PlayerPreSkullDropEvent;
+import ca.tweetzy.skulls.api.events.PlayerSkullDropEvent;
 import ca.tweetzy.skulls.settings.Settings;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Random;
 
@@ -38,7 +44,21 @@ public final class PlayerDeathListener implements Listener {
 		final Random random = new Random();
 
 		if (random.nextDouble() * 100D < Settings.PLAYER_HEAD_DROP_CHANCE.getInt()) {
-			player.getWorld().dropItemNaturally(player.getLocation(), QuickItem.of(player).name(Settings.PLAYER_HEAD_NAME.getString().replace("%player_name%", player.getName())).make());
+			final Location dropLocation = player.getLocation();
+			final ItemStack skull = QuickItem.of(player).name(Settings.PLAYER_HEAD_NAME.getString().replace("%player_name%", player.getName())).make();
+
+			// Send pre-skull drop event
+			PlayerPreSkullDropEvent preEvent = new PlayerPreSkullDropEvent(player, dropLocation, skull);
+			Bukkit.getPluginManager().callEvent(preEvent);
+			if (preEvent.isCancelled())
+				return;
+
+			// Drop skull
+			Item droppedSkull = player.getWorld().dropItemNaturally(dropLocation, skull);
+
+			// Send skull drop event
+			PlayerSkullDropEvent postEvent = new PlayerSkullDropEvent(player, droppedSkull);
+			Bukkit.getPluginManager().callEvent(postEvent);
 		}
 	}
 }

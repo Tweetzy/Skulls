@@ -30,6 +30,7 @@ import ca.tweetzy.skulls.commands.*;
 import ca.tweetzy.skulls.database.DataManager;
 import ca.tweetzy.skulls.database.migrations._1_InitialMigration;
 import ca.tweetzy.skulls.database.migrations._2_PlacedSkullsMigration;
+import ca.tweetzy.skulls.database.migrations._3_HistoryRemovalMigration;
 import ca.tweetzy.skulls.impl.SkullsAPIImplementation;
 import ca.tweetzy.skulls.listeners.PlayerDeathListener;
 import ca.tweetzy.skulls.listeners.PlayerJoinQuitListener;
@@ -77,7 +78,8 @@ public final class Skulls extends FlightPlugin {
 
 		final DataMigrationManager dataMigrationManager = new DataMigrationManager(this.databaseConnector, this.dataManager,
 				new _1_InitialMigration(),
-				new _2_PlacedSkullsMigration()
+				new _2_PlacedSkullsMigration(),
+				new _3_HistoryRemovalMigration()
 		);
 
 		// run table migrations

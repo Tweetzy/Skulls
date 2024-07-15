@@ -133,12 +133,11 @@ public final class MainGUI extends SkullsBaseGUI {
 					.name("&e&lSettings")
 					.lore(
 							"&8Skull Settings",
-							"&7You can view skulls that are new here",
-							"&7and then download them if you want.",
+							"&7A few quick setting options for skulls",
 							"",
 							"&e&lClick &8» &7To view settings"
 					)
-					.make(), click -> click.manager.showGUI(click.player, new HistoryViewGUI(this, click.player)));
+					.make(), click -> click.manager.showGUI(click.player, new SettingsGUI(this, click.player)));
 
 			setButton(5, 8, QuickItem.of(CompMaterial.DIAMOND)
 					.name("&e&lPatreon")

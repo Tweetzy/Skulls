@@ -71,18 +71,6 @@ gui:
           - ''
           - '&e&l点击 &8» &7添加到其他类别'
         name: <GRADIENT:DD5E89>&l添加到类别</GRADIENT:fbc7d4>
-  histories:
-    title: '&e头颅 &8> &7历史记录'
-    items:
-      history:
-        lore:
-          - ''
-          - '&7总头颅数&f: &a%history_size%'
-          - '&7已下载&f: %is_true%'
-          - '&7时间&f: &a%history_time%'
-          - ''
-          - '&e&l点击 &8» &7下载头颅'
-        name: '&e%history_id%'
   main:
     title: '&e头颅'
     items:
