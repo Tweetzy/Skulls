@@ -138,7 +138,7 @@ public final class MainGUI extends SkullsBaseGUI {
 							"",
 							"&e&lClick &8» &7To view settings"
 					)
-					.make(), click -> click.manager.showGUI(click.player, new HistoryViewGUI(this, click.player)));
+					.make(), click -> click.manager.showGUI(click.player, new SettingsGUI(this, click.player)));
 
 			setButton(5, 8, QuickItem.of(CompMaterial.DIAMOND)
 					.name("&e&lPatreon")

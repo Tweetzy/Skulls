@@ -16,22 +16,32 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ca.tweetzy.skulls.api.interfaces;
+package ca.tweetzy.skulls.database.migrations;
 
 
-import java.util.List;
+import ca.tweetzy.flight.database.DataMigration;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
- * Date Created: April 04 2022
- * Time Created: 9:50 p.m.
+ * Date Created: April 01 2022
+ * Time Created: 11:25 p.m.
  *
  * @author Kiran Hart
  */
-public interface History {
+public final class _3_HistoryRemovalMigration extends DataMigration {
 
-	int getID();
+	public _3_HistoryRemovalMigration() {
+		super(3);
+	}
 
-	long getTime();
+	@Override
+	public void migrate(Connection connection, String tablePrefix) throws SQLException {
 
-	List<Integer> getSkulls();
+		try (Statement statement = connection.createStatement()) {
+			statement.execute("DROP TABLE " + tablePrefix + "history");
+		}
+	}
 }

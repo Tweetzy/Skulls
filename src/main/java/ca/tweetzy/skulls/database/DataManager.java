@@ -26,8 +26,14 @@ import ca.tweetzy.flight.utils.Common;
 import ca.tweetzy.flight.utils.SerializeUtil;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.enums.BaseCategory;
-import ca.tweetzy.skulls.api.interfaces.*;
-import ca.tweetzy.skulls.impl.*;
+import ca.tweetzy.skulls.api.interfaces.Category;
+import ca.tweetzy.skulls.api.interfaces.PlacedSkull;
+import ca.tweetzy.skulls.api.interfaces.Skull;
+import ca.tweetzy.skulls.api.interfaces.SkullUser;
+import ca.tweetzy.skulls.impl.PlacedSkullLocation;
+import ca.tweetzy.skulls.impl.SkullCategory;
+import ca.tweetzy.skulls.impl.SkullPlayer;
+import ca.tweetzy.skulls.impl.TexturedSkull;
 import lombok.NonNull;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
@@ -89,44 +95,6 @@ public final class DataManager extends DataManagerAbstract {
 		}));
 	}
 
-	public void insertHistories(Collection<History> histories) {
-		this.runAsync(() -> this.databaseConnector.connect(connection -> {
-			PreparedStatement statement = connection.prepareStatement("INSERT INTO " + this.getTablePrefix() + "history(id, time, skulls) VALUES(?, ?, ?)");
-			for (History history : histories) {
-				statement.setInt(1, history.getID());
-				statement.setLong(2, history.getTime());
-				statement.setString(3, history.getSkulls().stream().map(String::valueOf).collect(Collectors.joining(",")));
-				statement.addBatch();
-			}
-
-			statement.executeBatch();
-		}));
-	}
-
-	public void insertHistory(@NonNull final History history, Callback<History> callback) {
-		this.runAsync(() -> this.databaseConnector.connect(connection -> {
-			try (PreparedStatement statement = connection.prepareStatement("INSERT INTO " + this.getTablePrefix() + "history (id, time, skulls) VALUES(?, ?, ?)")) {
-				PreparedStatement fetch = connection.prepareStatement("SELECT * FROM " + this.getTablePrefix() + "history WHERE id = ?");
-
-				fetch.setInt(1, history.getID());
-				statement.setInt(1, history.getID());
-				statement.setLong(2, history.getTime());
-				statement.setString(3, history.getSkulls().stream().map(String::valueOf).collect(Collectors.joining(",")));
-				statement.executeUpdate();
-
-				if (callback != null) {
-					ResultSet res = fetch.executeQuery();
-					res.next();
-					callback.accept(null, extractHistory(res));
-				}
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				resolveCallback(callback, e);
-			}
-		}));
-	}
-
 	public void insertPlacedSkull(@NonNull final PlacedSkull placedSkull, Callback<PlacedSkull> callback) {
 		this.runAsync(() -> this.databaseConnector.connect(connection -> {
 			try (PreparedStatement statement = connection.prepareStatement("INSERT INTO " + this.getTablePrefix() + "placed_skull (id, skull_id, location) VALUES(?, ?, ?)")) {
@@ -175,22 +143,6 @@ public final class DataManager extends DataManagerAbstract {
 				int result = statement.executeUpdate();
 				callback.accept(null, result > 0);
 
-			} catch (Exception e) {
-				resolveCallback(callback, e);
-			}
-		}));
-	}
-
-	public void getHistories(Callback<ArrayList<History>> callback) {
-		ArrayList<History> histories = new ArrayList<>();
-		this.runAsync(() -> this.databaseConnector.connect(connection -> {
-			try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + this.getTablePrefix() + "history")) {
-				ResultSet resultSet = statement.executeQuery();
-				while (resultSet.next()) {
-					histories.add(extractHistory(resultSet));
-				}
-
-				callback.accept(null, histories);
 			} catch (Exception e) {
 				resolveCallback(callback, e);
 			}
@@ -388,14 +340,6 @@ public final class DataManager extends DataManagerAbstract {
 				resultSet.getString("name"),
 				true,
 				skulls.length() == 0 || split.length == 0 ? new ArrayList<>() : Arrays.stream(split).map(Integer::parseInt).collect(Collectors.toList())
-		);
-	}
-
-	public History extractHistory(@NonNull final ResultSet resultSet) throws SQLException {
-		return new InsertHistory(
-				resultSet.getInt("id"),
-				resultSet.getLong("time"),
-				Arrays.stream(resultSet.getString("skulls").split(",")).map((Integer::parseInt)).collect(Collectors.toList())
 		);
 	}
 

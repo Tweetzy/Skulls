@@ -23,10 +23,8 @@ import ca.tweetzy.flight.utils.Common;
 import ca.tweetzy.flight.utils.QuickItem;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.enums.BaseCategory;
-import ca.tweetzy.skulls.api.interfaces.History;
 import ca.tweetzy.skulls.api.interfaces.PlacedSkull;
 import ca.tweetzy.skulls.api.interfaces.Skull;
-import ca.tweetzy.skulls.impl.InsertHistory;
 import ca.tweetzy.skulls.impl.TexturedSkull;
 import ca.tweetzy.skulls.settings.Settings;
 import com.google.gson.JsonArray;
@@ -47,10 +45,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -73,9 +69,6 @@ public final class SkullManager implements Manager {
 
 	@Getter
 	private final List<Skull> skulls = Collections.synchronizedList(new ArrayList<>());
-
-	@Getter
-	private final List<History> histories = Collections.synchronizedList(new ArrayList<>());
 
 	@Getter
 	private final List<Integer> idList = Collections.synchronizedList(new ArrayList<>());
@@ -208,27 +201,6 @@ public final class SkullManager implements Manager {
 		});
 	}
 
-
-	public List<History> downloadHistories() {
-		final List<History> histories = new ArrayList<>();
-		try {
-			final JsonArray json = getJsonFromUrl("https://rose.tweetzy.ca/minecraft/skulls/inserts");
-			json.forEach(jsonElement -> {
-				final JsonObject jsonObject = jsonElement.getAsJsonObject();
-				histories.add(new InsertHistory(
-						Integer.parseInt(replace(jsonObject.get("id").toString())),
-						Instant.parse(replace(jsonObject.get("date").toString())).toEpochMilli(),
-						Arrays.stream(replace(jsonObject.get("heads").toString()).split(",")).map(Integer::parseInt).collect(Collectors.toList())
-				));
-			});
-
-		} catch (Exception e) {
-			Common.log("&cTweetzy.ca's api is currently unavailable, you can try again shortly.");
-		}
-
-		return histories;
-	}
-
 	public List<Skull> performHeadDownload(boolean silentDownload) {
 		final List<Skull> skulls = new ArrayList<>();
 
@@ -264,36 +236,6 @@ public final class SkullManager implements Manager {
 		}
 
 		return skulls;
-	}
-
-	public void downloadHistorySkulls(@NonNull final History history, Consumer<List<Skull>> finished) {
-		final List<Skull> heads = new ArrayList<>();
-		try {
-			final JsonArray json = getJsonFromUrl(String.format("https://rose.tweetzy.ca/minecraft/skulls/select?ids=%s", history.getSkulls().stream().map(String::valueOf).collect(Collectors.joining(","))));
-			json.forEach(jsonElement -> {
-				final JsonObject jsonObject = jsonElement.getAsJsonObject();
-				final Skull head = new TexturedSkull(
-						Integer.parseInt(replace(jsonObject.get("id").toString())),
-						replace(jsonObject.get("name").toString()),
-						replace(jsonObject.get("category").toString()),
-						Arrays.asList(replace(jsonObject.get("tags").toString()).split(",")),
-						replace(jsonObject.get("texture").toString()),
-						BaseCategory.getById(replace(jsonObject.get("category").toString())).getDefaultPrice(),
-						false
-				);
-
-				if (!this.idList.contains(head.getId())) {
-					heads.add(head);
-					this.idList.add(head.getId());
-				}
-
-				Skulls.getDataManager().insertSkulls(heads);
-			});
-			finished.accept(heads);
-
-		} catch (Exception e) {
-			Common.log("&cTweetzy.ca's api is currently unavailable, you can try again shortly.");
-		}
 	}
 
 	private JsonArray getJsonFromUrl(final String url) throws IOException {
@@ -348,45 +290,5 @@ public final class SkullManager implements Manager {
 				all.forEach(placedSkull -> this.placedSkulls.put(placedSkull.getLocation(), placedSkull));
 			});
 		}
-
-		Skulls.getDataManager().getHistories((error, all) -> {
-			if (error != null) {
-				error.printStackTrace();
-				return;
-			}
-
-			this.histories.addAll(all);
-
-			if (this.histories.isEmpty()) {
-				Common.log("&cCould not find any inserts, attempting to redownload them!");
-				Bukkit.getServer().getScheduler().runTaskAsynchronously(Skulls.getInstance(), () -> {
-					final List<History> dlHistory = downloadHistories();
-					Skulls.getDataManager().insertHistories(dlHistory);
-					this.histories.addAll(dlHistory);
-				});
-			} else {
-
-				Bukkit.getServer().getScheduler().runTaskAsynchronously(Skulls.getInstance(), () -> {
-					// check for new inserts
-					final List<History> dlHistory = downloadHistories();
-
-					if (dlHistory.size() != this.histories.size()) {
-						List<History> toInsert = new ArrayList<>();
-						dlHistory.forEach(downloadedHistory -> {
-							if (this.histories.stream().noneMatch(history -> history.getID() == downloadedHistory.getID())) {
-								toInsert.add(downloadedHistory);
-							}
-						});
-
-
-						Skulls.getDataManager().insertHistories(toInsert);
-						Common.log("&aInserts were found, saving the following: &e" + toInsert.stream().map(h -> String.valueOf(h.getID())).collect(Collectors.joining(", ")));
-						return;
-					}
-
-					Common.log("&aLoaded &e" + this.histories.size() + "&a history inserts");
-				});
-			}
-		});
 	}
 }

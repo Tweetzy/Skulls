@@ -94,20 +94,6 @@ public final class Translations extends TranslationManager {
 			"&e&lClick &8» &7to go to next page"
 	);
 
-
-	public static final TranslationEntry GUI_HISTORIES_TITLE = create("gui.histories.title", "&eSkulls &8> &7Histories");
-
-	public static final TranslationEntry GUI_HISTORIES_ITEMS_HISTORY_NAME = create("gui.histories.items.history.name", "&e%history_id%");
-
-	public static final TranslationEntry GUI_HISTORIES_ITEMS_HISTORY_LORE = create("gui.histories.items.history.lore",
-			"",
-			"&7Total Heads&f: &a%history_size%",
-			"&7Downloaded&f: %is_true%",
-			"&7Time&f: &a%history_time%",
-			"",
-			"&e&lClick &8» &7To download heads"
-	);
-
 	public static final TranslationEntry GUI_CUSTOM_CATEGORY_SELECTOR_TITLE = create("gui.custom category selector.title", "&eSkulls &8> &7Select Category");
 
 	public static final TranslationEntry GUI_CUSTOM_CATEGORY_SELECTOR_ITEMS_CATEGORY_NAME = create("gui.custom category selector.items.category.name", "%category_name%");
@@ -153,6 +139,9 @@ public final class Translations extends TranslationManager {
 	public static final TranslationEntry GUI_EDIT_ITEMS_BLOCKED_NAME = create("gui.edit.items.blocked.name", "<GRADIENT:DD5E89>&lSkull Blocked</GRADIENT:fbc7d4>");
 
 	public static final TranslationEntry GUI_EDIT_ITEMS_BLOCKED_LORE = create("gui.edit.items.blocked.lore", "", "&7Blocked&f: %is_true%", "", "&e&lClick &8» &7To toggle block status");
+
+	public static final TranslationEntry GUI_SETTINGS_TITLE = create("gui.settings.title", "&eSkulls &8> &7Settings");
+
 
 	public static final TranslationEntry GUI_MAIN_TITLE = create("gui.main.title", "&eSkulls");
 
