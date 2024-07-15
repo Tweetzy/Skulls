@@ -36,6 +36,7 @@ public final class SettingsGUI extends SkullsBaseGUI {
 
 	public SettingsGUI(Gui parent, @NonNull Player player) {
 		super(parent, player, TranslationManager.string(Translations.GUI_SETTINGS_TITLE), 4);
+		draw();
 	}
 
 	@Override
