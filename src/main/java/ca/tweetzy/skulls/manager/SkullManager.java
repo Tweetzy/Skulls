@@ -179,13 +179,11 @@ public final class SkullManager implements Manager {
 
 			Common.log("&r&aRunning database check :)");
 
-			for (BaseCategory value : BaseCategory.values()) {
-				final List<Skull> downloaded = downloadHeadCategory(value, true);
-				downloaded.forEach(skull -> {
-					if (this.skulls.contains(skull)) return;
-					heads.add(skull);
-				});
-			}
+			final List<Skull> downloaded = performHeadDownload(true);
+			downloaded.forEach(skull -> {
+				if (this.skulls.contains(skull)) return;
+				heads.add(skull);
+			});
 
 			if (this.skulls.size() < heads.size()) {
 				Common.log("&r&eFound some missing heads, downloading/inserting them now!");
@@ -200,13 +198,9 @@ public final class SkullManager implements Manager {
 	public void downloadHeads() {
 		setDownloading(true);
 		Bukkit.getServer().getScheduler().runTaskAsynchronously(Skulls.getInstance(), () -> {
-			final List<Skull> heads = new ArrayList<>();
-
 			Common.log("&r&aBeginning initial download, it may take some time to insert all the skulls into the data file!");
 
-			for (BaseCategory value : BaseCategory.values()) {
-				heads.addAll(downloadHeadCategory(value, false));
-			}
+			final List<Skull> heads = new ArrayList<>(performHeadDownload(false));
 
 			this.skulls.addAll(heads);
 			this.idList.addAll(heads.stream().map(Skull::getId).toList());
@@ -235,13 +229,18 @@ public final class SkullManager implements Manager {
 		return histories;
 	}
 
-	public List<Skull> downloadHeadCategory(@NonNull final BaseCategory category, boolean silent) {
-		final List<Skull> heads = new ArrayList<>();
+	public List<Skull> performHeadDownload(boolean silentDownload) {
+		final List<Skull> skulls = new ArrayList<>();
+
+		final String DOWNLOAD_URL = "https://raw.githubusercontent.com/Tweetzy/Data-Files/main/Skulls/skulls.json";
+
 		try {
 			long start = System.nanoTime();
-			final JsonArray json = getJsonFromUrl(String.format("https://rose.tweetzy.ca/minecraft/skulls?category=%s", category.name().replace("AND", "&").toUpperCase().replace("_", "%20")));
+			final JsonArray json = getJsonFromUrl(DOWNLOAD_URL);
 			json.forEach(jsonElement -> {
 				final JsonObject jsonObject = jsonElement.getAsJsonObject();
+				final BaseCategory category = BaseCategory.getById(replace(jsonObject.get("category").toString()));
+
 				final Skull head = new TexturedSkull(
 						Integer.parseInt(replace(jsonObject.get("id").toString())),
 						replace(jsonObject.get("name").toString()),
@@ -252,19 +251,19 @@ public final class SkullManager implements Manager {
 						false
 				);
 
-				heads.add(head);
+				skulls.add(head);
 				this.idList.add(head.getId());
 
 			});
 
-			if (!silent)
-				Common.log("&aDownloaded &e" + heads.size() + " &askulls for category &e" + category.getName() + "&a in &f" + String.format("%,.3f", (System.nanoTime() - start) / 1e+6) + "&ems");
+			if (!silentDownload)
+				Common.log("&aDownloaded &e" + skulls.size() + " &askulls in &f" + String.format("%,.3f", (System.nanoTime() - start) / 1e+6) + "&ems");
 		} catch (Exception e) {
-			if (!silent)
-				Common.log("&cTweetzy.ca's api is currently unavailable, you can try again shortly.");
+			if (!silentDownload)
+				Common.log("&cCould not download skulls, try again later. If the issue persist, join the Support Server");
 		}
 
-		return heads;
+		return skulls;
 	}
 
 	public void downloadHistorySkulls(@NonNull final History history, Consumer<List<Skull>> finished) {
