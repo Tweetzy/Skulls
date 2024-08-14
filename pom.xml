@@ -7,7 +7,7 @@
     <artifactId>skulls</artifactId>
 
     <name>Skulls</name>
-    <version>3.16.0</version>
+    <version>3.17.0</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -15,7 +15,7 @@
         <jarName>Skulls-${project.version}</jarName>
         <main.class>${project.groupId}.${project.artifactId}.${project.name}</main.class>
         <java.version>16</java.version>
-        <flight.version>3.23.2</flight.version>
+        <flight.version>3.24.1</flight.version>
         <flight.path>ca.tweetzy</flight.path>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
