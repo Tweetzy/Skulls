@@ -18,17 +18,19 @@
 
 package ca.tweetzy.skulls.manager;
 
+import ca.tweetzy.flight.settings.TranslationManager;
+import ca.tweetzy.flight.utils.Common;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.interfaces.SkullUser;
 import ca.tweetzy.skulls.impl.SkullPlayer;
+import ca.tweetzy.skulls.settings.Settings;
+import ca.tweetzy.skulls.settings.Translations;
 import lombok.NonNull;
 import org.bukkit.entity.Player;
+import org.bukkit.persistence.PersistentDataType;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Date Created: April 04 2022
@@ -78,6 +80,66 @@ public final class PlayerManager {
 		}
 
 		return skullUser;
+	}
+
+	public boolean playerCanClaim(@NonNull final Player player) {
+		if (!Settings.CLAIM_DELAY_ENABLED.getBoolean()) return true;
+		List<Integer> possibleTimes = new ArrayList<>();
+
+		Settings.CLAIM_DELAY_PERMS.getStringList().forEach(line -> {
+			String[] split = line.split(":");
+			if (player.hasPermission("skulls.claimdelay." + split[0])) {
+				possibleTimes.add(Integer.parseInt(split[1]));
+			}
+		});
+
+		if (possibleTimes.isEmpty()) return true;
+		int maxSecs = Collections.max(possibleTimes);
+		long currentMillis = System.currentTimeMillis();
+
+		if (!player.getPersistentDataContainer().has(Skulls.getClaimDelayKey())) {
+			// set the time
+			final long newMillis = currentMillis + (maxSecs * 1000L);
+			player.getPersistentDataContainer().set(Skulls.getClaimDelayKey(), PersistentDataType.LONG, newMillis);
+			return true;
+		}
+
+		final long lastClaimedAt = player.getPersistentDataContainer().get(Skulls.getClaimDelayKey(), PersistentDataType.LONG);
+		if (lastClaimedAt > currentMillis) {
+			Common.tell(player, TranslationManager.string(Translations.CLAIM_DELAY, "time_difference", getFriendlyTimeDifference(currentMillis,lastClaimedAt)));
+			return false;
+		} else {
+			final long newMillis = currentMillis + (maxSecs * 1000L);
+			player.getPersistentDataContainer().set(Skulls.getClaimDelayKey(), PersistentDataType.LONG, newMillis);
+		}
+
+		return true;
+	}
+
+	private String getFriendlyTimeDifference(long startMillis, long endMillis) {
+		long diffMillis = endMillis - startMillis;
+		long seconds = diffMillis / 1000;
+		long minutes = seconds / 60;
+		long hours = minutes / 60;
+		long days = hours / 24;
+
+		StringBuilder result = new StringBuilder();
+
+		if (days > 0) {
+			result.append(days).append("d ");
+			hours %= 24;
+		}
+		if (hours > 0 || result.length() > 0) {
+			result.append(hours).append("h ");
+			minutes %= 60;
+		}
+		if (minutes > 0 || result.length() > 0) {
+			result.append(minutes).append("m ");
+			seconds %= 60;
+		}
+		result.append(seconds).append("s");
+
+		return result.toString().trim();
 	}
 
 	public void load() {

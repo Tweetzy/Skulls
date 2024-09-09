@@ -44,6 +44,9 @@ import ca.tweetzy.skulls.settings.Translations;
 import co.aikar.taskchain.BukkitTaskChainFactory;
 import co.aikar.taskchain.TaskChain;
 import co.aikar.taskchain.TaskChainFactory;
+import org.bukkit.NamespacedKey;
+
+import javax.inject.Named;
 
 /**
  * Date Created: April 04 2022
@@ -67,6 +70,10 @@ public final class Skulls extends FlightPlugin {
 
 	private DatabaseConnector databaseConnector;
 	private DataManager dataManager;
+
+
+	private final NamespacedKey SKULLS_CLAIM_DELAY = new NamespacedKey(this, "SkullsClaimDelay");
+
 
 	@Override
 	protected void onFlight() {
@@ -104,7 +111,8 @@ public final class Skulls extends FlightPlugin {
 				new SearchCommand(),
 				new PlayerHeadCommand(),
 				new GiveCommand(),
-				new InspectCommand()
+				new InspectCommand(),
+				new ReloadCommand()
 		);
 
 		// events
@@ -156,6 +164,10 @@ public final class Skulls extends FlightPlugin {
 	// api
 	public static SkullsAPI getAPI() {
 		return getInstance().api;
+	}
+
+	public static NamespacedKey getClaimDelayKey() {
+		return getInstance().SKULLS_CLAIM_DELAY;
 	}
 
 	@Override

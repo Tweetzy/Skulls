@@ -40,6 +40,7 @@ public final class Translations extends TranslationManager {
 	public static final TranslationEntry SKULL_TITLE = create("skull.name", "&e%skull_name%");
 	public static final TranslationEntry ID_TAKEN = create("misc.id taken", "&cThat category id is already in use!");
 	public static final TranslationEntry LOADING = create("misc.loading", "&cPlease wait a bit longer, still loading heads.");
+	public static final TranslationEntry CLAIM_DELAY = create("misc.claim delay", "&cYou can claim another head in &7(&e%time_difference%&7)");
 
 
 	public static final TranslationEntry ALPHABET = create("categories.alphabet", "Alphabet");
