@@ -41,6 +41,12 @@ import ca.tweetzy.skulls.manager.PlayerManager;
 import ca.tweetzy.skulls.manager.SkullManager;
 import ca.tweetzy.skulls.settings.Settings;
 import ca.tweetzy.skulls.settings.Translations;
+import co.aikar.taskchain.BukkitTaskChainFactory;
+import co.aikar.taskchain.TaskChain;
+import co.aikar.taskchain.TaskChainFactory;
+import org.bukkit.NamespacedKey;
+
+import javax.inject.Named;
 
 /**
  * Date Created: April 04 2022
@@ -49,6 +55,8 @@ import ca.tweetzy.skulls.settings.Translations;
  * @author Kiran Hart
  */
 public final class Skulls extends FlightPlugin {
+
+	private static TaskChainFactory taskChainFactory;
 
 	private final GuiManager guiManager = new GuiManager(this);
 	private final CommandManager commandManager = new CommandManager(this);
@@ -63,6 +71,10 @@ public final class Skulls extends FlightPlugin {
 	private DatabaseConnector databaseConnector;
 	private DataManager dataManager;
 
+
+	private final NamespacedKey SKULLS_CLAIM_DELAY = new NamespacedKey(this, "SkullsClaimDelay");
+
+
 	@Override
 	protected void onFlight() {
 		// settings and locale setup
@@ -71,6 +83,7 @@ public final class Skulls extends FlightPlugin {
 
 		Common.setPrefix(Settings.PREFIX.getString());
 		Common.setPluginName("<GRADIENT:DD5E89>&lSkulls</GRADIENT:fbc7d4>");
+		taskChainFactory = BukkitTaskChainFactory.create(this);
 
 		// setup sqlite
 		this.databaseConnector = new SQLiteConnector(this);
@@ -98,7 +111,8 @@ public final class Skulls extends FlightPlugin {
 				new SearchCommand(),
 				new PlayerHeadCommand(),
 				new GiveCommand(),
-				new InspectCommand()
+				new InspectCommand(),
+				new ReloadCommand()
 		);
 
 		// events
@@ -143,9 +157,17 @@ public final class Skulls extends FlightPlugin {
 		return getInstance().economyManager;
 	}
 
+	public static <T> TaskChain<T> newChain() {
+		return taskChainFactory.newChain();
+	}
+
 	// api
 	public static SkullsAPI getAPI() {
 		return getInstance().api;
+	}
+
+	public static NamespacedKey getClaimDelayKey() {
+		return getInstance().SKULLS_CLAIM_DELAY;
 	}
 
 	@Override

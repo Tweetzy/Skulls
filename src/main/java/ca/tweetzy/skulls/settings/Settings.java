@@ -24,6 +24,8 @@ import ca.tweetzy.flight.settings.FlightSettings;
 import ca.tweetzy.skulls.Skulls;
 import lombok.SneakyThrows;
 
+import java.util.List;
+
 /**
  * Date Created: April 04 2022
  * Time Created: 9:22 p.m.
@@ -52,10 +54,17 @@ public final class Settings extends FlightSettings {
 	public static final ConfigEntry CATEGORIES_MISC_ENABLED = create("enabled categories.misc", true);
 	public static final ConfigEntry CATEGORIES_MONSTERS_ENABLED = create("enabled categories.monsters", true);
 	public static final ConfigEntry CATEGORIES_PLANTS_ENABLED = create("enabled categories.plants", true);
+	public static final ConfigEntry CATEGORIES_PLAYER_HEADS_ENABLED = create("enabled categories.player heads", false);
 
 	public static final ConfigEntry PLAYER_HEAD_NAME = create("player head.name", "&e%player_name%");
 	public static final ConfigEntry PLAYER_HEAD_DROP = create("player head.drop enabled", true);
 	public static final ConfigEntry PLAYER_HEAD_DROP_CHANCE = create("player head.drop chance", 50);
+
+
+	public static final ConfigEntry CLAIM_DELAY_ENABLED = create("claim delay.enabled", false,"If enabled, players will be forced to wait based on their permission to claim another head.");
+	public static final ConfigEntry CLAIM_DELAY_PERMS = create("claim delay.permission times", List.of(
+			"basic:30"
+	), "Structure -> perm name:seconds to claim again. Ex basic:30 means skulls.claimdelay.basic permission will allow players to get a head every 30 seconds");
 
 	/*
 	==================== GUI END ====================

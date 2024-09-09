@@ -29,6 +29,7 @@ import ca.tweetzy.skulls.api.enums.BaseCategory;
 import ca.tweetzy.skulls.api.enums.ViewMode;
 import ca.tweetzy.skulls.guis.abstraction.SkullsBaseGUI;
 import ca.tweetzy.skulls.model.SkullItem;
+import ca.tweetzy.skulls.model.StringHelper;
 import ca.tweetzy.skulls.settings.Settings;
 import ca.tweetzy.skulls.settings.Translations;
 import lombok.NonNull;
@@ -86,8 +87,8 @@ public final class MainGUI extends SkullsBaseGUI {
 
 				@Override
 				public boolean onResult(String string) {
-					if (string.matches("[\\\\^$.|?*+(){}]")) return false;
-					Skulls.getGuiManager().showGUI(click.player, new SkullsViewGUI(MainGUI.this, Skulls.getPlayerManager().findOrCreate(click.player), string.trim(), ViewMode.SEARCH));
+					string = StringHelper.escapeRegex(string).trim();
+					Skulls.getGuiManager().showGUI(click.player, new SkullsViewGUI(MainGUI.this, Skulls.getPlayerManager().findOrCreate(click.player), string, ViewMode.SEARCH));
 					return true;
 				}
 			};
@@ -99,19 +100,20 @@ public final class MainGUI extends SkullsBaseGUI {
 				.lore(TranslationManager.list(Translations.GUI_MAIN_ITEMS_CUSTOM_CATEGORIES_LORE))
 				.make(), click -> click.manager.showGUI(click.player, new CustomCategoryListGUI(click.player, this)));
 
-		setButton(Settings.GUI_MAIN_ITEMS_PLAYER_HEADS_SLOT.getInt(), QuickItem.of(this.player)
-				.name(TranslationManager.string(Translations.GUI_MAIN_ITEMS_PLAYERS_NAME))
-				.lore(TranslationManager.list(Translations.GUI_MAIN_ITEMS_PLAYERS_LORE, "category_size", Skulls.getSkullManager().getOnlineOfflinePlayers().size()))
-				.make(), click -> {
+		if (Settings.CATEGORIES_PLAYER_HEADS_ENABLED.getBoolean())
+			setButton(Settings.GUI_MAIN_ITEMS_PLAYER_HEADS_SLOT.getInt(), QuickItem.of(this.player)
+					.name(TranslationManager.string(Translations.GUI_MAIN_ITEMS_PLAYERS_NAME))
+					.lore(TranslationManager.list(Translations.GUI_MAIN_ITEMS_PLAYERS_LORE, "category_size", Skulls.getSkullManager().getOnlineOfflinePlayers().size()))
+					.make(), click -> {
 
-			if (!Settings.GENERAL_USAGE_REQUIRES_NO_PERM.getBoolean())
-				if (!click.player.hasPermission("skulls.category.playerheads")) {
-					Common.tell(click.player, TranslationManager.string(Translations.NO_PERMISSION));
-					return;
-				}
+				if (!Settings.GENERAL_USAGE_REQUIRES_NO_PERM.getBoolean())
+					if (!click.player.hasPermission("skulls.category.playerheads")) {
+						Common.tell(click.player, TranslationManager.string(Translations.NO_PERMISSION));
+						return;
+					}
 
-			click.manager.showGUI(click.player, new PlayerHeadGUI(this, Skulls.getPlayerManager().findOrCreate(click.player)));
-		});
+				click.manager.showGUI(click.player, new PlayerHeadGUI(this, Skulls.getPlayerManager().findOrCreate(click.player)));
+			});
 
 		setButton(Settings.GUI_MAIN_ITEMS_FAVOURITES_SLOT.getInt(), QuickItem.of(SkullItem.get("skulls:39696"))
 				.name(TranslationManager.string(Translations.GUI_MAIN_ITEMS_FAVOURITES_NAME))

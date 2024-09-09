@@ -18,8 +18,12 @@
 
 package ca.tweetzy.skulls.impl;
 
+import ca.tweetzy.flight.comp.enums.CompMaterial;
 import ca.tweetzy.flight.settings.TranslationManager;
 import ca.tweetzy.flight.utils.QuickItem;
+import ca.tweetzy.flight.utils.profiles.builder.XSkull;
+import ca.tweetzy.flight.utils.profiles.objects.ProfileInputType;
+import ca.tweetzy.flight.utils.profiles.objects.Profileable;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.interfaces.Skull;
 import ca.tweetzy.skulls.settings.Translations;
@@ -97,10 +101,12 @@ public final class TexturedSkull implements Skull {
 
 	@Override
 	public ItemStack getItemStack() {
-		return QuickItem
-				.of(this.texture)
+		ItemStack itemUnTextured = QuickItem
+				.of(CompMaterial.PLAYER_HEAD)
 				.name(TranslationManager.string(Translations.SKULL_TITLE, "skull_name", this.name))
 				.tag("Skulls:ID", String.valueOf(this.id)).make();
+
+		return XSkull.of(itemUnTextured).profile(Profileable.of(ProfileInputType.TEXTURE_URL, this.texture)).lenient().apply();
 	}
 
 	@Override

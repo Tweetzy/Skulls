@@ -104,6 +104,10 @@ public final class SkullsViewGUI extends SkullsPagedGUI<Skull> {
 				if (!player.isOp() || !player.hasPermission("skulls.buyblocked")) return;
 			}
 
+			if (!Skulls.getPlayerManager().playerCanClaim(player)) {
+				return;
+			}
+
 			if (!Settings.CHARGE_FOR_HEADS.getBoolean()) {
 				player.getInventory().addItem(skull.getItemStack());
 				return;

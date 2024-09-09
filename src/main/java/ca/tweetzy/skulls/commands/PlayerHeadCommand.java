@@ -25,7 +25,7 @@ import ca.tweetzy.flight.settings.TranslationManager;
 import ca.tweetzy.flight.utils.Common;
 import ca.tweetzy.flight.utils.QuickItem;
 import ca.tweetzy.skulls.Skulls;
-import ca.tweetzy.skulls.model.NumberHelper;
+import ca.tweetzy.skulls.model.StringHelper;
 import ca.tweetzy.skulls.settings.Settings;
 import ca.tweetzy.skulls.settings.Translations;
 import org.bukkit.Bukkit;
@@ -69,7 +69,7 @@ public final class PlayerHeadCommand extends Command {
 
 			final ItemStack item = QuickItem.of(targetUser)
 					.name(Settings.PLAYER_HEAD_NAME.getString().replace("%player_name%", targetUser.getName()))
-					.amount(args.length > 1 ? NumberHelper.tryInt(args[1], 1) : 1)
+					.amount(args.length > 1 ? StringHelper.tryInt(args[1], 1) : 1)
 					.make();
 
 			if (args.length == 3) {
