@@ -52,6 +52,7 @@ public final class Settings extends FlightSettings {
 	public static final ConfigEntry CATEGORIES_MISC_ENABLED = create("enabled categories.misc", true);
 	public static final ConfigEntry CATEGORIES_MONSTERS_ENABLED = create("enabled categories.monsters", true);
 	public static final ConfigEntry CATEGORIES_PLANTS_ENABLED = create("enabled categories.plants", true);
+	public static final ConfigEntry CATEGORIES_PLAYER_HEADS_ENABLED = create("enabled categories.player heads", false);
 
 	public static final ConfigEntry PLAYER_HEAD_NAME = create("player head.name", "&e%player_name%");
 	public static final ConfigEntry PLAYER_HEAD_DROP = create("player head.drop enabled", true);

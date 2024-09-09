@@ -24,10 +24,12 @@ import ca.tweetzy.flight.gui.events.GuiClickEvent;
 import ca.tweetzy.flight.gui.template.BaseGUI;
 import ca.tweetzy.flight.settings.TranslationManager;
 import ca.tweetzy.flight.utils.QuickItem;
+import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.settings.Settings;
 import ca.tweetzy.skulls.settings.Translations;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -40,6 +42,9 @@ public abstract class SkullsPagedGUI<T> extends BaseGUI {
 	protected final Player player;
 	protected final Gui parent;
 	protected List<T> items;
+
+	@Setter
+	protected boolean async = false;
 
 	public SkullsPagedGUI(Gui parent, @NonNull final Player player, @NonNull String title, int rows, @NonNull List<T> items) {
 		super(parent, title, rows);
@@ -67,21 +72,47 @@ public abstract class SkullsPagedGUI<T> extends BaseGUI {
 
 	private void populateItems() {
 		if (this.items != null) {
-			this.fillSlots().forEach(slot -> setItem(slot, getDefaultItem()));
-			prePopulate();
+			if (!this.async) {
+				renderItems();
+			} else {
+				Skulls.newChain().asyncFirst(() -> {
+					this.fillSlots().forEach(slot -> setItem(slot, getDefaultItem()));
+					prePopulate();
 
-			final List<T> itemsToFill = this.items.stream().skip((page - 1) * (long) this.fillSlots().size()).limit(this.fillSlots().size()).collect(Collectors.toList());
-			pages = (int) Math.max(1, Math.ceil(this.items.size() / (double) this.fillSlots().size()));
+					return this.items.stream().skip((page - 1) * (long) this.fillSlots().size()).limit(this.fillSlots().size()).collect(Collectors.toList());
+				}).asyncLast((data) -> {
+					pages = (int) Math.max(1, Math.ceil(this.items.size() / (double) this.fillSlots().size()));
 
-			setPrevPage(getPreviousButtonSlot(), getPreviousButton());
-			setNextPage(getNextButtonSlot(), getNextButton());
-			setOnPage(e -> draw());
+					setPrevPage(getPreviousButtonSlot(), getPreviousButton());
+					setNextPage(getNextButtonSlot(), getNextButton());
+					setOnPage(e -> draw());
 
-			for (int i = 0; i < this.rows * 9; i++) {
-				if (this.fillSlots().contains(i) && this.fillSlots().indexOf(i) < itemsToFill.size()) {
-					final T object = itemsToFill.get(this.fillSlots().indexOf(i));
-					setButton(i, this.makeDisplayItem(object), click -> this.onClick(object, click));
-				}
+					for (int i = 0; i < this.rows * 9; i++) {
+						if (this.fillSlots().contains(i) && this.fillSlots().indexOf(i) < data.size()) {
+							final T object = data.get(this.fillSlots().indexOf(i));
+							setButton(i, this.makeDisplayItem(object), click -> this.onClick(object, click));
+						}
+					}
+				}).execute();
+			}
+		}
+	}
+
+	private void renderItems() {
+		this.fillSlots().forEach(slot -> setItem(slot, getDefaultItem()));
+		prePopulate();
+
+		final List<T> itemsToFill = this.items.stream().skip((page - 1) * (long) this.fillSlots().size()).limit(this.fillSlots().size()).collect(Collectors.toList());
+		pages = (int) Math.max(1, Math.ceil(this.items.size() / (double) this.fillSlots().size()));
+
+		setPrevPage(getPreviousButtonSlot(), getPreviousButton());
+		setNextPage(getNextButtonSlot(), getNextButton());
+		setOnPage(e -> draw());
+
+		for (int i = 0; i < this.rows * 9; i++) {
+			if (this.fillSlots().contains(i) && this.fillSlots().indexOf(i) < itemsToFill.size()) {
+				final T object = itemsToFill.get(this.fillSlots().indexOf(i));
+				setButton(i, this.makeDisplayItem(object), click -> this.onClick(object, click));
 			}
 		}
 	}

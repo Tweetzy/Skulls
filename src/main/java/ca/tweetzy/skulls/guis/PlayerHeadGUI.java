@@ -18,11 +18,15 @@
 
 package ca.tweetzy.skulls.guis;
 
+import ca.tweetzy.flight.comp.enums.CompMaterial;
 import ca.tweetzy.flight.gui.Gui;
 import ca.tweetzy.flight.gui.events.GuiClickEvent;
 import ca.tweetzy.flight.settings.TranslationManager;
 import ca.tweetzy.flight.utils.Common;
 import ca.tweetzy.flight.utils.QuickItem;
+import ca.tweetzy.flight.utils.profiles.builder.XSkull;
+import ca.tweetzy.flight.utils.profiles.objects.ProfileInputType;
+import ca.tweetzy.flight.utils.profiles.objects.Profileable;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.interfaces.SkullUser;
 import ca.tweetzy.skulls.guis.abstraction.SkullsPagedGUI;
@@ -43,6 +47,7 @@ public final class PlayerHeadGUI extends SkullsPagedGUI<OfflinePlayer> {
 
 	public PlayerHeadGUI(final Gui parent, @NonNull final SkullUser player) {
 		super(parent, Bukkit.getPlayer(player.getUUID()), TranslationManager.string(Translations.GUI_PLAYER_HEADS_TITLE), 6, new ArrayList<>());
+		setAsync(true);
 		this.player = player;
 		draw();
 	}
@@ -59,7 +64,11 @@ public final class PlayerHeadGUI extends SkullsPagedGUI<OfflinePlayer> {
 
 	@Override
 	protected ItemStack makeDisplayItem(OfflinePlayer target) {
-		QuickItem item = QuickItem.of(target).name(TranslationManager.string(Translations.GUI_PLAYER_HEADS_ITEMS_HEAD_NAME, "player_name", target.getName()));
+		if (target == null || !target.hasPlayedBefore()) {
+			return QuickItem.of("http://textures.minecraft.net/texture/ee7700096b5a2a87386d6205b4ddcc14fd33cf269362fa6893499431ce77bf9").name("&eUnknown Player").make();
+		}
+
+		QuickItem item = QuickItem.of(CompMaterial.PLAYER_HEAD).name(TranslationManager.string(Translations.GUI_PLAYER_HEADS_ITEMS_HEAD_NAME, "player_name", target.getName()));
 
 		if (Settings.CHARGE_FOR_HEADS.getBoolean() && Settings.DEFAULT_PRICES_PLAYER_HEADS.getDouble() > 0) {
 			item.lore(TranslationManager.string(Translations.GUI_SKULLS_LIST_ITEMS_SKULL_LORE_PRICE, "skull_price", String.format("%,.2f", Settings.DEFAULT_PRICES_PLAYER_HEADS.getDouble())));
@@ -67,7 +76,15 @@ public final class PlayerHeadGUI extends SkullsPagedGUI<OfflinePlayer> {
 
 		item.lore(TranslationManager.string(Translations.GUI_SKULLS_LIST_ITEMS_SKULL_LORE_TAKE));
 
-		return item.make();
+		return XSkull
+				.of(item.make())
+				.profile(Profileable.of(target))
+				.fallback(Profileable.of(
+						ProfileInputType.TEXTURE_URL,
+						"http://textures.minecraft.net/texture/ee7700096b5a2a87386d6205b4ddcc14fd33cf269362fa6893499431ce77bf9"
+				))
+				.lenient()
+				.apply();
 	}
 
 	@Override

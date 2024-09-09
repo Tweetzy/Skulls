@@ -21,7 +21,7 @@ package ca.tweetzy.skulls.model;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public final class NumberHelper {
+public final class StringHelper {
 
 	public int tryInt(String value, int def) {
 		try {
@@ -40,5 +40,10 @@ public final class NumberHelper {
 		}
 
 		return true;
+	}
+
+	public String escapeRegex(String input) {
+		return input.replaceAll("[\\\\\\[\\]{}()*+?.^$|]", "\\\\$0");
+//		return input.replaceAll("[\\\\\\[\\]\\{\\}\\(\\)\\*\\+\\?\\.\\^\\$\\|]", "\\\\$0");
 	}
 }

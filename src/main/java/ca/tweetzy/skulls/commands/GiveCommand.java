@@ -25,7 +25,7 @@ import ca.tweetzy.flight.settings.TranslationManager;
 import ca.tweetzy.flight.utils.Common;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.interfaces.Skull;
-import ca.tweetzy.skulls.model.NumberHelper;
+import ca.tweetzy.skulls.model.StringHelper;
 import ca.tweetzy.skulls.settings.Translations;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -57,13 +57,13 @@ public final class GiveCommand extends Command {
 
 		boolean isRandomHead = args[1].equalsIgnoreCase("random");
 
-		if (!isRandomHead && !NumberHelper.isInt(args[1])) {
+		if (!isRandomHead && !StringHelper.isInt(args[1])) {
 			Common.tell(sender, TranslationManager.string(Translations.NOT_A_NUMBER, "value", args[1]));
 
 			return ReturnType.FAIL;
 		}
 
-		int amount = args.length == 3 ? NumberHelper.tryInt(args[2], 1) : 1;
+		int amount = args.length == 3 ? StringHelper.tryInt(args[2], 1) : 1;
 		if (amount > 36) amount = 36;
 
 		Skull skull = isRandomHead ? Skulls.getSkullManager().getRandomSkull() : Skulls.getSkullManager().getSkull(Integer.parseInt(args[1]));

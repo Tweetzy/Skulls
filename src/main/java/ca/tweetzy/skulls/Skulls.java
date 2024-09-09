@@ -41,6 +41,9 @@ import ca.tweetzy.skulls.manager.PlayerManager;
 import ca.tweetzy.skulls.manager.SkullManager;
 import ca.tweetzy.skulls.settings.Settings;
 import ca.tweetzy.skulls.settings.Translations;
+import co.aikar.taskchain.BukkitTaskChainFactory;
+import co.aikar.taskchain.TaskChain;
+import co.aikar.taskchain.TaskChainFactory;
 
 /**
  * Date Created: April 04 2022
@@ -49,6 +52,8 @@ import ca.tweetzy.skulls.settings.Translations;
  * @author Kiran Hart
  */
 public final class Skulls extends FlightPlugin {
+
+	private static TaskChainFactory taskChainFactory;
 
 	private final GuiManager guiManager = new GuiManager(this);
 	private final CommandManager commandManager = new CommandManager(this);
@@ -71,6 +76,7 @@ public final class Skulls extends FlightPlugin {
 
 		Common.setPrefix(Settings.PREFIX.getString());
 		Common.setPluginName("<GRADIENT:DD5E89>&lSkulls</GRADIENT:fbc7d4>");
+		taskChainFactory = BukkitTaskChainFactory.create(this);
 
 		// setup sqlite
 		this.databaseConnector = new SQLiteConnector(this);
@@ -141,6 +147,10 @@ public final class Skulls extends FlightPlugin {
 	// economy manager
 	public static EconomyManager getEconomyManager() {
 		return getInstance().economyManager;
+	}
+
+	public static <T> TaskChain<T> newChain() {
+		return taskChainFactory.newChain();
 	}
 
 	// api
