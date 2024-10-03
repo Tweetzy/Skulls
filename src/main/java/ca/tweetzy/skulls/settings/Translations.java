@@ -28,6 +28,7 @@ public final class Translations extends TranslationManager {
 
 	public Translations(@NonNull JavaPlugin plugin) {
 		super(plugin);
+		this.mainLanguage = Settings.LANG.getString();
 	}
 
 	public static final TranslationEntry MISC_IS_TRUE = create("conditionals.is true", "&ATrue");
@@ -219,6 +220,6 @@ public final class Translations extends TranslationManager {
 
 
 	public static void init() {
-		new Translations(Skulls.getInstance()).setup();
+		new Translations(Skulls.getInstance()).setup(Skulls.getInstance());
 	}
 }
