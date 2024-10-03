@@ -59,8 +59,8 @@ public final class SkullsAPIImplementation implements SkullsAPI {
 	}
 
 	@Override
-	public List<Skull> getSkullsBySearch(@NonNull String phrase) {
-		return Skulls.getSkullManager().getSkullsBySearch(phrase);
+	public List<Skull> getSkullsBySearch(@NonNull Player player, @NonNull String phrase) {
+		return Skulls.getSkullManager().getSkullsBySearch(player, phrase);
 	}
 
 	@Override
