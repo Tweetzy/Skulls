@@ -35,6 +35,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+
 /**
  * Date Created: April 21 2022
  * Time Created: 11:59 a.m.
@@ -54,7 +56,7 @@ public final class SkullsViewGUI extends SkullsPagedGUI<Skull> {
 				Bukkit.getPlayer(skullPlayer.getUUID()),
 				viewMode == ViewMode.SEARCH ? TranslationManager.string(Translations.GUI_SKULLS_LIST_TITLE_SEARCH, "search_phrase", category) : viewMode == ViewMode.FAVOURITE ? TranslationManager.string(Translations.GUI_SKULLS_LIST_TITLE_FAVOURITES) : TranslationManager.string(Translations.GUI_SKULLS_LIST_TITLE_CATEGORY, "category_name", category),
 				6,
-				viewMode == ViewMode.SEARCH ? Skulls.getSkullManager().getSkullsBySearch(category) : viewMode == ViewMode.FAVOURITE ? Skulls.getSkullManager().getSkulls(skullPlayer.getFavourites()) : Skulls.getSkullManager().getSkulls(category)
+				viewMode == ViewMode.SEARCH ? new ArrayList<>() : viewMode == ViewMode.FAVOURITE ? Skulls.getSkullManager().getSkulls(skullPlayer.getFavourites()) : Skulls.getSkullManager().getSkulls(category)
 		);
 
 		this.category = category;
@@ -62,6 +64,11 @@ public final class SkullsViewGUI extends SkullsPagedGUI<Skull> {
 		this.skullPlayer = skullPlayer;
 		this.player = Bukkit.getPlayer(this.skullPlayer.getUUID());
 		draw();
+	}
+
+	@Override
+	protected void prePopulate() {
+		this.items = Skulls.getSkullManager().getSkullsBySearch(this.player, category);
 	}
 
 	@Override

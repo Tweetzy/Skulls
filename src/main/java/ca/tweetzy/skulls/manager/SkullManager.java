@@ -37,6 +37,7 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.BufferedReader;
@@ -113,7 +114,7 @@ public final class SkullManager implements Manager {
 		return enabledSkulls.get(random.nextInt(enabledSkulls.size()));
 	}
 
-	public List<Skull> getSkullsBySearch(String phrase) {
+	public List<Skull> getSkullsBySearch(Player player, String phrase) {
 		synchronized (this.skulls) {
 			int id = -1;
 			if (phrase.startsWith("id:")) {
@@ -125,7 +126,7 @@ public final class SkullManager implements Manager {
 			if (id != -1)
 				return Collections.singletonList(getSkull(id));
 
-			return this.skulls.stream().filter(skull -> BaseCategory.getById(skull.getCategory()).isEnabled() && (Common.match(phrase, skull.getName()) || Common.match(phrase, skull.getCategory()) || skull.getTags().stream().anyMatch(tag -> Common.match(phrase, tag)))).collect(Collectors.toList());
+			return this.skulls.stream().filter(skull -> player.hasPermission("skulls.category." + BaseCategory.getById(skull.getCategory()).getId().toLowerCase().replace(" ", "").replace("&", "")) &&  BaseCategory.getById(skull.getCategory()).isEnabled() && (Common.match(phrase, skull.getName()) || Common.match(phrase, skull.getCategory()) || skull.getTags().stream().anyMatch(tag -> Common.match(phrase, tag)))).collect(Collectors.toList());
 		}
 	}
 

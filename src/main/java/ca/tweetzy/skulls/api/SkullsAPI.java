@@ -83,7 +83,7 @@ public interface SkullsAPI {
 	 * @param phrase The phrase to search for.
 	 * @return A list of Skulls that match the search phrase.
 	 */
-	List<Skull> getSkullsBySearch(@NonNull final String phrase);
+	List<Skull> getSkullsBySearch(@NonNull Player player, @NonNull final String phrase);
 
 	/**
 	 * This returns a list of skulls, given a list of IDs.
