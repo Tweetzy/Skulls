@@ -42,18 +42,18 @@ public final class _1_InitialMigration extends DataMigration {
 
 		try (Statement statement = connection.createStatement()) {
 
-			statement.execute("CREATE TABLE " + tablePrefix + "players (" +
+			statement.execute("CREATE TABLE IF NOT EXISTS " + tablePrefix + "players (" +
 					"uuid VARCHAR(36) PRIMARY KEY, " +
 					"favourites TEXT" +
 					")");
 
-			statement.execute("CREATE TABLE " + tablePrefix + "categories (" +
+			statement.execute("CREATE TABLE IF NOT EXISTS " + tablePrefix + "categories (" +
 					"id VARCHAR(64) PRIMARY KEY, " +
 					"name VARCHAR(72) NOT NULL, " +
 					"skulls TEXT NULL" +
 					")");
 
-			statement.execute("CREATE TABLE " + tablePrefix + "skull (" +
+			statement.execute("CREATE TABLE IF NOT EXISTS " + tablePrefix + "skull (" +
 					"id INTEGER PRIMARY KEY, " +
 					"name VARCHAR(64) NOT NULL, " +
 					"category VARCHAR(16) NOT NULL, " +

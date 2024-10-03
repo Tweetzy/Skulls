@@ -41,7 +41,7 @@ public final class _2_PlacedSkullsMigration extends DataMigration {
 	public void migrate(Connection connection, String tablePrefix) throws SQLException {
 
 		try (Statement statement = connection.createStatement()) {
-			statement.execute("CREATE TABLE " + tablePrefix + "placed_skull (" +
+			statement.execute("CREATE TABLE IF NOT EXISTS " + tablePrefix + "placed_skull (" +
 					"id VARCHAR(36) NOT NULL, " +
 					"skull_id INTEGER NOT NULL," +
 					"location VARCHAR(128) NOT NULL" +
