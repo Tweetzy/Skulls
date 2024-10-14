@@ -12,6 +12,26 @@
       <option name="url" value="https://jitpack.io" />
     </remote-repository>
     <remote-repository>
+      <option name="id" value="repsy" />
+      <option name="name" value="Tweetzy Maven Repo On Repsy" />
+      <option name="url" value="https://repo.repsy.io/mvn/kiran/tweetzy" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="aikar" />
+      <option name="name" value="aikar" />
+      <option name="url" value="https://repo.aikar.co/content/groups/aikar/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="sonatype-oss-snapshots1" />
+      <option name="name" value="sonatype-oss-snapshots1" />
+      <option name="url" value="https://s01.oss.sonatype.org/content/repositories/snapshots/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="griefdefender" />
+      <option name="name" value="griefdefender" />
+      <option name="url" value="https://repo.glaremasters.me/repository/bloodshot" />
+    </remote-repository>
+    <remote-repository>
       <option name="id" value="github" />
       <option name="name" value="github" />
       <option name="url" value="https://maven.pkg.github.com/kiranhart/*" />
@@ -25,6 +45,21 @@
       <option name="id" value="jboss.community" />
       <option name="name" value="JBoss Community repository" />
       <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="techscode" />
+      <option name="name" value="techscode" />
+      <option name="url" value="https://repo.techscode.com/repository/techscode-apis/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="nms-repo" />
+      <option name="name" value="nms-repo" />
+      <option name="url" value="https://repo.codemc.io/repository/nms/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="sk89q-repo" />
+      <option name="name" value="sk89q-repo" />
+      <option name="url" value="https://maven.enginehub.org/repo/" />
     </remote-repository>
   </component>
 </project>
