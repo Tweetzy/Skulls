@@ -1,3 +1,4 @@
 /target/
 /src/test/
-.idea/
+/.idea/
+/uuids.txt

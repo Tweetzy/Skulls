@@ -37,7 +37,7 @@ public final class Settings extends FlightSettings {
 	public static final ConfigEntry LANG = create("language", "english").withComment("Default language file");
 	public static final ConfigEntry PREFIX = create("prefix", "<GRADIENT:DD5E89>&lSkulls</GRADIENT:fbc7d4>&r &8»").withComment("Prefix to be used in chat");
 	public static final ConfigEntry CHARGE_FOR_HEADS = create("charge for heads", true).withComment("Should skulls charge users without permission for heads?");
-	public static final ConfigEntry SKULLS_DATA_SOURCE_URL = create("skulls data source url", "https://raw.githubusercontent.com/Tweetzy/Data-Files/main/Skulls/skulls.json").withComment("Skulls data source, might be a mirror");
+	public static final ConfigEntry SKULLS_DATA_SOURCE_URL = create("data url", "https://raw.githubusercontent.com/Tweetzy/Data-Files/main/Skulls/skulls.json").withComment("Do not touch this if you don't know what you are doing!");
 	public static final ConfigEntry ECONOMY = create("economy", "Vault").withComment("You can use Vault or Item");
 	public static final ConfigEntry ITEM_ECONOMY_ITEM = create("item economy item", CompMaterial.GOLD_INGOT.name());
 	public static final ConfigEntry MAIN_MENU_REQUIRES_NO_PERM = create("main menu requires no permission", true);
