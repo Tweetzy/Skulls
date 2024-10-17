@@ -46,6 +46,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -205,11 +207,13 @@ public final class SkullManager implements Manager {
 	public List<Skull> performHeadDownload(boolean silentDownload) {
 		final List<Skull> skulls = new ArrayList<>();
 
-		final String DOWNLOAD_URL = "https://raw.githubusercontent.com/Tweetzy/Data-Files/main/Skulls/skulls.json";
+		final String DOWNLOAD_URL = Settings.SKULLS_DATA_SOURCE_URL.getString();
 
 		try {
 			long start = System.nanoTime();
-			final JsonArray json = getJsonFromUrl(DOWNLOAD_URL);
+			final JsonArray json = DOWNLOAD_URL.startsWith("file://")
+					? getJsonFromFile(DOWNLOAD_URL.substring(7))
+					: getJsonFromUrl(DOWNLOAD_URL);
 			json.forEach(jsonElement -> {
 				final JsonObject jsonObject = jsonElement.getAsJsonObject();
 				final BaseCategory category = BaseCategory.getById(replace(jsonObject.get("category").toString()));
@@ -251,6 +255,11 @@ public final class SkullManager implements Manager {
 
 		final JsonParser parser = new JsonParser();
 		return (JsonArray) parser.parse(builder.toString());
+	}
+
+	private JsonArray getJsonFromFile(String filePath) throws IOException {
+		String content = new String(Files.readAllBytes(Paths.get(filePath)));
+		return JsonParser.parseString(content).getAsJsonArray();
 	}
 
 	private String replace(String in) {
