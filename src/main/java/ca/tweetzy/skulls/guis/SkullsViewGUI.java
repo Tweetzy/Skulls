@@ -68,7 +68,8 @@ public final class SkullsViewGUI extends SkullsPagedGUI<Skull> {
 
 	@Override
 	protected void prePopulate() {
-		this.items = Skulls.getSkullManager().getSkullsBySearch(this.player, category);
+		if (this.viewMode == ViewMode.SEARCH)
+			this.items = Skulls.getSkullManager().getSkullsBySearch(this.player, category);
 	}
 
 	@Override
