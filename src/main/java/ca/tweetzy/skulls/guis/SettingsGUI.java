@@ -46,7 +46,7 @@ public final class SettingsGUI extends SkullsBaseGUI {
 		setButton(1, 2, QuickItem.of(CompMaterial.GOLD_NUGGET).name("&e&lForce Sync Prices").lore("&7Clicking this will force update all the prices", "&7for all skulls to the default category price", "&7set within the configuration file.").make(), click -> {
 			AtomicInteger total = new AtomicInteger(0);
 
-			Skulls.getSkullManager().getSkulls().forEach(skull -> {
+			Skulls.getSkullManager().getSkulls().values().forEach(skull -> {
 				final BaseCategory category = BaseCategory.getById(skull.getCategory());
 				if (skull.getPrice() != category.getDefaultPrice()) {
 					skull.setPrice(category.getDefaultPrice());
