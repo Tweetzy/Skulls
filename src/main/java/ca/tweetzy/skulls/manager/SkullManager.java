@@ -35,6 +35,7 @@ import lombok.NonNull;
 import lombok.Setter;
 import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -71,10 +72,10 @@ public final class SkullManager implements Manager {
 	private boolean loading = false;
 
 	@Getter
-	private final List<Skull> skulls = Collections.synchronizedList(new ArrayList<>());
+	private final ConcurrentHashMap<Integer, Skull> skulls = new ConcurrentHashMap<>();
 
 	@Getter
-	private final List<Integer> idList = Collections.synchronizedList(new ArrayList<>());
+	private final Set<Integer> idList = Collections.synchronizedSet(new HashSet<>());
 
 	@Getter
 	private final Map<Location, PlacedSkull> placedSkulls = new ConcurrentHashMap<>();
@@ -90,58 +91,61 @@ public final class SkullManager implements Manager {
 	}
 
 	public Skull getSkull(final int id) {
-		synchronized (this.skulls) {
-			return this.skulls.stream().filter(skull -> skull.getId() == id).findFirst().orElse(null);
-		}
+		return this.skulls.getOrDefault(id, null);
 	}
 
 	public List<Skull> getSkulls(BaseCategory category) {
-		synchronized (this.skulls) {
-			return this.skulls.stream().filter(skull -> skull.getCategory().equalsIgnoreCase(category.getId())).collect(Collectors.toList());
-		}
+		return this.skulls.values().stream().filter(skull -> skull.getCategory().equalsIgnoreCase(category.getId())).collect(Collectors.toList());
 	}
 
 	public List<Skull> getSkulls(String category) {
-		synchronized (this.skulls) {
-			if (BaseCategory.getById(category) != null)
+		if (BaseCategory.getById(category) != null)
 
-				return this.skulls.stream().filter(skull -> skull.getCategory().equalsIgnoreCase(category)).collect(Collectors.toList());
+			return this.skulls.values().stream().filter(skull -> skull.getCategory().equalsIgnoreCase(category)).collect(Collectors.toList());
 
-			return this.skulls.stream().filter(skull -> Skulls.getCategoryManager().findCategory(category).getSkulls().contains(skull.getId())).collect(Collectors.toList());
-		}
+		return this.skulls.values().stream().filter(skull -> Skulls.getCategoryManager().findCategory(category).getSkulls().contains(skull.getId())).collect(Collectors.toList());
 	}
 
 	public Skull getRandomSkull() {
-		final List<Skull> enabledSkulls = getSkulls().stream().filter(skull -> BaseCategory.getById(skull.getCategory()).isEnabled()).collect(Collectors.toList());
+		final List<Skull> enabledSkulls = getSkulls().values().stream().filter(skull -> BaseCategory.getById(skull.getCategory()).isEnabled()).toList();
 		return enabledSkulls.get(random.nextInt(enabledSkulls.size()));
 	}
 
-	public List<Skull> getSkullsBySearch(Player player, String phrase) {
-		synchronized (this.skulls) {
-			int id = -1;
-			if (phrase.startsWith("id:")) {
-				if (NumberUtils.isNumber(phrase.split(":")[1])) {
-					id = Integer.parseInt(phrase.split(":")[1]);
-				}
+	public Skull getRandomAllowedSkull(Player player) {
+		final List<Skull> enabledSkulls = getSkulls().values().stream().filter(skull -> player.hasPermission("skulls.category." + BaseCategory.getById(skull.getCategory()).getId().toLowerCase().replace(" ", "").replace("&", "")) && BaseCategory.getById(skull.getCategory()).isEnabled() && !skull.isBlocked()).toList();
+		return enabledSkulls.get(random.nextInt(enabledSkulls.size()));
+	}
+
+	public List<Skull> getSkullsBySearch(Player player, String phraseOriginal) {
+		String phrase = ChatColor.stripColor(phraseOriginal);
+
+		int id = -1;
+		if (phrase.startsWith("id:")) {
+			if (NumberUtils.isNumber(phrase.split(":")[1])) {
+				id = Integer.parseInt(phrase.split(":")[1]);
 			}
-
-			if (id != -1)
-				return Collections.singletonList(getSkull(id));
-
-			return this.skulls.stream().filter(skull -> player.hasPermission("skulls.category." + BaseCategory.getById(skull.getCategory()).getId().toLowerCase().replace(" ", "").replace("&", "")) &&  BaseCategory.getById(skull.getCategory()).isEnabled() && (Common.match(phrase, skull.getName()) || Common.match(phrase, skull.getCategory()) || skull.getTags().stream().anyMatch(tag -> Common.match(phrase, tag)))).collect(Collectors.toList());
 		}
+
+		if (id != -1)
+			return Collections.singletonList(getSkull(id));
+
+		return this.skulls.values().stream().filter(skull -> player.hasPermission("skulls.category." + BaseCategory.getById(skull.getCategory()).getId().toLowerCase().replace(" ", "").replace("&", "")) && BaseCategory.getById(skull.getCategory()).isEnabled() && (Common.match(phrase, skull.getName()) || Common.match(phrase, skull.getCategory()) || skull.getTags().stream().anyMatch(tag -> Common.match(phrase, tag)))).collect(Collectors.toList());
 	}
 
 	public List<Skull> getSkulls(List<Integer> ids) {
-		synchronized (this.skulls) {
-			return this.skulls.stream().filter(skull -> ids.contains(skull.getId())).collect(Collectors.toList());
+		final List<Skull> results = new ArrayList<>();
+
+		for (Integer id : ids) {
+			final Skull found = this.skulls.getOrDefault(id, null);
+			if (found != null)
+				results.add(found);
 		}
+
+		return results;
 	}
 
 	public long getSkullCount(String category) {
-		synchronized (this.skulls) {
-			return this.skulls.stream().filter(skull -> skull.getCategory().equalsIgnoreCase(category)).count();
-		}
+		return this.skulls.values().stream().filter(skull -> skull.getCategory().equalsIgnoreCase(category)).count();
 	}
 
 	public ItemStack getSkullItem(final int id) {
@@ -171,22 +175,25 @@ public final class SkullManager implements Manager {
 
 	private void checkAndFixDatabase() {
 		Bukkit.getServer().getScheduler().runTaskAsynchronously(Skulls.getInstance(), () -> {
-			final Set<Skull> heads = new HashSet<>();
+			final Map<Integer, Skull> heads = new HashMap<>();
 
 			Common.log("&r&aRunning database check :)");
 
 			final List<Skull> downloaded = performHeadDownload(true);
 			downloaded.forEach(skull -> {
-				if (this.skulls.contains(skull)) return;
-				heads.add(skull);
+				if (!this.skulls.containsKey(skull.getId()))
+					heads.put(skull.getId(),skull);
 			});
 
-			if (this.skulls.size() < heads.size()) {
-				Common.log("&r&eFound some missing heads, downloading/inserting them now!");
+			int oldSize = this.skulls.size();
+			this.skulls.putAll(heads);
+			int newSize = this.skulls.size();
 
-				this.skulls.addAll(heads);
-				this.idList.addAll(heads.stream().map(Skull::getId).toList());
-				Skulls.getDataManager().insertSkulls(new ArrayList<>(heads));
+			if (newSize > oldSize) {
+				Skulls.getDataManager().insertSkulls(new ArrayList<>(heads.values()));
+				Common.log("&r&eFound some new skulls, saving them now :D");
+			} else {
+				Common.log("&r&aEverything looks up-to-date, no issues found. Enjoy!");
 			}
 		});
 	}
@@ -198,8 +205,8 @@ public final class SkullManager implements Manager {
 
 			final List<Skull> heads = new ArrayList<>(performHeadDownload(false));
 
-			this.skulls.addAll(heads);
-			this.idList.addAll(heads.stream().map(Skull::getId).toList());
+			heads.forEach(skull -> this.skulls.putIfAbsent(skull.getId(), skull));
+//			this.idList.addAll(heads.stream().map(Skull::getId).toList());
 			Skulls.getDataManager().insertSkulls(heads);
 		});
 	}
@@ -277,8 +284,8 @@ public final class SkullManager implements Manager {
 				return;
 			}
 
-			this.skulls.addAll(all);
-			this.idList.addAll(all.stream().map(Skull::getId).toList());
+			all.forEach(skull -> this.skulls.put(skull.getId(), skull));
+//			this.idList.addAll(all.stream().map(Skull::getId).toList());
 
 			if (this.skulls.isEmpty()) {
 				Common.log("&cCould not find any skulls, attempting to redownload them!");

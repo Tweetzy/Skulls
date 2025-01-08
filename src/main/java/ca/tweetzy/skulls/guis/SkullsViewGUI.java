@@ -56,7 +56,7 @@ public final class SkullsViewGUI extends SkullsPagedGUI<Skull> {
 				Bukkit.getPlayer(skullPlayer.getUUID()),
 				viewMode == ViewMode.SEARCH ? TranslationManager.string(Translations.GUI_SKULLS_LIST_TITLE_SEARCH, "search_phrase", category) : viewMode == ViewMode.FAVOURITE ? TranslationManager.string(Translations.GUI_SKULLS_LIST_TITLE_FAVOURITES) : TranslationManager.string(Translations.GUI_SKULLS_LIST_TITLE_CATEGORY, "category_name", category),
 				6,
-				viewMode == ViewMode.SEARCH ? new ArrayList<>() : viewMode == ViewMode.FAVOURITE ? Skulls.getSkullManager().getSkulls(skullPlayer.getFavourites()) : Skulls.getSkullManager().getSkulls(category)
+				new ArrayList<>()
 		);
 
 		this.category = category;
@@ -70,6 +70,11 @@ public final class SkullsViewGUI extends SkullsPagedGUI<Skull> {
 	protected void prePopulate() {
 		if (this.viewMode == ViewMode.SEARCH)
 			this.items = Skulls.getSkullManager().getSkullsBySearch(this.player, category);
+
+		else if (viewMode == ViewMode.FAVOURITE)
+			this.items = Skulls.getSkullManager().getSkulls(skullPlayer.getFavourites());
+		else
+			this.items= Skulls.getSkullManager().getSkulls(category);
 	}
 
 	@Override

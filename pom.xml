@@ -7,7 +7,7 @@
     <artifactId>skulls</artifactId>
 
     <name>Skulls</name>
-    <version>3.20.0</version>
+    <version>3.23.0</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -15,10 +15,18 @@
         <jarName>Skulls-${project.version}</jarName>
         <main.class>${project.groupId}.${project.artifactId}.${project.name}</main.class>
         <java.version>16</java.version>
-        <flight.version>3.27.1</flight.version>
+        <flight.version>3.30.0</flight.version>
         <flight.path>ca.tweetzy</flight.path>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <distributionManagement>
+        <repository>
+            <id>repsy</id>
+            <name>Tweetzy Maven Repo On Repsy</name>
+            <url>https://repo.repsy.io/mvn/kiran/tweetzy</url>
+        </repository>
+    </distributionManagement>
 
     <repositories>
         <repository>
@@ -59,7 +67,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
-            <version>1.20.4-R0.1-SNAPSHOT</version>
+            <version>1.21.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -182,6 +190,24 @@
                                     <filtering>false</filtering>
                                 </resource>
                             </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.coderplus.maven.plugins</groupId>
+                <artifactId>copy-rename-maven-plugin</artifactId>
+                <version>1.0.1</version>
+                <executions>
+                    <execution>
+                        <id>copy-named-jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <sourceFile>${project.build.directory}/${jarName}.jar</sourceFile>
+                            <destinationFile>D:\Development\Spigot Plugins\Ready Jars\${project.name}\${project.name} - v${project.version}.jar</destinationFile>
                         </configuration>
                     </execution>
                 </executions>

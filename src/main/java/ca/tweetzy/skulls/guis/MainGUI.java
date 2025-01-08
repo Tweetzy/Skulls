@@ -27,6 +27,7 @@ import ca.tweetzy.flight.utils.input.TitleInput;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.enums.BaseCategory;
 import ca.tweetzy.skulls.api.enums.ViewMode;
+import ca.tweetzy.skulls.api.interfaces.Skull;
 import ca.tweetzy.skulls.guis.abstraction.SkullsBaseGUI;
 import ca.tweetzy.skulls.model.SkullItem;
 import ca.tweetzy.skulls.model.StringHelper;
@@ -113,6 +114,34 @@ public final class MainGUI extends SkullsBaseGUI {
 					}
 
 				click.manager.showGUI(click.player, new PlayerHeadGUI(this, Skulls.getPlayerManager().findOrCreate(click.player)));
+			});
+
+		if (Settings.RANDOM_HEAD_BUTTON_ENABLED.getBoolean())
+			setButton(Settings.GUI_MAIN_ITEMS_RANDOM_HEAD_SLOT.getInt(), QuickItem.of(SkullItem.get("skulls:5171"))
+					.name(TranslationManager.string(Translations.GUI_MAIN_ITEMS_RANDOM_HEAD_NAME))
+					.lore(TranslationManager.list(Translations.GUI_MAIN_ITEMS_RANDOM_HEAD_LORE, "price", String.format("%,.2f", Settings.RANDOM_HEAD_BUTTON_PRICE.getDouble())))
+					.make(), click -> {
+
+				if (!Skulls.getPlayerManager().playerCanClaim(player)) {
+					return;
+				}
+
+				final double price = player.hasPermission("skulls.freeskulls") ? 0 : Settings.RANDOM_HEAD_BUTTON_PRICE.getDouble();
+				final Skull skull = Skulls.getSkullManager().getRandomAllowedSkull(click.player);
+
+				if (price <= 0) {
+					player.getInventory().addItem(skull.getItemStack());
+					Common.tell(player, TranslationManager.string(Translations.RECEIVED_RANDOM_SKULL, "skull_name", skull.getName()));	return;
+				}
+
+				if (!Skulls.getEconomyManager().has(player, price)) {
+					Common.tell(player, TranslationManager.string(Translations.NO_MONEY));
+					return;
+				}
+
+				Skulls.getEconomyManager().withdraw(player, price);
+				player.getInventory().addItem(skull.getItemStack());
+				Common.tell(player, TranslationManager.string(Translations.RECEIVED_RANDOM_SKULL, "skull_name", skull.getName()));
 			});
 
 		setButton(Settings.GUI_MAIN_ITEMS_FAVOURITES_SLOT.getInt(), QuickItem.of(SkullItem.get("skulls:39696"))
