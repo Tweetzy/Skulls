@@ -44,6 +44,8 @@ public final class Settings extends FlightSettings {
 	public static final ConfigEntry GENERAL_USAGE_REQUIRES_NO_PERM = create("general usage requires no permission", false, "If true, no permission is required to use except for admin stuff");
 	public static final ConfigEntry TELL_OP_PATREON_LINK = create("tell ops patron on join", true);
 	public static final ConfigEntry SKULL_TRACKING = create("track skull placement", true, "If disabled skulls will no longer drop in creative");
+	public static final ConfigEntry RANDOM_HEAD_BUTTON_ENABLED = create("random head button.enabled", false, "If enabled players can click to receive a random head (only from categories they have access too)");
+	public static final ConfigEntry RANDOM_HEAD_BUTTON_PRICE = create("random head button.price", 1.0, "The price for using the random head button");
 
 	public static final ConfigEntry CATEGORIES_ALPHABET_ENABLED = create("enabled categories.alphabet", true);
 	public static final ConfigEntry CATEGORIES_ANIMALS_ENABLED = create("enabled categories.animals", true);
@@ -56,6 +58,7 @@ public final class Settings extends FlightSettings {
 	public static final ConfigEntry CATEGORIES_MONSTERS_ENABLED = create("enabled categories.monsters", true);
 	public static final ConfigEntry CATEGORIES_PLANTS_ENABLED = create("enabled categories.plants", true);
 	public static final ConfigEntry CATEGORIES_PLAYER_HEADS_ENABLED = create("enabled categories.player heads", false);
+
 
 	public static final ConfigEntry PLAYER_HEAD_NAME = create("player head.name", "&e%player_name%");
 	public static final ConfigEntry PLAYER_HEAD_DROP = create("player head.drop enabled", true);
@@ -79,7 +82,7 @@ public final class Settings extends FlightSettings {
 	public static final ConfigEntry GUI_MAIN_ITEMS_SEARCH_SLOT = create("gui.main.items.search.slot", 41, "-1 to disable it");
 	public static final ConfigEntry GUI_MAIN_ITEMS_CUSTOM_CATEGORIES_SLOT = create("gui.main.items.custom categories.slot", 38, "-1 to disable it");
 	public static final ConfigEntry GUI_MAIN_ITEMS_PLAYER_HEADS_SLOT = create("gui.main.items.player heads.slot", 39, "-1 to disable it");
-
+	public static final ConfigEntry GUI_MAIN_ITEMS_RANDOM_HEAD_SLOT = create("gui.main.items.random head.slot", 40, "-1 to disable or turn off completely under 'random head button'");
 
 	public static final ConfigEntry GUI_MAIN_ITEMS_ALPHABET_SLOT = create("gui.main.items.alphabet.slot", 11);
 	public static final ConfigEntry GUI_MAIN_ITEMS_ANIMALS_SLOT = create("gui.main.items.animals.slot", 12);

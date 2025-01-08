@@ -35,6 +35,7 @@ import lombok.NonNull;
 import lombok.Setter;
 import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -110,7 +111,14 @@ public final class SkullManager implements Manager {
 		return enabledSkulls.get(random.nextInt(enabledSkulls.size()));
 	}
 
-	public List<Skull> getSkullsBySearch(Player player, String phrase) {
+	public Skull getRandomAllowedSkull(Player player) {
+		final List<Skull> enabledSkulls = getSkulls().values().stream().filter(skull -> player.hasPermission("skulls.category." + BaseCategory.getById(skull.getCategory()).getId().toLowerCase().replace(" ", "").replace("&", "")) && BaseCategory.getById(skull.getCategory()).isEnabled() && !skull.isBlocked()).toList();
+		return enabledSkulls.get(random.nextInt(enabledSkulls.size()));
+	}
+
+	public List<Skull> getSkullsBySearch(Player player, String phraseOriginal) {
+		String phrase = ChatColor.stripColor(phraseOriginal);
+
 		int id = -1;
 		if (phrase.startsWith("id:")) {
 			if (NumberUtils.isNumber(phrase.split(":")[1])) {

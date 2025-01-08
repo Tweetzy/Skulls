@@ -40,8 +40,8 @@ public final class Translations extends TranslationManager {
 	public static final TranslationEntry NO_SKULL_INFO = create("misc.no skull info", "&cCould not determine ID of that skull");
 	public static final TranslationEntry SKULL_TITLE = create("skull.name", "&e%skull_name%");
 	public static final TranslationEntry ID_TAKEN = create("misc.id taken", "&cThat category id is already in use!");
-	public static final TranslationEntry LOADING = create("misc.loading", "&cPlease wait a bit longer, still loading heads.");
 	public static final TranslationEntry CLAIM_DELAY = create("misc.claim delay", "&cYou can claim another head in &7(&e%time_difference%&7)");
+	public static final TranslationEntry RECEIVED_RANDOM_SKULL = create("misc.received random skull", "&aYou received a random skull &F(&E%skull_name%&f)");
 
 
 	public static final TranslationEntry ALPHABET = create("categories.alphabet", "Alphabet");
@@ -172,6 +172,17 @@ public final class Translations extends TranslationManager {
 			"&7that you have favourited.",
 			"",
 			"&e&lClick &8» &7To view your favourites"
+	);
+
+	public static final TranslationEntry GUI_MAIN_ITEMS_RANDOM_HEAD_NAME = create("gui.main.items.random head.name", "<GRADIENT:DD5E89>&lRandom Head</GRADIENT:fbc7d4>");
+
+	public static final TranslationEntry GUI_MAIN_ITEMS_RANDOM_HEAD_LORE = create("gui.main.items.random head.lore",
+			"&7Used to receive a random head from",
+			"&7a random category that you have access too.",
+			"",
+			"&7Cost: &a$%price%",
+			"",
+			"&e&lClick &8» &7To receive a random head"
 	);
 
 	public static final TranslationEntry GUI_MAIN_ITEMS_SEARCH_NAME = create("gui.main.items.search.name", "<GRADIENT:DD5E89>&lSearch</GRADIENT:fbc7d4>");
