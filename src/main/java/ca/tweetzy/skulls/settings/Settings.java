@@ -42,7 +42,7 @@ public final class Settings extends FlightSettings {
 	public static final ConfigEntry ITEM_ECONOMY_ITEM = create("item economy item", CompMaterial.GOLD_INGOT.name());
 	public static final ConfigEntry MAIN_MENU_REQUIRES_NO_PERM = create("main menu requires no permission", true);
 	public static final ConfigEntry GENERAL_USAGE_REQUIRES_NO_PERM = create("general usage requires no permission", false, "If true, no permission is required to use except for admin stuff");
-	public static final ConfigEntry TELL_OP_PATREON_LINK = create("tell ops patron on join", true);
+	public static final ConfigEntry PATREON_UPDATES = create("patreon.update changes", true, "Tells changes being done regarding updates.");
 	public static final ConfigEntry SKULL_TRACKING = create("track skull placement", true, "If disabled skulls will no longer drop in creative");
 	public static final ConfigEntry RANDOM_HEAD_BUTTON_ENABLED = create("random head button.enabled", false, "If enabled players can click to receive a random head (only from categories they have access too)");
 	public static final ConfigEntry RANDOM_HEAD_BUTTON_PRICE = create("random head button.price", 1.0, "The price for using the random head button");

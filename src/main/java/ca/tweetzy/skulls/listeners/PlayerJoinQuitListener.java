@@ -44,22 +44,19 @@ public final class PlayerJoinQuitListener implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onOpdPlayerJoin(final PlayerJoinEvent event) {
 		final Player player = event.getPlayer();
-		if (!player.isOp()) return;
+		if (!Settings.PATREON_UPDATES.getBoolean()) return;
 
-		if (!Settings.TELL_OP_PATREON_LINK.getBoolean()) return;
-		Bukkit.getServer().getScheduler().runTaskLater(Skulls.getInstance(), () -> {
-			Common.tellNoPrefix(player,
-					"",
-					"<center>%pl_name%",
-					"<center>&7If you like the plugin, please consider supporting",
-					"<center>&7me on patreon for as low as &a$1 &7a month.",
-					"<center>&7It will help me keep the skulls db up and for me",
-					"<center>&7to be able to provide updates regularly",
-					"",
-					"<center>&6https://patreon.com/kiranhart",
-					""
-			);
-		}, 5L);
+		if (player.isOp() || player.hasPermission("skulls.admin")) {
+			Bukkit.getServer().getScheduler().runTaskLater(Skulls.getInstance(), () -> {
+				Common.tellNoPrefix(player,
+						"",
+						"<center>%pl_name%",
+						"<center>&7Future updates will be posted to patreon for a while before they get released publicly, as will access to new heads. You can join for $1/m if you wish using the link below.",
+						"<center>&6https://patreon.com/kiranhart",
+						""
+				);
+			}, 5L);
+		}
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)

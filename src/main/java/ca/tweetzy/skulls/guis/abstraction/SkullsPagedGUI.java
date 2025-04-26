@@ -18,7 +18,6 @@
 
 package ca.tweetzy.skulls.guis.abstraction;
 
-import ca.tweetzy.flight.comp.enums.CompSound;
 import ca.tweetzy.flight.gui.Gui;
 import ca.tweetzy.flight.gui.events.GuiClickEvent;
 import ca.tweetzy.flight.gui.template.BaseGUI;

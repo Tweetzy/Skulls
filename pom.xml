@@ -7,7 +7,7 @@
     <artifactId>skulls</artifactId>
 
     <name>Skulls</name>
-    <version>3.24.0</version>
+    <version>3.25.0</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -15,7 +15,7 @@
         <jarName>Skulls-${project.version}</jarName>
         <main.class>${project.groupId}.${project.artifactId}.${project.name}</main.class>
         <java.version>16</java.version>
-        <flight.version>3.30.1</flight.version>
+        <flight.version>3.36.0</flight.version>
         <flight.path>ca.tweetzy</flight.path>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -72,7 +72,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
-            <version>1.21.4-R0.1-SNAPSHOT</version>
+            <version>1.21.5-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -121,6 +121,12 @@
             <version>2.4.1</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.32</version>
+        </dependency>
+
     </dependencies>
     <build>
         <finalName>${jarName}</finalName>
@@ -179,7 +185,8 @@
                         <relocation>
                             <pattern>co.aikar.taskchain</pattern>
                             <shadedPattern>${project.groupId}.${project.artifactId}.lib.taskchain</shadedPattern>
-                        </relocation> </relocations>
+                        </relocation>
+                    </relocations>
                 </configuration>
             </plugin>
             <plugin>
