@@ -114,6 +114,17 @@ public final class Settings extends FlightSettings {
 	public static final ConfigEntry DEFAULT_PRICES_PLANTS = create("default prices.plants", 1.0);
 	public static final ConfigEntry DEFAULT_PRICES_PLAYER_HEADS = create("default prices.player heads", 1.0);
 
+	/*
+	==================== PERFORMANCE SETTINGS ====================
+	 */
+	public static final ConfigEntry PLAYER_TEXTURE_CACHE_TTL = create("performance.player texture cache.ttl", 86400, "Time in seconds to cache player textures (default: 86400 = 24 hours). Set to 0 to disable caching.");
+	public static final ConfigEntry PLAYER_TEXTURE_CACHE_ENABLED = create("performance.player texture cache.enabled", true, "Enable player texture caching to reduce API calls and improve performance");
+	public static final ConfigEntry OFFLINE_PLAYERS_CACHE_ENABLED = create("performance.offline players cache.enabled", true, "Cache offline players list to improve GUI loading performance");
+	public static final ConfigEntry OFFLINE_PLAYERS_CACHE_REFRESH_INTERVAL = create("performance.offline players cache.refresh interval", 300, "Time in seconds between offline players cache refreshes (default: 300 = 5 minutes)");
+	public static final ConfigEntry MAX_OFFLINE_PLAYERS_TO_LOAD = create("performance.max offline players to load", 1000, "Maximum number of offline players to load in the player heads GUI. Set to -1 for unlimited.");
+	public static final ConfigEntry ITEMSTACK_CACHE_ENABLED = create("performance.itemstack cache.enabled", true, "Cache ItemStacks to significantly improve GUI loading speed. Disable if you experience memory issues.");
+	public static final ConfigEntry ITEMSTACK_CACHE_SIZE = create("performance.itemstack cache.size", 5000, "Maximum number of ItemStacks to cache. Higher values use more memory but improve performance for large skull collections.");
+
 	@SneakyThrows
 	public static void setup() {
 		Skulls.getCoreConfig().init();

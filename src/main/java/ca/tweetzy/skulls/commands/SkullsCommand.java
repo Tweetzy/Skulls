@@ -20,14 +20,11 @@ package ca.tweetzy.skulls.commands;
 
 import ca.tweetzy.flight.command.AllowedExecutor;
 import ca.tweetzy.flight.command.Command;
+import ca.tweetzy.flight.command.CommandContext;
 import ca.tweetzy.flight.command.ReturnType;
-import ca.tweetzy.flight.settings.TranslationManager;
-import ca.tweetzy.flight.utils.Common;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.guis.MainGUI;
 import ca.tweetzy.skulls.settings.Settings;
-import ca.tweetzy.skulls.settings.Translations;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -45,9 +42,9 @@ public final class SkullsCommand extends Command {
 	}
 
 	@Override
-	protected ReturnType execute(CommandSender commandSender, String... strings) {
-		if (commandSender instanceof Player) {
-			final Player player = (Player) commandSender;
+	protected ReturnType execute(CommandContext context) {
+		if (context.isPlayer()) {
+			final Player player = context.getPlayer();
 
 //			if (Skulls.getSkullManager().isLoading()) {
 //				Common.tell(player, TranslationManager.string(Translations.LOADING));
@@ -62,8 +59,18 @@ public final class SkullsCommand extends Command {
 	}
 
 	@Override
-	protected List<String> tab(CommandSender commandSender, String... strings) {
+	protected ReturnType execute(org.bukkit.command.CommandSender sender, String... args) {
+		return execute(new ca.tweetzy.flight.command.CommandContext(sender, args, getSubCommands().get(0)));
+	}
+
+	@Override
+	protected List<String> tab(CommandContext context) {
 		return null;
+	}
+
+	@Override
+	protected List<String> tab(org.bukkit.command.CommandSender sender, String... args) {
+		return tab(new ca.tweetzy.flight.command.CommandContext(sender, args, getSubCommands().get(0)));
 	}
 
 	@Override

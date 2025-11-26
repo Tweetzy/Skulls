@@ -20,9 +20,10 @@ package ca.tweetzy.skulls.commands;
 
 import ca.tweetzy.flight.command.AllowedExecutor;
 import ca.tweetzy.flight.command.Command;
+import ca.tweetzy.flight.command.CommandContext;
 import ca.tweetzy.flight.command.ReturnType;
 import ca.tweetzy.flight.comp.enums.CompMaterial;
-import ca.tweetzy.flight.nbtapi.NBT;
+import de.tr7zw.changeme.nbtapi.NBT;
 import ca.tweetzy.flight.settings.TranslationManager;
 import ca.tweetzy.flight.utils.Common;
 import ca.tweetzy.flight.utils.PlayerUtil;
@@ -45,8 +46,8 @@ public final class InspectCommand extends Command {
 	}
 
 	@Override
-	protected ReturnType execute(CommandSender sender, String... args) {
-		final Player player = (Player) sender;
+	protected ReturnType execute(CommandContext context) {
+		final Player player = context.getPlayer();
 
 		final ItemStack hand = PlayerUtil.getHand(player);
 		int skullId = -1;
@@ -68,11 +69,11 @@ public final class InspectCommand extends Command {
 
 		final Skull skull = Skulls.getSkullManager().getSkull(skullId);
 		if (skull == null) {
-			Common.tell(sender, TranslationManager.string(Translations.NO_SKULL_INFO));
+			Common.tell(context.getSender(), TranslationManager.string(Translations.NO_SKULL_INFO));
 			return ReturnType.FAIL;
 		}
 
-		Common.tellNoPrefix(sender, TranslationManager.list(Translations.INSPECT_INFO,
+		Common.tellNoPrefix(context.getSender(), TranslationManager.list(Translations.INSPECT_INFO,
 				"skull_id", String.valueOf(skullId),
 				"skull_texture", skull.getTexture()
 		).toArray(new String[0]));
@@ -80,8 +81,18 @@ public final class InspectCommand extends Command {
 	}
 
 	@Override
-	protected List<String> tab(CommandSender sender, String... args) {
+	protected ReturnType execute(CommandSender sender, String... args) {
+		return execute(new CommandContext(sender, args, getSubCommands().get(0)));
+	}
+
+	@Override
+	protected List<String> tab(CommandContext context) {
 		return null;
+	}
+
+	@Override
+	protected List<String> tab(CommandSender sender, String... args) {
+		return tab(new CommandContext(sender, args, getSubCommands().get(0)));
 	}
 
 	@Override

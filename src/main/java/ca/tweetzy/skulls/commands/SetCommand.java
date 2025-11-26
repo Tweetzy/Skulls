@@ -20,8 +20,8 @@ package ca.tweetzy.skulls.commands;
 
 import ca.tweetzy.flight.command.AllowedExecutor;
 import ca.tweetzy.flight.command.Command;
+import ca.tweetzy.flight.command.CommandContext;
 import ca.tweetzy.flight.command.ReturnType;
-import org.bukkit.command.CommandSender;
 
 import java.util.List;
 
@@ -32,14 +32,23 @@ public final class SetCommand extends Command {
 	}
 
 	@Override
-	protected ReturnType execute(CommandSender sender, String... args) {
-
+	protected ReturnType execute(CommandContext context) {
 		return ReturnType.SUCCESS;
 	}
 
 	@Override
-	protected List<String> tab(CommandSender sender, String... args) {
+	protected ReturnType execute(org.bukkit.command.CommandSender sender, String... args) {
+		return execute(new ca.tweetzy.flight.command.CommandContext(sender, args, getSubCommands().get(0)));
+	}
+
+	@Override
+	protected List<String> tab(CommandContext context) {
 		return null;
+	}
+
+	@Override
+	protected List<String> tab(org.bukkit.command.CommandSender sender, String... args) {
+		return tab(new ca.tweetzy.flight.command.CommandContext(sender, args, getSubCommands().get(0)));
 	}
 
 	@Override
@@ -57,3 +66,4 @@ public final class SetCommand extends Command {
 		return null;
 	}
 }
+

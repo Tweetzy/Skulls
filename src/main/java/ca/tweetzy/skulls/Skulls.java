@@ -38,6 +38,7 @@ import ca.tweetzy.skulls.listeners.SkullBlockListener;
 import ca.tweetzy.skulls.manager.CategoryManager;
 import ca.tweetzy.skulls.manager.EconomyManager;
 import ca.tweetzy.skulls.manager.PlayerManager;
+import ca.tweetzy.skulls.manager.PlayerTextureCache;
 import ca.tweetzy.skulls.manager.SkullManager;
 import ca.tweetzy.skulls.settings.Settings;
 import ca.tweetzy.skulls.settings.Translations;
@@ -46,7 +47,6 @@ import co.aikar.taskchain.TaskChain;
 import co.aikar.taskchain.TaskChainFactory;
 import org.bukkit.NamespacedKey;
 
-import javax.inject.Named;
 
 /**
  * Date Created: April 04 2022
@@ -64,6 +64,7 @@ public final class Skulls extends FlightPlugin {
 	private final SkullManager skullManager = new SkullManager();
 	private final CategoryManager categoryManager = new CategoryManager();
 	private final PlayerManager playerManager = new PlayerManager();
+	private final PlayerTextureCache playerTextureCache = new PlayerTextureCache();
 	private EconomyManager economyManager;
 
 	private final SkullsAPI api = new SkullsAPIImplementation();
@@ -157,6 +158,11 @@ public final class Skulls extends FlightPlugin {
 		return getInstance().economyManager;
 	}
 
+	// player texture cache
+	public static PlayerTextureCache getPlayerTextureCache() {
+		return getInstance().playerTextureCache;
+	}
+
 	public static <T> TaskChain<T> newChain() {
 		return taskChainFactory.newChain();
 	}
@@ -173,5 +179,11 @@ public final class Skulls extends FlightPlugin {
 	@Override
 	protected int getBStatsId() {
 		return 10616;
+	}
+
+	@Override
+	protected void onSleep() {
+		// Cleanup texture cache threads to prevent thread leaks
+		this.playerTextureCache.shutdown();
 	}
 }

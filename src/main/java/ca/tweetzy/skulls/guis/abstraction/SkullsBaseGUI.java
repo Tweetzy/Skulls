@@ -41,9 +41,8 @@ public abstract class SkullsBaseGUI extends BaseGUI {
 	}
 
 	public SkullsBaseGUI(Gui parent, @NonNull final Player player, @NonNull String title) {
-		super(parent, title);
+		super(parent, title, 6);
 		this.player = player;
-		setTitle(title);
 	}
 
 	public SkullsBaseGUI(@NonNull final Player player, @NonNull String title) {

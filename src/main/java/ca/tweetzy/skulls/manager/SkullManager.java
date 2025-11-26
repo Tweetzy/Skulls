@@ -80,7 +80,84 @@ public final class SkullManager implements Manager {
 	@Getter
 	private final Map<Location, PlacedSkull> placedSkulls = new ConcurrentHashMap<>();
 
+	// Cached offline players list
+	private List<OfflinePlayer> cachedOfflinePlayers = new ArrayList<>();
+	private long lastOfflinePlayersCacheTime = 0;
+	private static final long DEFAULT_CACHE_REFRESH_INTERVAL = 300000L; // 5 minutes
+
+	// ItemStack cache for performance
+	private final Map<Integer, ItemStack> itemStackCache = new ConcurrentHashMap<>();
+	private static final int DEFAULT_MAX_CACHE_SIZE = 5000;
+
 	public List<OfflinePlayer> getOnlineOfflinePlayers() {
+		// If caching is disabled, use the old method
+		if (!Settings.OFFLINE_PLAYERS_CACHE_ENABLED.getBoolean()) {
+			return getOnlineOfflinePlayersUncached();
+		}
+
+		long now = System.currentTimeMillis();
+		long refreshInterval = Settings.OFFLINE_PLAYERS_CACHE_REFRESH_INTERVAL.getInt() * 1000L; // Convert seconds to milliseconds
+		if (refreshInterval <= 0) refreshInterval = DEFAULT_CACHE_REFRESH_INTERVAL;
+
+		// Check if cache needs refresh
+		boolean needsRefresh = cachedOfflinePlayers.isEmpty() || 
+		                      (now - lastOfflinePlayersCacheTime) > refreshInterval;
+
+		if (needsRefresh) {
+			// Refresh cache asynchronously
+			refreshOfflinePlayersCacheAsync();
+			
+			// Return current cache (or minimal list) while refreshing
+			if (cachedOfflinePlayers.isEmpty()) {
+				// First time - return online players only
+				return new ArrayList<>(Bukkit.getOnlinePlayers());
+			}
+		}
+
+		// Return cached list with online players added/updated
+		final List<OfflinePlayer> result = new ArrayList<>(cachedOfflinePlayers);
+		final Set<java.util.UUID> onlineUuids = new java.util.HashSet<>();
+		
+		Bukkit.getOnlinePlayers().forEach(player -> {
+			onlineUuids.add(player.getUniqueId());
+			// Remove old entry if exists and add current online player
+			result.removeIf(p -> p.getUniqueId().equals(player.getUniqueId()));
+			result.add(player);
+		});
+
+		// Apply max players limit if configured
+		int maxPlayers = Settings.MAX_OFFLINE_PLAYERS_TO_LOAD.getInt();
+		if (maxPlayers > 0 && result.size() > maxPlayers) {
+			// Keep online players first, then limit offline players
+			List<OfflinePlayer> online = new ArrayList<>();
+			List<OfflinePlayer> offline = new ArrayList<>();
+			
+			for (OfflinePlayer player : result) {
+				if (player.isOnline()) {
+					online.add(player);
+				} else {
+					offline.add(player);
+				}
+			}
+			
+			// Keep all online players + limited offline players
+			result.clear();
+			result.addAll(online);
+			int remaining = maxPlayers - online.size();
+			if (remaining > 0 && offline.size() > remaining) {
+				result.addAll(offline.subList(0, remaining));
+			} else {
+				result.addAll(offline);
+			}
+		}
+
+		return result;
+	}
+
+	/**
+	 * Get players without caching (legacy method)
+	 */
+	private List<OfflinePlayer> getOnlineOfflinePlayersUncached() {
 		final List<OfflinePlayer> players = new ArrayList<>(Arrays.asList(Bukkit.getOfflinePlayers()));
 		Bukkit.getOnlinePlayers().forEach(player -> {
 			if (players.stream().anyMatch(target -> target.getUniqueId().equals(player.getUniqueId()))) return;
@@ -90,29 +167,88 @@ public final class SkullManager implements Manager {
 		return players;
 	}
 
+	/**
+	 * Refresh offline players cache asynchronously
+	 */
+	private void refreshOfflinePlayersCacheAsync() {
+		Bukkit.getServer().getScheduler().runTaskAsynchronously(Skulls.getInstance(), () -> {
+			try {
+				// Load offline players asynchronously
+				OfflinePlayer[] offlinePlayers = Bukkit.getOfflinePlayers();
+				
+				// Switch back to main thread to update cache
+				Bukkit.getServer().getScheduler().runTask(Skulls.getInstance(), () -> {
+					cachedOfflinePlayers = new ArrayList<>(Arrays.asList(offlinePlayers));
+					lastOfflinePlayersCacheTime = System.currentTimeMillis();
+				});
+			} catch (Exception e) {
+				// On error, just update timestamp to prevent constant retries
+				lastOfflinePlayersCacheTime = System.currentTimeMillis();
+			}
+		});
+	}
+
 	public Skull getSkull(final int id) {
 		return this.skulls.getOrDefault(id, null);
 	}
 
 	public List<Skull> getSkulls(BaseCategory category) {
-		return this.skulls.values().stream().filter(skull -> skull.getCategory().equalsIgnoreCase(category.getId())).collect(Collectors.toList());
+		String categoryId = category.getId();
+		return this.skulls.values().stream()
+				.filter(skull -> skull.getCategory().equalsIgnoreCase(categoryId))
+				.collect(Collectors.toList());
 	}
 
 	public List<Skull> getSkulls(String category) {
-		if (BaseCategory.getById(category) != null)
+		BaseCategory baseCategory = BaseCategory.getById(category);
+		if (baseCategory != null) {
+			// Use cached category ID
+			String categoryId = baseCategory.getId();
+			return this.skulls.values().stream()
+					.filter(skull -> skull.getCategory().equalsIgnoreCase(categoryId))
+					.collect(Collectors.toList());
+		}
 
-			return this.skulls.values().stream().filter(skull -> skull.getCategory().equalsIgnoreCase(category)).collect(Collectors.toList());
-
-		return this.skulls.values().stream().filter(skull -> Skulls.getCategoryManager().findCategory(category).getSkulls().contains(skull.getId())).collect(Collectors.toList());
+		// For custom categories, cache the skull IDs list
+		ca.tweetzy.skulls.api.interfaces.Category customCategory = Skulls.getCategoryManager().findCategory(category);
+		if (customCategory == null) {
+			return new ArrayList<>();
+		}
+		java.util.Set<Integer> categorySkullIds = new java.util.HashSet<>(customCategory.getSkulls());
+		return this.skulls.values().stream()
+				.filter(skull -> categorySkullIds.contains(skull.getId()))
+				.collect(Collectors.toList());
 	}
 
 	public Skull getRandomSkull() {
-		final List<Skull> enabledSkulls = getSkulls().values().stream().filter(skull -> BaseCategory.getById(skull.getCategory()).isEnabled()).toList();
+		final List<Skull> enabledSkulls = getSkulls().values().stream()
+				.filter(skull -> {
+					BaseCategory category = BaseCategory.getById(skull.getCategory());
+					return category != null && category.isEnabled();
+				})
+				.collect(Collectors.toList());
+		if (enabledSkulls.isEmpty()) {
+			return null;
+		}
 		return enabledSkulls.get(random.nextInt(enabledSkulls.size()));
 	}
 
 	public Skull getRandomAllowedSkull(Player player) {
-		final List<Skull> enabledSkulls = getSkulls().values().stream().filter(skull -> player.hasPermission("skulls.category." + BaseCategory.getById(skull.getCategory()).getId().toLowerCase().replace(" ", "").replace("&", "")) && BaseCategory.getById(skull.getCategory()).isEnabled() && !skull.isBlocked()).toList();
+		// Cache permission prefix to avoid repeated string operations
+		final List<Skull> enabledSkulls = getSkulls().values().stream()
+				.filter(skull -> {
+					BaseCategory category = BaseCategory.getById(skull.getCategory());
+					if (category == null || !category.isEnabled() || skull.isBlocked()) {
+						return false;
+					}
+					// Cache permission string building
+					String perm = "skulls.category." + category.getId().toLowerCase().replace(" ", "").replace("&", "");
+					return player.hasPermission(perm);
+				})
+				.collect(Collectors.toList());
+		if (enabledSkulls.isEmpty()) {
+			return null;
+		}
 		return enabledSkulls.get(random.nextInt(enabledSkulls.size()));
 	}
 
@@ -121,15 +257,36 @@ public final class SkullManager implements Manager {
 
 		int id = -1;
 		if (phrase.startsWith("id:")) {
-			if (NumberUtils.isNumber(phrase.split(":")[1])) {
-				id = Integer.parseInt(phrase.split(":")[1]);
+			String[] parts = phrase.split(":", 2);
+			if (parts.length > 1 && NumberUtils.isNumber(parts[1])) {
+				id = Integer.parseInt(parts[1]);
 			}
 		}
 
-		if (id != -1)
-			return Collections.singletonList(getSkull(id));
+		if (id != -1) {
+			Skull skull = getSkull(id);
+			return skull != null ? Collections.singletonList(skull) : Collections.emptyList();
+		}
 
-		return this.skulls.values().stream().filter(skull -> player.hasPermission("skulls.category." + BaseCategory.getById(skull.getCategory()).getId().toLowerCase().replace(" ", "").replace("&", "")) && BaseCategory.getById(skull.getCategory()).isEnabled() && (Common.match(phrase, skull.getName()) || Common.match(phrase, skull.getCategory()) || skull.getTags().stream().anyMatch(tag -> Common.match(phrase, tag)))).collect(Collectors.toList());
+		return this.skulls.values().stream()
+				.filter(skull -> {
+					BaseCategory category = BaseCategory.getById(skull.getCategory());
+					if (category == null || !category.isEnabled()) {
+						return false;
+					}
+					
+					// Check permission
+					String perm = "skulls.category." + category.getId().toLowerCase().replace(" ", "").replace("&", "");
+					if (!player.hasPermission(perm)) {
+						return false;
+					}
+					
+					// Check matches
+					return Common.match(phrase, skull.getName()) || 
+					       Common.match(phrase, skull.getCategory()) || 
+					       skull.getTags().stream().anyMatch(tag -> Common.match(phrase, tag));
+				})
+				.collect(Collectors.toList());
 	}
 
 	public List<Skull> getSkulls(List<Integer> ids) {
@@ -145,13 +302,46 @@ public final class SkullManager implements Manager {
 	}
 
 	public long getSkullCount(String category) {
-		return this.skulls.values().stream().filter(skull -> skull.getCategory().equalsIgnoreCase(category)).count();
+		// Use direct iteration for counting - more efficient than stream
+		long count = 0;
+		for (Skull skull : this.skulls.values()) {
+			if (skull.getCategory().equalsIgnoreCase(category)) {
+				count++;
+			}
+		}
+		return count;
 	}
 
 	public ItemStack getSkullItem(final int id) {
+		// Use cache if enabled
+		if (Settings.ITEMSTACK_CACHE_ENABLED.getBoolean()) {
+			ItemStack cached = itemStackCache.get(id);
+			if (cached != null) {
+				// Return a clone to prevent modification of cached item
+				return cached.clone();
+			}
+		}
+
 		synchronized (this.skulls) {
 			final Skull skull = getSkull(id);
-			return skull == null ? QuickItem.of(CompMaterial.PLAYER_HEAD).make() : skull.getItemStack();
+			if (skull == null) {
+				return QuickItem.of(CompMaterial.PLAYER_HEAD).make();
+			}
+
+			ItemStack item = skull.getItemStack();
+
+			// Cache the item if caching is enabled and cache isn't full
+			if (Settings.ITEMSTACK_CACHE_ENABLED.getBoolean()) {
+				int maxCacheSize = Settings.ITEMSTACK_CACHE_SIZE.getInt();
+				if (maxCacheSize <= 0) maxCacheSize = DEFAULT_MAX_CACHE_SIZE;
+
+				// Only cache if we're under the limit
+				if (itemStackCache.size() < maxCacheSize) {
+					itemStackCache.put(id, item.clone());
+				}
+			}
+
+			return item;
 		}
 	}
 
@@ -167,6 +357,42 @@ public final class SkullManager implements Manager {
 			if (error == null)
 				this.placedSkulls.remove(placedSkull.getLocation());
 		});
+	}
+
+	/**
+	 * Invalidate ItemStack cache for a specific skull
+	 * Call this when skull data changes (name, price, blocked status, etc.)
+	 */
+	public void invalidateItemStackCache(int skullId) {
+		itemStackCache.remove(skullId);
+	}
+
+	/**
+	 * Clear the entire ItemStack cache
+	 */
+	public void clearItemStackCache() {
+		itemStackCache.clear();
+	}
+
+	/**
+	 * Get cache statistics
+	 */
+	public int getItemStackCacheSize() {
+		return itemStackCache.size();
+	}
+
+	/**
+	 * Get cached ItemStack (internal use)
+	 */
+	public ItemStack getCachedItemStack(int skullId) {
+		return itemStackCache.get(skullId);
+	}
+
+	/**
+	 * Cache an ItemStack (internal use)
+	 */
+	public void cacheItemStack(int skullId, ItemStack item) {
+		itemStackCache.put(skullId, item);
 	}
 
 	/**
@@ -309,3 +535,4 @@ public final class SkullManager implements Manager {
 		}
 	}
 }
+

@@ -24,6 +24,7 @@ import ca.tweetzy.flight.database.DatabaseConnector;
 import ca.tweetzy.flight.database.UpdateCallback;
 import ca.tweetzy.flight.utils.Common;
 import ca.tweetzy.flight.utils.SerializeUtil;
+import ca.tweetzy.flight.database.query.QueryBuilder;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.enums.BaseCategory;
 import ca.tweetzy.skulls.api.interfaces.Category;
@@ -96,227 +97,275 @@ public final class DataManager extends DataManagerAbstract {
 	}
 
 	public void insertPlacedSkull(@NonNull final PlacedSkull placedSkull, Callback<PlacedSkull> callback) {
-		this.runAsync(() -> this.databaseConnector.connect(connection -> {
-			try (PreparedStatement statement = connection.prepareStatement("INSERT INTO " + this.getTablePrefix() + "placed_skull (id, skull_id, location) VALUES(?, ?, ?)")) {
-				PreparedStatement fetch = connection.prepareStatement("SELECT * FROM " + this.getTablePrefix() + "placed_skull WHERE id = ?");
+		this.runAsync(() -> {
+			try {
+				getQueryBuilder().insert("placed_skull")
+						.set("id", placedSkull.getId().toString())
+						.set("skull_id", placedSkull.getSkullId())
+						.set("location", SerializeUtil.serializeLocation(placedSkull.getLocation()))
+						.execute((ex, affectedRows) -> {
+							if (ex != null) {
+								ex.printStackTrace();
+								resolveCallback(callback, ex);
+								return;
+							}
 
-				fetch.setString(1, placedSkull.getId().toString());
-				statement.setString(1, placedSkull.getId().toString());
-				statement.setInt(2, placedSkull.getSkullId());
-				statement.setString(3, SerializeUtil.serializeLocation(placedSkull.getLocation()));
-				statement.executeUpdate();
-
-				if (callback != null) {
-					ResultSet res = fetch.executeQuery();
-					res.next();
-					callback.accept(null, extractPlacedSkull(res));
-				}
-
+							if (callback != null) {
+								callback.accept(null, placedSkull);
+							}
+						});
 			} catch (Exception e) {
 				e.printStackTrace();
 				resolveCallback(callback, e);
 			}
-		}));
+		});
 	}
 
 	public void getPlacedSkulls(Callback<ArrayList<PlacedSkull>> callback) {
-		ArrayList<PlacedSkull> placedSkulls = new ArrayList<>();
-		this.runAsync(() -> this.databaseConnector.connect(connection -> {
-			try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + this.getTablePrefix() + "placed_skull")) {
-				ResultSet resultSet = statement.executeQuery();
-				while (resultSet.next()) {
-					placedSkulls.add(extractPlacedSkull(resultSet));
-				}
-
-				callback.accept(null, placedSkulls);
-			} catch (Exception e) {
-				resolveCallback(callback, e);
-			}
-		}));
+		this.runAsync(() -> {
+			getQueryBuilder().select("placed_skull")
+					.fetch(rs -> {
+						try {
+							return extractPlacedSkull(rs);
+						} catch (SQLException e) {
+							return null;
+						}
+					}, (ex, results) -> {
+						if (ex != null) {
+							resolveCallback(callback, ex);
+							return;
+						}
+						callback.accept(null, new ArrayList<>(results));
+					});
+		});
 	}
 
 	public void deletePlacedSkull(final UUID id, Callback<Boolean> callback) {
-		this.runAsync(() -> this.databaseConnector.connect(connection -> {
-			try (PreparedStatement statement = connection.prepareStatement("DELETE FROM " + this.getTablePrefix() + "placed_skull WHERE id = ?")) {
-				statement.setString(1, id.toString());
-
-				int result = statement.executeUpdate();
-				callback.accept(null, result > 0);
-
-			} catch (Exception e) {
-				resolveCallback(callback, e);
-			}
-		}));
+		this.runAsync(() -> {
+			getQueryBuilder().delete("placed_skull")
+					.where("id", id.toString())
+					.execute((ex, affectedRows) -> {
+						if (ex != null) {
+							resolveCallback(callback, ex);
+							return;
+						}
+						callback.accept(null, affectedRows != null && affectedRows > 0);
+					});
+		});
 	}
 
 	//id, name, category, tags, price, blocked
 	public void getSkulls(Callback<ArrayList<Skull>> callback) {
-		ArrayList<Skull> skulls = new ArrayList<>();
-		this.runAsync(() -> this.databaseConnector.connect(connection -> {
-			try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + this.getTablePrefix() + "skull")) {
-				ResultSet resultSet = statement.executeQuery();
-				while (resultSet.next()) {
-					skulls.add(extractSkull(resultSet));
-				}
-				this.sync(() -> callback.accept(null, skulls));
-			} catch (Exception e) {
-				resolveCallback(callback, e);
-			}
-		}));
+		this.runAsync(() -> {
+			getQueryBuilder().select("skull")
+					.fetch(rs -> {
+						try {
+							return extractSkull(rs);
+						} catch (SQLException e) {
+							return null;
+						}
+					}, (ex, results) -> {
+						if (ex != null) {
+							resolveCallback(callback, ex);
+							return;
+						}
+						this.sync(() -> callback.accept(null, new ArrayList<>(results)));
+					});
+		});
 	}
 
 	public void syncSkullPricesByCategory(Callback<Boolean> callback) {
-		this.runAsync(() -> this.databaseConnector.connect(connection -> {
-			final PreparedStatement statement = connection.prepareStatement("UPDATE " + this.getTablePrefix() + "skull SET price = ? WHERE category = ?");
+		this.runAsync(() -> {
+			// Use batch updates for each category
+			final QueryBuilder qb = getQueryBuilder();
+			int[] updateCounts = new int[BaseCategory.values().length];
+			final int[] completed = {0};
+			final boolean[] hasError = {false};
 
-			for (BaseCategory value : BaseCategory.values()) {
-				statement.setDouble(1, value.getDefaultPrice());
-				statement.setString(2, value.getId());
-				statement.addBatch();
+			for (int i = 0; i < BaseCategory.values().length; i++) {
+				final BaseCategory category = BaseCategory.values()[i];
+				qb.update("skull")
+						.set("price", category.getDefaultPrice())
+						.where("category", category.getId())
+						.execute((ex, affectedRows) -> {
+							if (ex != null && !hasError[0]) {
+								hasError[0] = true;
+								if (callback != null) {
+									resolveCallback(callback, ex);
+								}
+								return;
+							}
+
+							if (affectedRows != null) {
+								updateCounts[completed[0]] = affectedRows;
+							}
+							completed[0]++;
+
+							// All updates completed
+							if (completed[0] == BaseCategory.values().length && !hasError[0]) {
+								int totalUpdated = 0;
+								for (int count : updateCounts) {
+									totalUpdated += count;
+								}
+								final int finalTotalUpdated = totalUpdated;
+								Common.log("updated " + finalTotalUpdated);
+								if (callback != null) {
+									this.sync(() -> callback.accept(null, finalTotalUpdated > 0));
+								}
+							}
+						});
 			}
-
-			int[] updated = statement.executeBatch();
-			Common.log("updated" + updated.length);
-
-			if (callback != null)
-				this.sync(() -> callback.accept(null, updated.length > 0));
-		}));
+		});
 	}
 
 	public void getCategories(Callback<ArrayList<Category>> callback) {
-		ArrayList<Category> categories = new ArrayList<>();
-		this.runAsync(() -> this.databaseConnector.connect(connection -> {
-			try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + this.getTablePrefix() + "categories")) {
-				ResultSet resultSet = statement.executeQuery();
-				while (resultSet.next()) {
-					categories.add(extractCategory(resultSet));
-				}
-
-				callback.accept(null, categories);
-			} catch (Exception e) {
-				resolveCallback(callback, e);
-			}
-		}));
+		this.runAsync(() -> {
+			getQueryBuilder().select("categories")
+					.fetch(rs -> {
+						try {
+							return extractCategory(rs);
+						} catch (SQLException e) {
+							return null;
+						}
+					}, (ex, results) -> {
+						if (ex != null) {
+							resolveCallback(callback, ex);
+							return;
+						}
+						callback.accept(null, new ArrayList<>(results));
+					});
+		});
 	}
 
 	public void getPlayers(Callback<ArrayList<SkullUser>> callback) {
-		ArrayList<SkullUser> skulls = new ArrayList<>();
-		this.runAsync(() -> this.databaseConnector.connect(connection -> {
-			try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + this.getTablePrefix() + "players")) {
-				ResultSet resultSet = statement.executeQuery();
-				while (resultSet.next()) {
-					skulls.add(extractSkullPlayer(resultSet));
-				}
-
-				this.sync(() -> callback.accept(null, skulls));
-			} catch (Exception e) {
-				resolveCallback(callback, e);
-			}
-		}));
+		this.runAsync(() -> {
+			getQueryBuilder().select("players")
+					.fetch(rs -> {
+						try {
+							return extractSkullPlayer(rs);
+						} catch (SQLException e) {
+							return null;
+						}
+					}, (ex, results) -> {
+						if (ex != null) {
+							resolveCallback(callback, ex);
+							return;
+						}
+						this.sync(() -> callback.accept(null, new ArrayList<>(results)));
+					});
+		});
 	}
 
 	public void insertPlayer(@NonNull final SkullUser user, Callback<SkullUser> callback) {
-		this.runAsync(() -> this.databaseConnector.connect(connection -> {
-			try (PreparedStatement statement = connection.prepareStatement("INSERT INTO " + this.getTablePrefix() + "players (uuid, favourites) VALUES(?, ?) ON CONFLICT(uuid) DO NOTHING;")) {
-				PreparedStatement fetch = connection.prepareStatement("SELECT * FROM " + this.getTablePrefix() + "players WHERE uuid = ?");
+		this.runAsync(() -> {
+			try {
+				// SQLite uses INSERT OR IGNORE instead of ON CONFLICT DO NOTHING
+				// We'll use the query builder but need to handle the conflict manually
+				getQueryBuilder().insert("players")
+						.set("uuid", user.getUUID().toString())
+						.set("favourites", user.getFavourites().stream().map(String::valueOf).collect(Collectors.joining(",")))
+						.execute((ex, affectedRows) -> {
+							if (ex != null) {
+								// If it's a constraint violation, that's okay - player already exists
+								if (ex.getMessage() != null && ex.getMessage().contains("UNIQUE constraint")) {
+									if (callback != null) {
+										callback.accept(null, user);
+									}
+									return;
+								}
+								ex.printStackTrace();
+								resolveCallback(callback, ex);
+								return;
+							}
 
-				fetch.setString(1, user.getUUID().toString());
-				statement.setString(1, user.getUUID().toString());
-				statement.setString(2, user.getFavourites().stream().map(String::valueOf).collect(Collectors.joining(",")));
-				statement.executeUpdate();
-
-				if (callback != null) {
-					ResultSet res = fetch.executeQuery();
-					res.next();
-					callback.accept(null, extractSkullPlayer(res));
-				}
-
+							if (callback != null) {
+								callback.accept(null, user);
+							}
+						});
 			} catch (Exception e) {
 				e.printStackTrace();
 				resolveCallback(callback, e);
 			}
-		}));
+		});
 	}
 
 	public void insertCategory(@NonNull final Category category, Callback<Category> callback) {
-		this.runAsync(() -> this.databaseConnector.connect(connection -> {
-			try (PreparedStatement statement = connection.prepareStatement("INSERT INTO " + this.getTablePrefix() + "categories (id, name, skulls) VALUES(?, ?, ?)")) {
-				PreparedStatement fetch = connection.prepareStatement("SELECT * FROM " + this.getTablePrefix() + "categories WHERE id = ?");
+		this.runAsync(() -> {
+			try {
+				getQueryBuilder().insert("categories")
+						.set("id", category.getId())
+						.set("name", category.getName())
+						.set("skulls", category.getSkulls().stream().map(String::valueOf).collect(Collectors.joining(",")))
+						.execute((ex, affectedRows) -> {
+							if (ex != null) {
+								ex.printStackTrace();
+								resolveCallback(callback, ex);
+								return;
+							}
 
-				fetch.setString(1, category.getId());
-				statement.setString(1, category.getId());
-				statement.setString(2, category.getName());
-				statement.setString(3, category.getSkulls().stream().map(String::valueOf).collect(Collectors.joining(",")));
-				statement.executeUpdate();
-
-				if (callback != null) {
-					ResultSet res = fetch.executeQuery();
-					res.next();
-					callback.accept(null, extractCategory(res));
-				}
-
+							if (callback != null) {
+								callback.accept(null, category);
+							}
+						});
 			} catch (Exception e) {
 				e.printStackTrace();
 				resolveCallback(callback, e);
 			}
-		}));
+		});
 	}
 
 	public void updateCategory(@NonNull final Category category, Callback<Boolean> callback) {
-		this.runAsync(() -> this.databaseConnector.connect(connection -> {
-			try (PreparedStatement statement = connection.prepareStatement("UPDATE " + this.getTablePrefix() + "categories SET name = ?, skulls = ? WHERE id = ?")) {
-
-				statement.setString(1, category.getName());
-				statement.setString(2, category.getSkulls().stream().map(String::valueOf).collect(Collectors.joining(",")));
-				statement.setString(3, category.getId());
-
-				int result = statement.executeUpdate();
-
-				if (callback != null)
-					callback.accept(null, result > 0);
-
-			} catch (Exception e) {
-				resolveCallback(callback, e);
-			}
-		}));
+		this.runAsync(() -> {
+			getQueryBuilder().update("categories")
+					.set("name", category.getName())
+					.set("skulls", category.getSkulls().stream().map(String::valueOf).collect(Collectors.joining(",")))
+					.where("id", category.getId())
+					.execute((ex, affectedRows) -> {
+						if (ex != null) {
+							resolveCallback(callback, ex);
+							return;
+						}
+						if (callback != null) {
+							callback.accept(null, affectedRows != null && affectedRows > 0);
+						}
+					});
+		});
 	}
 
 	public void updateSkull(@NonNull final Skull skull, Callback<Boolean> callback) {
-		this.runAsync(() -> this.databaseConnector.connect(connection -> {
-			try (PreparedStatement statement = connection.prepareStatement("UPDATE " + this.getTablePrefix() + "skull SET name = ?, price = ?, blocked = ? WHERE id = ?")) {
-
-				statement.setString(1, skull.getName());
-				statement.setDouble(2, skull.getPrice());
-				statement.setBoolean(3, skull.isBlocked());
-				statement.setInt(4, skull.getId());
-
-				int result = statement.executeUpdate();
-
-				if (callback != null)
-					callback.accept(null, result > 0);
-
-			} catch (Exception e) {
-				resolveCallback(callback, e);
-			}
-		}));
+		this.runAsync(() -> {
+			getQueryBuilder().update("skull")
+					.set("name", skull.getName())
+					.set("price", skull.getPrice())
+					.set("blocked", skull.isBlocked())
+					.where("id", skull.getId())
+					.execute((ex, affectedRows) -> {
+						if (ex != null) {
+							resolveCallback(callback, ex);
+							return;
+						}
+						if (callback != null) {
+							callback.accept(null, affectedRows != null && affectedRows > 0);
+						}
+					});
+		});
 	}
 
 	public void updatePlayer(@NonNull final SkullUser user, Callback<Boolean> callback) {
-		this.runAsync(() -> this.databaseConnector.connect(connection -> {
-			try (PreparedStatement statement = connection.prepareStatement("UPDATE " + this.getTablePrefix() + "players SET favourites = ? WHERE uuid = ?")) {
-
-				statement.setString(1, user.getFavourites().stream().map(String::valueOf).collect(Collectors.joining(",")));
-				statement.setString(2, user.getUUID().toString());
-
-				int result = statement.executeUpdate();
-
-				if (callback != null)
-					callback.accept(null, result > 0);
-
-			} catch (Exception e) {
-				resolveCallback(callback, e);
-			}
-		}));
+		this.runAsync(() -> {
+			getQueryBuilder().update("players")
+					.set("favourites", user.getFavourites().stream().map(String::valueOf).collect(Collectors.joining(",")))
+					.where("uuid", user.getUUID().toString())
+					.execute((ex, affectedRows) -> {
+						if (ex != null) {
+							resolveCallback(callback, ex);
+							return;
+						}
+						if (callback != null) {
+							callback.accept(null, affectedRows != null && affectedRows > 0);
+						}
+					});
+		});
 	}
 
 	public Skull extractSkull(@NonNull final ResultSet resultSet) throws SQLException {

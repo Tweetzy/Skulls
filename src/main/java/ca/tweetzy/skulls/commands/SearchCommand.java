@@ -20,6 +20,7 @@ package ca.tweetzy.skulls.commands;
 
 import ca.tweetzy.flight.command.AllowedExecutor;
 import ca.tweetzy.flight.command.Command;
+import ca.tweetzy.flight.command.CommandContext;
 import ca.tweetzy.flight.command.ReturnType;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.enums.ViewMode;
@@ -28,7 +29,6 @@ import ca.tweetzy.skulls.guis.SkullsViewGUI;
 import ca.tweetzy.skulls.impl.SkullPlayer;
 import ca.tweetzy.skulls.model.StringHelper;
 import ca.tweetzy.skulls.settings.Settings;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -47,24 +47,21 @@ public final class SearchCommand extends Command {
 	}
 
 	@Override
-	protected ReturnType execute(CommandSender commandSender, String... args) {
-		final Player player = (Player) commandSender;
-		if (args.length == 0) return ReturnType.INVALID_SYNTAX;
+	protected ReturnType execute(CommandContext context) {
+		final Player player = context.getPlayer();
+		if (!context.hasArg(0)) return ReturnType.INVALID_SYNTAX;
 
-		final StringBuilder builder = new StringBuilder();
-		for (String arg : args) builder.append(" ").append(arg);
+		// Join all arguments into a search query
+		String query = StringHelper.escapeRegex(context.joinArgs(0));
 
 		SkullUser skullUser = Skulls.getPlayerManager().findOrCreate(player);
-		String query = StringHelper.escapeRegex(builder.toString().trim());
-
 		if (skullUser == null)
 			Skulls.getDataManager().insertPlayer(new SkullPlayer(player.getUniqueId(), new ArrayList<>()), (createError, created) -> {
 				if (createError == null) {
 					Skulls.getPlayerManager().addPlayer(created);
 					Skulls.getGuiManager().showGUI(player, new SkullsViewGUI(null, created, query, ViewMode.SEARCH));
 				} else {
-					Skulls.getGuiManager().showGUI(player, new SkullsViewGUI(null, new SkullPlayer(player.getUniqueId(), new ArrayList<>()),query, ViewMode.SEARCH));
-
+					Skulls.getGuiManager().showGUI(player, new SkullsViewGUI(null, new SkullPlayer(player.getUniqueId(), new ArrayList<>()), query, ViewMode.SEARCH));
 				}
 			});
 		else
@@ -74,8 +71,18 @@ public final class SearchCommand extends Command {
 	}
 
 	@Override
-	protected List<String> tab(CommandSender commandSender, String... strings) {
+	protected ReturnType execute(org.bukkit.command.CommandSender sender, String... args) {
+		return execute(new ca.tweetzy.flight.command.CommandContext(sender, args, getSubCommands().get(0)));
+	}
+
+	@Override
+	protected List<String> tab(CommandContext context) {
 		return null;
+	}
+
+	@Override
+	protected List<String> tab(org.bukkit.command.CommandSender sender, String... args) {
+		return tab(new ca.tweetzy.flight.command.CommandContext(sender, args, getSubCommands().get(0)));
 	}
 
 	@Override

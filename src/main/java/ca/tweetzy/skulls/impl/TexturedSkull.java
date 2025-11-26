@@ -26,6 +26,7 @@ import ca.tweetzy.flight.utils.profiles.objects.ProfileInputType;
 import ca.tweetzy.flight.utils.profiles.objects.Profileable;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.interfaces.Skull;
+import ca.tweetzy.skulls.settings.Settings;
 import ca.tweetzy.skulls.settings.Translations;
 import lombok.AllArgsConstructor;
 import org.bukkit.inventory.ItemStack;
@@ -81,7 +82,11 @@ public final class TexturedSkull implements Skull {
 
 	@Override
 	public void setBlocked(boolean blocked) {
-		this.blocked = blocked;
+		if (this.blocked != blocked) {
+			this.blocked = blocked;
+			// Invalidate cache when blocked status changes
+			Skulls.getSkullManager().invalidateItemStackCache(this.id);
+		}
 	}
 
 	@Override
@@ -91,22 +96,49 @@ public final class TexturedSkull implements Skull {
 
 	@Override
 	public void setName(String name) {
-		this.name = name;
+		if (!this.name.equals(name)) {
+			this.name = name;
+			// Invalidate cache when name changes (affects ItemStack display name)
+			Skulls.getSkullManager().invalidateItemStackCache(this.id);
+		}
 	}
 
 	@Override
 	public void setPrice(double price) {
+		// Price change doesn't affect ItemStack appearance, so no cache invalidation needed
 		this.price = price;
 	}
 
 	@Override
 	public ItemStack getItemStack() {
+		// Use cache if enabled - this provides significant performance improvement
+		if (Settings.ITEMSTACK_CACHE_ENABLED.getBoolean()) {
+			ItemStack cached = Skulls.getSkullManager().getCachedItemStack(this.id);
+			if (cached != null) {
+				// Return a clone to prevent modification of cached item
+				return cached.clone();
+			}
+		}
+
 		ItemStack itemUnTextured = QuickItem
 				.of(CompMaterial.PLAYER_HEAD)
 				.name(TranslationManager.string(Translations.SKULL_TITLE, "skull_name", this.name))
 				.tag("Skulls:ID", String.valueOf(this.id)).make();
 
-		return XSkull.of(itemUnTextured).profile(Profileable.of(ProfileInputType.TEXTURE_URL, this.texture)).lenient().apply();
+		ItemStack item = XSkull.of(itemUnTextured).profile(Profileable.of(ProfileInputType.TEXTURE_URL, this.texture)).lenient().apply();
+
+		// Cache the item if caching is enabled
+		if (Settings.ITEMSTACK_CACHE_ENABLED.getBoolean()) {
+			int maxCacheSize = Settings.ITEMSTACK_CACHE_SIZE.getInt();
+			if (maxCacheSize <= 0) maxCacheSize = 5000;
+
+			// Only cache if we're under the limit
+			if (Skulls.getSkullManager().getItemStackCacheSize() < maxCacheSize) {
+				Skulls.getSkullManager().cacheItemStack(this.id, item.clone());
+			}
+		}
+
+		return item;
 	}
 
 	@Override

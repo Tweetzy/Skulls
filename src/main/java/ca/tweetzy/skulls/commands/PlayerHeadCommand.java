@@ -20,6 +20,7 @@ package ca.tweetzy.skulls.commands;
 
 import ca.tweetzy.flight.command.AllowedExecutor;
 import ca.tweetzy.flight.command.Command;
+import ca.tweetzy.flight.command.CommandContext;
 import ca.tweetzy.flight.command.ReturnType;
 import ca.tweetzy.flight.settings.TranslationManager;
 import ca.tweetzy.flight.utils.Common;
@@ -30,8 +31,7 @@ import ca.tweetzy.skulls.settings.Settings;
 import ca.tweetzy.skulls.settings.Translations;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
@@ -49,39 +49,47 @@ public final class PlayerHeadCommand extends Command {
 	}
 
 	@Override
-	protected ReturnType execute(CommandSender sender, String... args) {
-		if (args.length < 3 && !(sender instanceof Player)) {
+	protected ReturnType execute(CommandContext context) {
+		if (context.getArgCount() < 3 && !context.isPlayer()) {
 			return ReturnType.INVALID_SYNTAX;
 		}
 
 		Bukkit.getServer().getScheduler().runTaskAsynchronously(Skulls.getInstance(), () -> {
-			if (args.length == 0) {
-				final Player executor = (Player) sender;
+			if (context.getArgCount() == 0) {
+				if (!context.isPlayer()) return;
+				final Player executor = context.getPlayer();
 				executor.getInventory().addItem(QuickItem.of(executor).name(Settings.PLAYER_HEAD_NAME.getString().replace("%player_name%", executor.getName())).make());
 				return;
 			}
 
-			OfflinePlayer targetUser = Bukkit.getPlayer(args[0]);
+			String targetName = context.getArg(0);
+			if (targetName == null) return;
+
+			OfflinePlayer targetUser = Bukkit.getPlayer(targetName);
 
 			if (targetUser == null) {
-				targetUser = Bukkit.getOfflinePlayer(args[0]);
+				targetUser = Bukkit.getOfflinePlayer(targetName);
 			}
 
 			final ItemStack item = QuickItem.of(targetUser)
 					.name(Settings.PLAYER_HEAD_NAME.getString().replace("%player_name%", targetUser.getName()))
-					.amount(args.length > 1 ? StringHelper.tryInt(args[1], 1) : 1)
+					.amount(context.hasArg(1) ? StringHelper.tryInt(context.getArg(1), 1) : 1)
 					.make();
 
-			if (args.length == 3) {
-				final Player targetPlayer = Bukkit.getPlayerExact(args[2]);
+			if (context.getArgCount() == 3) {
+				String targetPlayerName = context.getArg(2);
+				if (targetPlayerName == null) return;
+				
+				final Player targetPlayer = Bukkit.getPlayerExact(targetPlayerName);
 				if (targetPlayer == null) {
-					Common.tell(sender, TranslationManager.string(Translations.PLAYER_OFFLINE, "value", args[2]));
+					Common.tell(context.getSender(), TranslationManager.string(Translations.PLAYER_OFFLINE, "value", targetPlayerName));
 					return;
 				}
 
 				targetPlayer.getInventory().addItem(item);
 			} else {
-				final Player executor = (Player) sender;
+				if (!context.isPlayer()) return;
+				final Player executor = context.getPlayer();
 				executor.getInventory().addItem(item);
 			}
 		});
@@ -90,8 +98,18 @@ public final class PlayerHeadCommand extends Command {
 	}
 
 	@Override
-	protected List<String> tab(CommandSender sender, String... args) {
+	protected ReturnType execute(org.bukkit.command.CommandSender sender, String... args) {
+		return execute(new ca.tweetzy.flight.command.CommandContext(sender, args, getSubCommands().get(0)));
+	}
+
+	@Override
+	protected List<String> tab(CommandContext context) {
 		return null;
+	}
+
+	@Override
+	protected List<String> tab(org.bukkit.command.CommandSender sender, String... args) {
+		return tab(new ca.tweetzy.flight.command.CommandContext(sender, args, getSubCommands().get(0)));
 	}
 
 	@Override

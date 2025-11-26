@@ -20,6 +20,7 @@ package ca.tweetzy.skulls.commands;
 
 import ca.tweetzy.flight.command.AllowedExecutor;
 import ca.tweetzy.flight.command.Command;
+import ca.tweetzy.flight.command.CommandContext;
 import ca.tweetzy.flight.command.ReturnType;
 import ca.tweetzy.flight.settings.TranslationManager;
 import ca.tweetzy.flight.utils.Common;
@@ -28,7 +29,6 @@ import ca.tweetzy.skulls.api.interfaces.Skull;
 import ca.tweetzy.skulls.model.StringHelper;
 import ca.tweetzy.skulls.settings.Translations;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -40,36 +40,40 @@ public final class GiveCommand extends Command {
 	}
 
 	@Override
-	protected ReturnType execute(CommandSender sender, String... args) {
-		if (args.length < 2) return ReturnType.FAIL;
+	protected ReturnType execute(CommandContext context) {
+		if (context.getArgCount() < 2) return ReturnType.FAIL;
 
-		final boolean isGiveAll = args[0].equals("*");
+		String firstArg = context.getArg(0);
+		String secondArg = context.getArg(1);
+		
+		if (firstArg == null || secondArg == null) return ReturnType.FAIL;
+
+		final boolean isGiveAll = firstArg.equals("*");
 
 		Player target = null;
 
 		if (!isGiveAll)
-			target = Bukkit.getPlayerExact(args[0]);
+			target = Bukkit.getPlayerExact(firstArg);
 
 		if (target == null && !isGiveAll) {
-			Common.tell(sender, TranslationManager.string(Translations.PLAYER_OFFLINE, "value", args[0]));
+			Common.tell(context.getSender(), TranslationManager.string(Translations.PLAYER_OFFLINE, "value", firstArg));
 			return ReturnType.FAIL;
 		}
 
-		boolean isRandomHead = args[1].equalsIgnoreCase("random");
+		boolean isRandomHead = secondArg.equalsIgnoreCase("random");
 
-		if (!isRandomHead && !StringHelper.isInt(args[1])) {
-			Common.tell(sender, TranslationManager.string(Translations.NOT_A_NUMBER, "value", args[1]));
-
+		if (!isRandomHead && !StringHelper.isInt(secondArg)) {
+			Common.tell(context.getSender(), TranslationManager.string(Translations.NOT_A_NUMBER, "value", secondArg));
 			return ReturnType.FAIL;
 		}
 
-		int amount = args.length == 3 ? StringHelper.tryInt(args[2], 1) : 1;
+		int amount = context.hasArg(2) ? StringHelper.tryInt(context.getArg(2), 1) : 1;
 		if (amount > 36) amount = 36;
 
-		Skull skull = isRandomHead ? Skulls.getSkullManager().getRandomSkull() : Skulls.getSkullManager().getSkull(Integer.parseInt(args[1]));
+		Skull skull = isRandomHead ? Skulls.getSkullManager().getRandomSkull() : Skulls.getSkullManager().getSkull(Integer.parseInt(secondArg));
 
 		if (skull == null) {
-			Common.tell(sender, TranslationManager.string(Translations.SKULL_NOT_FOUND));
+			Common.tell(context.getSender(), TranslationManager.string(Translations.SKULL_NOT_FOUND));
 			return ReturnType.FAIL;
 		}
 
@@ -83,9 +87,7 @@ public final class GiveCommand extends Command {
 				}
 			else
 				giveHead(target, skull);
-
 		}
-
 
 		return ReturnType.SUCCESS;
 	}
@@ -98,8 +100,18 @@ public final class GiveCommand extends Command {
 	}
 
 	@Override
-	protected List<String> tab(CommandSender sender, String... args) {
+	protected ReturnType execute(org.bukkit.command.CommandSender sender, String... args) {
+		return execute(new ca.tweetzy.flight.command.CommandContext(sender, args, getSubCommands().get(0)));
+	}
+
+	@Override
+	protected List<String> tab(CommandContext context) {
 		return null;
+	}
+
+	@Override
+	protected List<String> tab(org.bukkit.command.CommandSender sender, String... args) {
+		return tab(new ca.tweetzy.flight.command.CommandContext(sender, args, getSubCommands().get(0)));
 	}
 
 	@Override

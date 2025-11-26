@@ -20,21 +20,10 @@ package ca.tweetzy.skulls.commands;
 
 import ca.tweetzy.flight.command.AllowedExecutor;
 import ca.tweetzy.flight.command.Command;
+import ca.tweetzy.flight.command.CommandContext;
 import ca.tweetzy.flight.command.ReturnType;
-import ca.tweetzy.flight.comp.enums.CompMaterial;
-import ca.tweetzy.flight.nbtapi.NBT;
-import ca.tweetzy.flight.settings.TranslationManager;
-import ca.tweetzy.flight.utils.Common;
-import ca.tweetzy.flight.utils.PlayerUtil;
-import ca.tweetzy.skulls.Skulls;
-import ca.tweetzy.skulls.api.interfaces.PlacedSkull;
-import ca.tweetzy.skulls.api.interfaces.Skull;
 import ca.tweetzy.skulls.settings.Settings;
 import ca.tweetzy.skulls.settings.Translations;
-import org.bukkit.block.Block;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
@@ -45,16 +34,26 @@ public final class ReloadCommand extends Command {
 	}
 
 	@Override
-	protected ReturnType execute(CommandSender sender, String... args) {
+	protected ReturnType execute(CommandContext context) {
 		Settings.setup();
 		Translations.init();
-		tell(sender, "&aReloaded configuration files");
+		tell(context.getSender(), "&aReloaded configuration files");
 		return ReturnType.SUCCESS;
 	}
 
 	@Override
-	protected List<String> tab(CommandSender sender, String... args) {
+	protected ReturnType execute(org.bukkit.command.CommandSender sender, String... args) {
+		return execute(new ca.tweetzy.flight.command.CommandContext(sender, args, getSubCommands().get(0)));
+	}
+
+	@Override
+	protected List<String> tab(CommandContext context) {
 		return null;
+	}
+
+	@Override
+	protected List<String> tab(org.bukkit.command.CommandSender sender, String... args) {
+		return tab(new ca.tweetzy.flight.command.CommandContext(sender, args, getSubCommands().get(0)));
 	}
 
 	@Override

@@ -39,7 +39,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
-import scala.concurrent.impl.FutureConvertersImpl;
 
 import java.util.ArrayList;
 
@@ -57,6 +56,11 @@ public final class PlayerHeadGUI extends SkullsPagedGUI<OfflinePlayer> {
 	@Override
 	protected void prePopulate() {
 		this.items.addAll(Skulls.getSkullManager().getOnlineOfflinePlayers());
+		
+		// Pre-fetch textures for visible players to improve performance
+		if (Settings.PLAYER_TEXTURE_CACHE_ENABLED.getBoolean()) {
+			Skulls.getPlayerTextureCache().prefetchTextures(this.items);
+		}
 	}
 
 	@Override
@@ -78,6 +82,27 @@ public final class PlayerHeadGUI extends SkullsPagedGUI<OfflinePlayer> {
 
 		item.lore(TranslationManager.string(Translations.GUI_SKULLS_LIST_ITEMS_SKULL_LORE_TAKE));
 
+		// Use cached texture if available, otherwise use player profile with fallback
+		// This prevents blocking API calls that cause lag/timeouts
+		if (Settings.PLAYER_TEXTURE_CACHE_ENABLED.getBoolean()) {
+			String cachedTexture = Skulls.getPlayerTextureCache().getCachedTexture(target);
+			
+			// If we have a cached texture (not default), use it directly
+			if (cachedTexture != null && !cachedTexture.equals("http://textures.minecraft.net/texture/ee7700096b5a2a87386d6205b4ddcc14fd33cf269362fa6893499431ce77bf9")) {
+				return XSkull
+						.of(item.make())
+						.profile(Profileable.of(ProfileInputType.TEXTURE_URL, cachedTexture))
+						.lenient()
+						.apply();
+			}
+			
+			// Otherwise, trigger async fetch and use player profile with fallback
+			// The cache will handle the async fetching in the background
+			Skulls.getPlayerTextureCache().getTexture(target);
+		}
+
+		// Use player profile with fallback - XSkull will handle async fetching internally
+		// but we avoid blocking by using lenient mode and fallback
 		return XSkull
 				.of(item.make())
 				.profile(Profileable.of(target))
