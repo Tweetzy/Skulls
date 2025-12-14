@@ -19,7 +19,7 @@
 package ca.tweetzy.skulls.listeners;
 
 import ca.tweetzy.flight.comp.enums.CompMaterial;
-import de.tr7zw.changeme.nbtapi.NBT;
+import ca.tweetzy.flight.nbtapi.NBT;
 import ca.tweetzy.flight.utils.PlayerUtil;
 import ca.tweetzy.skulls.Skulls;
 import ca.tweetzy.skulls.api.interfaces.PlacedSkull;

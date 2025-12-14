@@ -29,7 +29,7 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Date Created: 2024
+ * Date Created: 2025
  * Time Created: Performance Optimization
  *
  * @author Kiran Hart
@@ -53,7 +53,6 @@ public final class PlayerTextureCache {
 	private static final long RATE_LIMIT_DELAY_MS = 200; // 5 requests per second max
 
 	public PlayerTextureCache() {
-		startPeriodicCleanup();
 	}
 
 	/**
@@ -226,7 +225,7 @@ public final class PlayerTextureCache {
 	/**
 	 * Start periodic cleanup of expired cache entries
 	 */
-	private void startPeriodicCleanup() {
+	public void startPeriodicCleanup() {
 		refreshTask = Skulls.getInstance().getServer().getScheduler().runTaskTimerAsynchronously(
 			Skulls.getInstance(),
 			this::cleanupExpiredEntries,

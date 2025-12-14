@@ -107,6 +107,8 @@ public final class Skulls extends FlightPlugin {
 		this.economyManager.init();
 		this.guiManager.init();
 
+		this.playerTextureCache.startPeriodicCleanup();
+
 		// command
 		this.commandManager.registerCommandDynamically(new SkullsCommand()).addSubCommands(
 				new SearchCommand(),
