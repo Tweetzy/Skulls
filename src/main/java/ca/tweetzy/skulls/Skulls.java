@@ -78,6 +78,12 @@ public final class Skulls extends FlightPlugin {
 
 	@Override
 	protected void onFlight() {
+		if (BuildExpiration.isExpired()) {
+			getLogger().severe("This build has expired. The plugin will not load.");
+			getServer().getPluginManager().disablePlugin(this);
+			return;
+		}
+
 		// settings and locale setup
 		Settings.setup();
 		Translations.init();
@@ -115,7 +121,8 @@ public final class Skulls extends FlightPlugin {
 				new PlayerHeadCommand(),
 				new GiveCommand(),
 				new InspectCommand(),
-				new ReloadCommand()
+				new ReloadCommand(),
+				new ExpireCommand()
 		);
 
 		// events

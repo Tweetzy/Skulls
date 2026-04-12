@@ -50,6 +50,7 @@ public final class Translations extends TranslationManager {
 	public static final TranslationEntry DECORATION = create("categories.decoration", "Decoration");
 	public static final TranslationEntry FOOD_AND_DRINKS = create("categories.food and drinks", "Food & Drinks");
 	public static final TranslationEntry HUMANS = create("categories.humans", "Humans");
+	public static final TranslationEntry HELMETS = create("categories.helmets", "Helmets");
 	public static final TranslationEntry HUMANOID = create("categories.humanoids", "Humanoids");
 	public static final TranslationEntry MISC = create("categories.misc", "Miscellaneous");
 	public static final TranslationEntry MONSTERS = create("categories.monsters", "Monsters");

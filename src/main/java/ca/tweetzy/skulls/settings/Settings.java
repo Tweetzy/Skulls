@@ -53,6 +53,7 @@ public final class Settings extends FlightSettings {
 	public static final ConfigEntry CATEGORIES_BLOCKS_ENABLED = create("enabled categories.blocks", true);
 	public static final ConfigEntry CATEGORIES_DECORATION_ENABLED = create("enabled categories.decoration", true);
 	public static final ConfigEntry CATEGORIES_FOOD_AND_DRINKS_ENABLED = create("enabled categories.food and drinks", true);
+	public static final ConfigEntry CATEGORIES_HELMETS_ENABLED = create("enabled categories.helmets", true);
 	public static final ConfigEntry CATEGORIES_HUMANS_ENABLED = create("enabled categories.humans", true);
 	public static final ConfigEntry CATEGORIES_HUMANOID_ENABLED = create("enabled categories.humanoids", true);
 	public static final ConfigEntry CATEGORIES_MISC_ENABLED = create("enabled categories.misc", true);
@@ -95,6 +96,7 @@ public final class Settings extends FlightSettings {
 	public static final ConfigEntry GUI_MAIN_ITEMS_BLOCKS_SLOT = create("gui.main.items.blocks.slot", 13);
 	public static final ConfigEntry GUI_MAIN_ITEMS_DECORATION_SLOT = create("gui.main.items.decoration.slot", 14);
 	public static final ConfigEntry GUI_MAIN_ITEMS_FOOD_AND_DRINKS_SLOT = create("gui.main.items.food and drinks.slot", 15);
+	public static final ConfigEntry GUI_MAIN_ITEMS_HELMETS_SLOT = create("gui.main.items.helmets.slot", 31);
 	public static final ConfigEntry GUI_MAIN_ITEMS_HUMANS_SLOT = create("gui.main.items.humans.slot", 20);
 	public static final ConfigEntry GUI_MAIN_ITEMS_HUMANOID_SLOT = create("gui.main.items.humanoids.slot", 21);
 	public static final ConfigEntry GUI_MAIN_ITEMS_MISC_SLOT = create("gui.main.items.misc.slot", 22);
@@ -107,6 +109,7 @@ public final class Settings extends FlightSettings {
 	public static final ConfigEntry DEFAULT_PRICES_BLOCKS = create("default prices.blocks", 1.0);
 	public static final ConfigEntry DEFAULT_PRICES_DECORATION = create("default prices.decoration", 1.0);
 	public static final ConfigEntry DEFAULT_PRICES_FOOD_AND_DRINKS = create("default prices.food and drinks", 1.0);
+	public static final ConfigEntry DEFAULT_PRICES_HELMETS = create("default prices.helmets", 1.0);
 	public static final ConfigEntry DEFAULT_PRICES_HUMANS = create("default prices.humans", 1.0);
 	public static final ConfigEntry DEFAULT_PRICES_HUMANOID = create("default prices.humanoids", 1.0);
 	public static final ConfigEntry DEFAULT_PRICES_MISC = create("default prices.misc", 1.0);

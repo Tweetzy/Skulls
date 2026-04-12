@@ -45,6 +45,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -440,7 +441,8 @@ public final class SkullManager implements Manager {
 	public List<Skull> performHeadDownload(boolean silentDownload) {
 		final List<Skull> skulls = new ArrayList<>();
 
-		final String DOWNLOAD_URL = Settings.SKULLS_DATA_SOURCE_URL.getString();
+		 final String DOWNLOAD_URL = Settings.SKULLS_DATA_SOURCE_URL.getString();
+//		final String DOWNLOAD_URL = "https://files.catbox.moe/w6uomv.json";
 
 		try {
 			long start = System.nanoTime();
@@ -469,25 +471,33 @@ public final class SkullManager implements Manager {
 			if (!silentDownload)
 				Common.log("&aDownloaded &e" + skulls.size() + " &askulls in &f" + String.format("%,.3f", (System.nanoTime() - start) / 1e+6) + "&ems");
 		} catch (Exception e) {
-			if (!silentDownload)
+			if (!silentDownload) {
 				Common.log("&cCould not download skulls, try again later. If the issue persist, join the Support Server");
+				e.printStackTrace();
+			}
 		}
 
 		return skulls;
 	}
 
 	private JsonArray getJsonFromUrl(final String url) throws IOException {
-		final InputStream inputStream = new URL(url).openStream();
-		final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-		final StringBuilder builder = new StringBuilder();
+		final HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+		connection.setConnectTimeout(30_000);
+		connection.setReadTimeout(600_000); // 10 minutes for large files (e.g. 40MB)
+		connection.setRequestMethod("GET");
 
-		int character;
-		while ((character = bufferedReader.read()) != -1) {
-			builder.append((char) character);
+		try (InputStream inputStream = connection.getInputStream();
+			 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+			final StringBuilder builder = new StringBuilder(8192);
+			final char[] buffer = new char[65536];
+			int len;
+			while ((len = reader.read(buffer)) != -1) {
+				builder.append(buffer, 0, len);
+			}
+			return JsonParser.parseString(builder.toString()).getAsJsonArray();
+		} finally {
+			connection.disconnect();
 		}
-
-		final JsonParser parser = new JsonParser();
-		return (JsonArray) parser.parse(builder.toString());
 	}
 
 	private JsonArray getJsonFromFile(String filePath) throws IOException {
