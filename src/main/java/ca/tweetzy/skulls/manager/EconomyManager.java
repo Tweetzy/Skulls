@@ -29,6 +29,8 @@ import lombok.NonNull;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.util.Locale;
+
 /**
  * Date Created: April 27 2022
  * Time Created: 11:04 p.m.
@@ -66,10 +68,15 @@ public final class EconomyManager implements Economy {
 	}
 
 	public void init() {
-		if (Settings.ECONOMY.getString().equalsIgnoreCase("vault") && Bukkit.getServer().getPluginManager().isPluginEnabled("Vault")) {
-			this.economy = new VaultEconomy();
-		} else if (Settings.ECONOMY.getString().toLowerCase().startsWith("ultraeconomy:") && Bukkit.getServer().getPluginManager().isPluginEnabled("UltraEconomy")) {
-			final String[] ultraEconomyCurrencyName = Settings.ECONOMY.getString().split(":");
+		final String configuredEconomy = Settings.ECONOMY.getString();
+		final String configuredEconomyLower = configuredEconomy.toLowerCase(Locale.ROOT);
+
+		if ((configuredEconomyLower.equals("vault") || configuredEconomyLower.startsWith("vault:")) && Bukkit.getServer().getPluginManager().isPluginEnabled("Vault")) {
+			final String[] vaultCurrencyName = configuredEconomy.split(":", 2);
+			final VaultEconomy vaultEconomy = new VaultEconomy(vaultCurrencyName.length > 1 ? vaultCurrencyName[1] : null);
+			this.economy = vaultEconomy.isAvailable() ? vaultEconomy : new ItemEconomy();
+		} else if (configuredEconomyLower.startsWith("ultraeconomy:") && Bukkit.getServer().getPluginManager().isPluginEnabled("UltraEconomy")) {
+			final String[] ultraEconomyCurrencyName = configuredEconomy.split(":");
 
 			if (ultraEconomyCurrencyName.length < 2) {
 				this.economy = new ItemEconomy();
@@ -77,8 +84,8 @@ public final class EconomyManager implements Economy {
 			}
 
 			this.economy = new UltraEconomyEconomy(ultraEconomyCurrencyName[1]);
-		} else if (Settings.ECONOMY.getString().toLowerCase().startsWith("coinsengine:") && Bukkit.getServer().getPluginManager().isPluginEnabled("CoinsEngine")) {
-			final String[] coinsEngineCurrencyName = Settings.ECONOMY.getString().split(":");
+		} else if (configuredEconomyLower.startsWith("coinsengine:") && Bukkit.getServer().getPluginManager().isPluginEnabled("CoinsEngine")) {
+			final String[] coinsEngineCurrencyName = configuredEconomy.split(":");
 
 			if (coinsEngineCurrencyName.length < 2) {
 				this.economy = new ItemEconomy();
