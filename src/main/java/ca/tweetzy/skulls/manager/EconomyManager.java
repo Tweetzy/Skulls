@@ -73,8 +73,7 @@ public final class EconomyManager implements Economy {
 
 		if ((configuredEconomyLower.equals("vault") || configuredEconomyLower.startsWith("vault:")) && Bukkit.getServer().getPluginManager().isPluginEnabled("Vault")) {
 			final String[] vaultCurrencyName = configuredEconomy.split(":", 2);
-			final VaultEconomy vaultEconomy = new VaultEconomy(vaultCurrencyName.length > 1 ? vaultCurrencyName[1] : null);
-			this.economy = vaultEconomy.isAvailable() ? vaultEconomy : new ItemEconomy();
+			this.economy = new VaultEconomy(vaultCurrencyName.length > 1 ? vaultCurrencyName[1] : null);
 		} else if (configuredEconomyLower.startsWith("ultraeconomy:") && Bukkit.getServer().getPluginManager().isPluginEnabled("UltraEconomy")) {
 			final String[] ultraEconomyCurrencyName = configuredEconomy.split(":");
 

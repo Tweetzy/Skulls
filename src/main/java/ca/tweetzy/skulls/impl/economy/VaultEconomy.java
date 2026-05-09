@@ -20,6 +20,7 @@ package ca.tweetzy.skulls.impl.economy;
 
 import ca.tweetzy.flight.utils.Common;
 import ca.tweetzy.skulls.Skulls;
+import ca.tweetzy.skulls.exception.CurrencyNotFoundException;
 import lombok.NonNull;
 import net.milkbowl.vault2.economy.Economy;
 import net.milkbowl.vault2.economy.EconomyResponse;
@@ -27,6 +28,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import java.math.BigDecimal;
+import java.util.function.BiFunction;
 
 /**
  * Date Created: April 21 2022
@@ -38,6 +40,9 @@ public final class VaultEconomy extends MultiCurrencyEconomy {
 
 	private final String pluginName;
 	private Economy economy;
+	private BiFunction<Player, BigDecimal, Boolean> hasBalance;
+	private BiFunction<Player, BigDecimal, EconomyResponse> withdrawFunds;
+	private BiFunction<Player, BigDecimal, EconomyResponse> depositFunds;
 
 	public VaultEconomy() {
 		this(null);
@@ -49,40 +54,34 @@ public final class VaultEconomy extends MultiCurrencyEconomy {
 		setupEconomy();
 	}
 
-	public boolean isAvailable() {
-		return this.economy != null;
-	}
-
 	private void setupEconomy() {
 		final RegisteredServiceProvider<Economy> rsp = Skulls.getInstance().getServer().getServicesManager().getRegistration(Economy.class);
-		if (rsp == null) {
-			Common.log("&cSkulls could not find an economy provider for Vault!");
-			return;
-		}
+		if (rsp == null)
+			throw new IllegalStateException("Skulls could not find an economy provider for Vault.");
 
 		this.economy = rsp.getProvider();
 
-		if (!this.economy.isEnabled()) {
-			Common.log("&cSkulls found a Vault economy provider, but it is not enabled!");
-			this.economy = null;
+		if (!this.economy.isEnabled())
+			throw new IllegalStateException("Skulls found a Vault economy provider, but it is not enabled.");
+
+		if (this.currencyName == null) {
+			this.hasBalance = (player, amount) -> this.economy.has(this.pluginName, player.getUniqueId(), player.getWorld().getName(), amount);
+			this.withdrawFunds = (player, amount) -> this.economy.withdraw(this.pluginName, player.getUniqueId(), player.getWorld().getName(), amount);
+			this.depositFunds = (player, amount) -> this.economy.deposit(this.pluginName, player.getUniqueId(), player.getWorld().getName(), amount);
+			Common.log("&aSetting up vault economy provider");
 			return;
 		}
 
-		if (this.currencyName != null) {
-			if (!this.economy.hasMultiCurrencySupport()) {
-				Common.log("&cVault economy provider does not support multi-currency, but config requested currency: " + this.currencyName);
-				this.economy = null;
-				return;
-			}
+		if (!this.economy.hasMultiCurrencySupport())
+			throw new IllegalStateException("Vault economy provider does not support multi-currency, but config requested currency: " + this.currencyName);
 
-			if (!this.economy.hasCurrency(this.currencyName)) {
-				Common.log("&cVault economy provider does not have currency: " + this.currencyName);
-				this.economy = null;
-				return;
-			}
-		}
+		if (!this.economy.hasCurrency(this.currencyName))
+			throw new CurrencyNotFoundException("Could not find the currency: '" + this.currencyName + "' from " + this.getName() + ", please check spelling or if it even exists.");
 
-		Common.log("&aSetting up vault economy provider" + (this.currencyName == null ? "" : " with currency: " + this.currencyName));
+		this.hasBalance = (player, amount) -> this.economy.has(this.pluginName, player.getUniqueId(), player.getWorld().getName(), this.currencyName, amount);
+		this.withdrawFunds = (player, amount) -> this.economy.withdraw(this.pluginName, player.getUniqueId(), player.getWorld().getName(), this.currencyName, amount);
+		this.depositFunds = (player, amount) -> this.economy.deposit(this.pluginName, player.getUniqueId(), player.getWorld().getName(), this.currencyName, amount);
+		Common.log("&aSetting up vault economy provider with currency: " + this.currencyName);
 	}
 
 	@Override
@@ -97,24 +96,14 @@ public final class VaultEconomy extends MultiCurrencyEconomy {
 
 	@Override
 	public boolean has(@NonNull Player player, double amount) {
-		if (!isAvailable())
-			return false;
-
 		final BigDecimal value = BigDecimal.valueOf(amount);
-		return this.currencyName == null
-				? this.economy.has(this.pluginName, player.getUniqueId(), player.getWorld().getName(), value)
-				: this.economy.has(this.pluginName, player.getUniqueId(), player.getWorld().getName(), this.currencyName, value);
+		return this.hasBalance.apply(player, value);
 	}
 
 	@Override
 	public void withdraw(@NonNull Player player, double amount) {
-		if (!isAvailable())
-			return;
-
 		final BigDecimal value = BigDecimal.valueOf(amount);
-		final EconomyResponse response = this.currencyName == null
-				? this.economy.withdraw(this.pluginName, player.getUniqueId(), player.getWorld().getName(), value)
-				: this.economy.withdraw(this.pluginName, player.getUniqueId(), player.getWorld().getName(), this.currencyName, value);
+		final EconomyResponse response = this.withdrawFunds.apply(player, value);
 
 		if (!response.transactionSuccess())
 			Common.log("&cFailed to withdraw from " + player.getName() + " using Vault economy: " + response.errorMessage);
@@ -122,13 +111,8 @@ public final class VaultEconomy extends MultiCurrencyEconomy {
 
 	@Override
 	public void deposit(@NonNull Player player, double amount) {
-		if (!isAvailable())
-			return;
-
 		final BigDecimal value = BigDecimal.valueOf(amount);
-		final EconomyResponse response = this.currencyName == null
-				? this.economy.deposit(this.pluginName, player.getUniqueId(), player.getWorld().getName(), value)
-				: this.economy.deposit(this.pluginName, player.getUniqueId(), player.getWorld().getName(), this.currencyName, value);
+		final EconomyResponse response = this.depositFunds.apply(player, value);
 
 		if (!response.transactionSuccess())
 			Common.log("&cFailed to deposit to " + player.getName() + " using Vault economy: " + response.errorMessage);
