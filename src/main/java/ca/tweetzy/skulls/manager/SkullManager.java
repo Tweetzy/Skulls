@@ -442,7 +442,6 @@ public final class SkullManager implements Manager {
 		final List<Skull> skulls = new ArrayList<>();
 
 		 final String DOWNLOAD_URL = Settings.SKULLS_DATA_SOURCE_URL.getString();
-//		final String DOWNLOAD_URL = "https://files.catbox.moe/w6uomv.json";
 
 		try {
 			long start = System.nanoTime();

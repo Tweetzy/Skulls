@@ -46,28 +46,28 @@ public final class PlayerJoinQuitListener implements Listener {
 		final Player player = event.getPlayer();
 		if (!Settings.PATREON_UPDATES.getBoolean()) return;
 
-		// if (player.isOp() || player.hasPermission("skulls.admin")) {
-		// 	Bukkit.getServer().getScheduler().runTaskLater(Skulls.getInstance(), () -> {
-		// 		Common.tellNoPrefix(player,
-		// 				"",
-		// 				"<center>%pl_name%",
-		// 				"<center>&7Future updates will be posted to patreon for a while before they get released publicly. Patreon version of Skulls will have access to newly added heads. Join for $3/m to gain access.",
-		// 				"<center>&6https://patreon.com/kiranhart",
-		// 				""
-		// 		);
-		// 	}, 5L);
-		// }
-
 		if (player.isOp() || player.hasPermission("skulls.admin")) {
 			Bukkit.getServer().getScheduler().runTaskLater(Skulls.getInstance(), () -> {
 				Common.tellNoPrefix(player,
 						"",
 						"<center>%pl_name%",
-						"<center>&aThank you for supporting the plugin <3",
+						"<center>&7Future updates will be posted to patreon for a while before they get released publicly. Patreon version of Skulls will have access to newly added heads. Join for $3/m to gain access.",
+						"<center>&6https://patreon.com/kiranhart",
 						""
 				);
 			}, 5L);
 		}
+
+		// if (player.isOp() || player.hasPermission("skulls.admin")) {
+		// 	Bukkit.getServer().getScheduler().runTaskLater(Skulls.getInstance(), () -> {
+		// 		Common.tellNoPrefix(player,
+		// 				"",
+		// 				"<center>%pl_name%",
+		// 				"<center>&aThank you for supporting the plugin <3",
+		// 				""
+		// 		);
+		// 	}, 5L);
+		// }
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
