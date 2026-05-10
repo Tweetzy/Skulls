@@ -9,5 +9,5 @@ softdepend:
   - WorldGuard
   - WorldEdit
   - FastAsyncWorldEdit
-  - CoinsEngine
+  - ExcellentEconomy
 commands:

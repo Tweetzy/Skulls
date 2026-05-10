@@ -19,7 +19,7 @@
 package ca.tweetzy.skulls.manager;
 
 import ca.tweetzy.skulls.api.interfaces.Economy;
-import ca.tweetzy.skulls.impl.economy.CoinsEngineEconomy;
+import ca.tweetzy.skulls.impl.economy.ExcellentEconomyEconomy;
 import ca.tweetzy.skulls.impl.economy.ItemEconomy;
 import ca.tweetzy.skulls.impl.economy.UltraEconomyEconomy;
 import ca.tweetzy.skulls.impl.economy.VaultEconomy;
@@ -83,15 +83,15 @@ public final class EconomyManager implements Economy {
 			}
 
 			this.economy = new UltraEconomyEconomy(ultraEconomyCurrencyName[1]);
-		} else if (configuredEconomyLower.startsWith("coinsengine:") && Bukkit.getServer().getPluginManager().isPluginEnabled("CoinsEngine")) {
-			final String[] coinsEngineCurrencyName = configuredEconomy.split(":");
+		} else if (configuredEconomyLower.startsWith("excellenteconomy:") && Bukkit.getServer().getPluginManager().isPluginEnabled("ExcellentEconomy")) {
+			final String[] excellentEconomyCurrencyName = configuredEconomy.split(":", 2);
 
-			if (coinsEngineCurrencyName.length < 2) {
+			if (excellentEconomyCurrencyName.length < 2) {
 				this.economy = new ItemEconomy();
 				return;
 			}
 
-			this.economy = new CoinsEngineEconomy(coinsEngineCurrencyName[1]);
+			this.economy = new ExcellentEconomyEconomy(excellentEconomyCurrencyName[1]);
 		} else
 			this.economy = new ItemEconomy();
 	}
