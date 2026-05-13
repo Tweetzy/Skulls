@@ -5,6 +5,7 @@ author: ${author}
 api-version: 1.13
 softdepend:
   - Vault
+  - TheNewEconomy
   - UltraEconomy
   - WorldGuard
   - WorldEdit
