@@ -24,17 +24,17 @@
 
     <distributionManagement>
         <repository>
-            <id>repsy</id>
-            <name>Tweetzy Maven Repo On Repsy</name>
-            <url>https://repo.repsy.io/mvn/kiran/tweetzy</url>
+            <id>tweetzy-releases</id>
+            <name>Tweetzy Maven Releases</name>
+            <url>https://nexus.hartserver.ca/repository/maven-releases/</url>
         </repository>
     </distributionManagement>
 
     <repositories>
         <repository>
-            <id>repsy</id>
-            <name>Tweetzy Maven Repo On Repsy</name>
-            <url>https://repo.repsy.io/mvn/kiran/tweetzy</url>
+            <id>tweetzy-releases</id>
+            <name>Tweetzy Maven Releases</name>
+            <url>https://nexus.hartserver.ca/repository/maven-releases/</url>
         </repository>
         <repository>
             <id>nms-repo</id>
@@ -43,6 +43,10 @@
         <repository>
             <id>codemc-releases</id>
             <url>https://repo.codemc.org/repository/maven-releases/</url>
+        </repository>
+        <repository>
+            <id>codemc-creatorfromhell</id>
+            <url>https://repo.codemc.io/repository/creatorfromhell/</url>
         </repository>
         <repository>
             <id>jitpack.io</id>
@@ -55,6 +59,10 @@
         <repository>
             <id>griefdefender</id>
             <url>https://repo.glaremasters.me/repository/bloodshot</url>
+        </repository>
+        <repository>
+            <id>phoenix616</id>
+            <url>https://repo.phoenix616.dev/</url>
         </repository>
         <repository>
             <id>techscode</id>
@@ -103,9 +111,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.MilkBowl</groupId>
-            <artifactId>VaultAPI</artifactId>
-            <version>1.7</version>
+            <groupId>net.milkbowl.vault</groupId>
+            <artifactId>VaultUnlockedAPI</artifactId>
+            <version>2.19</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -126,9 +134,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>su.nightexpress.coinsengine</groupId>
-            <artifactId>CoinsEngine</artifactId>
-            <version>2.4.1</version>
+            <groupId>su.nightexpress.excellenteconomy</groupId>
+            <artifactId>ExcellentEconomy</artifactId>
+            <version>2.8.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
