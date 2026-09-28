@@ -120,12 +120,13 @@ public final class TexturedSkull implements Skull {
 			}
 		}
 
-		ItemStack itemUnTextured = QuickItem
+		ItemStack item = QuickItem
 				.of(CompMaterial.PLAYER_HEAD)
 				.name(TranslationManager.string(Translations.SKULL_TITLE, "skull_name", this.name))
+				.texture(this.texture)
 				.tag("Skulls:ID", String.valueOf(this.id)).make();
 
-		ItemStack item = XSkull.of(itemUnTextured).profile(Profileable.of(ProfileInputType.TEXTURE_URL, this.texture)).lenient().apply();
+//		ItemStack item = XSkull.of(itemUnTextured).profile(Profileable.of(ProfileInputType.TEXTURE_URL, this.texture)).lenient().apply();
 
 		// Cache the item if caching is enabled
 		if (Settings.ITEMSTACK_CACHE_ENABLED.getBoolean()) {
